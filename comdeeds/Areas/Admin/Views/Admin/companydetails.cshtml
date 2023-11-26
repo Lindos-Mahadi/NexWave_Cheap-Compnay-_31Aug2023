@@ -1,0 +1,479 @@
+﻿
+<style>
+    .be-checkbox input[type=checkbox]:disabled + label, .be-checkbox input[type=radio]:disabled + label, .be-radio input[type=checkbox]:disabled + label, .be-radio input[type=radio]:disabled + label {
+        opacity: 1;
+    }
+</style>
+
+@model comdeeds.Models.BaseModel.ClassFullCompany
+@{
+    var company = Model.Company;
+    var applicant = Model.Applicant;
+    var address = Model.Address;
+    var trust = Model.CompanyTrust;
+    var dir = Model.Directors;
+    var share = Model.Shares;
+    var indshares = Model.indShares;
+    var user = Model.user;
+    var cost = Model.Cost;
+
+  
+    var i = 1;
+    var j = 1;
+    var totaldir = dir.Count;
+    var totalind = indshares.Count;
+
+
+    var chk1 = company.QuoteForTax == true ? "checked" : "";
+    var chk2 = company.LegalAssessment == true ? "checked" : "";
+    var chk3 = company.BorrowingReview == true ? "checked" : "";
+    var chk4 = company.Agreement == true ? "checked" : "";
+}
+
+<div class="main-content container-fluid" id="bindview">
+
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-divider">
+            <h4 class="panel-title" style="display:inline-block">@company.CompanyName details</h4>
+            <a href="/AdminC/UserSearchList.aspx" class="pull-right btn btn-primary" style=" margin-left: 10px;"><i class="fa fa-arrow-left"></i> Back to Company List</a>
+            <a href="/company-setup" class="pull-right btn btn-primary"><i class="fa fa-arrow-left"></i> Edit Details</a>
+        </div>
+        <div class="panel-body">
+            <div class="margin-bottom-45" id="printable">
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.Raw(ViewBag.msg)
+                        <div class="clearfix"></div>
+                        <div class="summary">
+                            <div class="summary-box" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4 class="headline">Summary of fees</h4>
+                                        <div class="fess-summary ">
+                                            <table class="table table-condensed table-striped">
+                                                <tr>
+                                                    <td>ASIC fees</td>
+                                                    <td>$@cost.AsicFee</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Our fee (EX GST)</td>
+                                                    <td>$@cost.SetupCost</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ADD GST</td>
+                                                    <td>$@cost.SetupGST</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Credit card fees </td>
+                                                    <td>$@(Math.Round((((cost.AsicFee + cost.SetupCost + cost.SetupGST) * cost.CreditCardFee) / 100), 2))   (@cost.CreditCardFee %)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Processing fees</td>
+                                                    <td>$@cost.ProcessingFee</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Total paid</th>
+                                                    <th>
+                                                        $@cost.TotalCost
+
+                                                        @{
+                                                            if (Model.TransactionDetail != null)
+                                                            {
+                                                                if (Model.TransactionDetail.TransactionStatus == true)
+                                                                {
+                                                                    <label class="label label-success">PAID</label>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label class="label label-warning">NOT PAID</label>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <label class="label label-warning">NOT PAID</label>
+                                                            }
+                                                        }
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="summary-box">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4 class="headline">Personal Information</h4>
+                                        <div class="fess-summary ">
+                                            <table class="table table-condensed table-striped">
+                                                <tr>
+                                                    <td>Name </td>
+                                                    <td>@applicant.GivenName @applicant.FamilyName</td>
+                                                </tr>
+                                               
+                                                <tr>
+                                                    <td>Email </td>
+                                                    <td>@applicant.Email.</td>
+                                                </tr>
+                                            
+                                                <tr>
+                                                    <td>Address </td>
+                                                    <td>@applicant.UnitLevelSuits @applicant.StreetNumberStreetName @applicant.Suburb @applicant.State @applicant.Postcode</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Phone No.</td>
+                                                    <td>@applicant.Phone</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>What will you use this company for ?</td>
+                                                    <td>@company.CompanyUseFor</td>
+                                                </tr>
+
+
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+
+
+                            <div class="summary-box">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4 class="headline">Company Information</h4>
+                                        <div class="fess-summary ">
+                                            <table class="table table-condensed table-striped">
+                                                <tr>
+                                                    <td>Company name </td>
+                                                    <td>@company.CompanyName</td>
+                                                </tr>
+                                                @{
+                                                    if (company.NameReserved == true)
+                                                    {
+                                                        <tr>
+                                                            <td>Company ABN</td>
+                                                            <td>@company.Abn</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                                <tr>
+                                                    <td>Company type </td>
+                                                    <td>PTY.LTD.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>State of Registration</td>
+                                                    <td>@company.RegistrationState</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Special Purpose</td>
+                                                    <td>@company.CompanyUseFor</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Purpose of Company</td>
+                                                    <td>@company.CompanyPurpose</td>
+                                                </tr>
+
+
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="summary-box">
+                                <div class="row">
+
+                                    @{
+                                        foreach (var a in address)
+                                        {
+                                            var addtype = (bool)a.IsRegisteredAddress ? "Registered office address" : "";
+                                            addtype = (bool)a.IsPrincipleAddress ? "Principle place of business" : addtype;
+
+                                            <div class="col-md-6">
+                                                <h4 class="headline">@addtype</h4>
+
+                                                <table class="table table-condensed table-striped">
+                                                    <tr>
+                                                        <td>Unit</td>
+                                                        <td>@a.UnitLevel </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Street</td>
+                                                        <td>@a.Street</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Suburb</td>
+                                                        <td>@a.Suburb</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>State</td>
+                                                        <td>@a.State</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Postcost</td>
+                                                        <td>@a.PostCode</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+
+
+                            <div class="summary-box">
+                                <h4 class="headline">Directors / Shareholders</h4>
+                                <div class="row">
+                                    @{
+                                        foreach (var d in dir)
+                                        {
+                                            <div class="col-md-12">
+                                                <h5 class="headline">Director @i of @totaldir</h5>
+                                                <table class="table table-condensed table-striped">
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Date of Birth</th>
+                                                        <th>Address</th>
+                                                        <th>City of Birth</th>
+                                                        <th>State of Birth</th>
+                                                        <th>Country of Birth</th>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@d.FirstName @d.LastName</td>
+                                                        <td>@d.DoBday/@d.DoBmonth/@d.DoByear</td>
+                                                        <td>@d.DoBaddress</td>
+                                                        <td>@d.DoBcity</td>
+                                                        <td>@d.DoBstate</td>
+                                                        <td>@d.DoBcountry</td>
+
+                                                    </tr>
+                                                </table>
+
+                                                <h5 class="headline margin-top-20">Share allocaion</h5>
+
+                                                <table class="table table-condensed table-striped">
+                                                    <tr>
+                                                        <td>Share Class</td>
+                                                        <td>Number of Shares</td>
+                                                        <td>Amount paid per share</td>
+                                                        <td>Held for own benefit</td>
+                                                        <td>Owner name</td>
+                                                    </tr>
+                                                    @{
+                                                        foreach (var s in share.Where(x => x.DirectorId == d.Id).ToList())
+                                                        {
+                                                            var b = s.ShareBehalf ? "Yes" : "No";
+                                                            var o = s.ShareBehalf ? s.OwnerName : "";
+                                                            <tr>
+                                                                <td>@s.ShareClass</td>
+                                                                <td>@s.NoOfShare</td>
+                                                                <td>$@s.ShareAmount</td>
+                                                                <td>@b</td>
+                                                                <td>@o</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </table>
+
+                                                <hr />
+                                            </div>
+
+                                                            i += 1;
+                                                        }
+                                    }
+
+
+                                </div>
+                            </div>
+
+@{
+
+    var count = 0;
+    foreach (var s in indshares)
+    {
+        if (s.individual_or_company == "Individual1" || s.individual_or_company == "company")
+        {
+            count++;
+        }
+    }
+
+}
+@{
+    if (count > 0)
+    {
+
+        foreach (var nd in indshares)
+        {
+            if (nd.individual_or_company == "Individual1")
+            {
+                <div class="summary-box">
+                    <h4 class="headline">Individual / Shareholders </h4>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="headline">Individual @j of @totalind</h5>
+                            <table class="table table-condensed table-striped">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date of Birth</th>
+                                    <th>Address</th>
+                                    <th>Place of Birth</th>
+                                    @*<th>State of Birth</th>*@
+                                    @*<th>Country of Birth</th>*@
+
+                                </tr>
+                                <tr>
+                                    <td>@nd.shareholderdetails</td>
+                                    <td>@nd.individual_or_company_dob</td>
+                                    <td>@nd.individual_or_company_address</td>
+                                    <td>@nd.placeofbirth</td>
+                                    @*<td>@nd.DoBstate</td>*@
+                                    @*<td>@nd.DoBcountry</td>*@
+
+                                </tr>
+                            </table>
+
+                            <h5 class="headline margin-top-20">Share allocaion</h5>
+
+                            <table class="table table-condensed table-striped">
+                                <tr>
+                                    <td>Share Class</td>
+                                    <td>Number of Shares</td>
+                                    <td>Amount paid per share</td>
+                                    <td>Held for own benefit</td>
+                                    <td>Owner name</td>
+                                </tr>
+                                @{
+
+                                var b = nd.ShareBehalf ? "yes" : "no";
+                                var o = nd.ShareBehalf ? nd.OwnerName : "";
+                                <tr>
+                                    <td>@nd.ShareClass</td>
+                                    <td>@nd.NoOfShare</td>
+                                    <td>$@nd.ShareAmount</td>
+                                    <td>@b</td>
+                                    <td>@o</td>
+                                </tr>
+                                j += 1;
+                                }
+                            </table>
+
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+
+                                    }
+                                    else if (nd.individual_or_company == "company")
+                                    {
+                                        <div class="summary-box">
+                                            <h4 class="headline">Company / Shareholders </h4>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h5 class="headline">Company @j of @totalind</h5>
+                                                    <table class="table table-condensed table-striped">
+                                                        <tr>
+                                                            <th>Company Name</th>
+                                                            <th>ABN</th>
+                                                            <th>Address</th>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td>@nd.shareholderdetails</td>
+                                                            <td>@nd.individual_or_company_acn</td>   @*show abn here*@
+                                                            <td>@nd.individual_or_company_address</td>
+
+                                                        </tr>
+                                                    </table>
+
+                                                    <h5 class="headline margin-top-20">Share allocaion</h5>
+
+                                                    <table class="table table-condensed table-striped">
+                                                        <tr>
+                                                            <td>Share Class</td>
+                                                            <td>Number of Shares</td>
+                                                            <td>Amount paid per share</td>
+                                                            <td>Held for own benefit</td>
+                                                            <td>Owner name</td>
+                                                        </tr>
+                                                        @{
+
+                                                            var b = nd.ShareBehalf ? "yes" : "no";
+                                                            var o = nd.ShareBehalf ? nd.OwnerName : "";
+                                                            <tr>
+                                                                <td>@nd.ShareClass</td>
+                                                                <td>@nd.NoOfShare</td>
+                                                                <td>$@nd.ShareAmount</td>
+                                                                <td>@b</td>
+                                                                <td>@o</td>
+                                                            </tr>
+                                                            j += 1;
+                                                        }
+                                                    </table>
+
+                                                    <hr />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            }
+
+
+                            <div class="summary-box alt">
+                                <h4 class="headline">Free Consultations</h4>
+
+                                <div class="be-checkbox">
+                                    <input type="checkbox" disabled name="chkquotefortax" id="chk1" value="true" @chk1 />
+                                    <label for="chk1">I would like a FREE quote for the cost of tax services</label>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="be-checkbox">
+                                    <input type="checkbox" disabled name="chklegalassesment" id="chk2" value="true" @chk2 />
+                                    <label for="chk2">I would like a 1 hour FREE Legal Assessment</label>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="be-checkbox">
+                                    <input type="checkbox" disabled name="chkborrowingreview" id="chk3" value="true" @chk3 />
+                                    <label for="chk3">I would like a FREE Borrowing review or assessments</label>
+                                </div>
+                            </div>
+                            <div class="summary-box alt">
+                                <h4 class="headline">Agreement</h4>
+
+                                <div class="be-checkbox">
+                                    <input type="checkbox" disabled @chk4 name="chkagreement" id="chk4" value="true" />
+                                    <label for="chk4">I have read the above and accept responsibility for any liability incurred due to my use of the deed. I understand that this deed does not constitute legal advice and may be unsuitable for the purposes I wish to employ it for" "I intend to seek legal advice after obtaining the Deed or intend to waive my right to seek Independent Legal Advice</label>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>

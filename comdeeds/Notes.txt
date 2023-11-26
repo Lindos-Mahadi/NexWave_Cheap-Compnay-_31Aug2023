@@ -1,0 +1,62 @@
+﻿
+https://www.geotrust.eu/en/support/manuals/microsoft/all+windows+servers/export+private+key+or+certificate/
+CREATE TABLE [dbo].[LBLmsg](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[companyid] [varchar](200) NULL,
+	[sms] [nvarchar](max) NULL,
+	[entrydate] [datetime] NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+create procedure dbo.insertLBLmsg(
+
+@companyid varchar(200),
+
+@sms nvarchar(max)
+
+)
+
+as
+
+begin
+
+insert into LBLmsg(companyid,sms) values(@companyid,@sms)
+end
+go
+Text
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+create procedure insert_ra55
+(
+@CompanyName varchar(300),
+@ACN varchar(20),
+@CompanyType varchar(50),
+@CompanyClass varchar(50),
+@CertificatePrintOption varchar(50),
+@JurisdictionOfRegistration varchar(50),
+@DateOfRegistration varchar(50),
+@CompanySubclass varchar(50),
+@AccountNumber varchar(50),
+@SupplierName varchar(100),
+@SupplierABN varchar(50),
+@RegisteredAgentName varchar(100),
+@RegisteredAgentAddress varchar(500),
+@InvoiceDescription varchar(500),
+@InvoiceAmmount varchar(50),
+@DocumentNumber varchar(50),
+@FormCode varchar(20),
+@TaxInvoiceText varchar(30),
+@TaxCode varchar(10),
+@TaxAmmount varchar(20)
+)
+as
+begin
+delete from ra55 where companyname=@CompanyName
+insert into RA55(CompanyName ,ACN ,CompanyType ,CompanyClass ,CertificatePrintOption ,JurisdictionOfRegistration ,DateOfRegistration ,CompanySubclass ,AccountNumber ,SupplierName ,SupplierABN ,RegisteredAgentName ,RegisteredAgentAddress ,InvoiceDescriptio
+n ,InvoiceAmmount ,DocumentNumber ,FormCode ,TaxInvoiceText,TaxCode,TaxAmmount) values(@CompanyName ,@ACN ,@CompanyType ,@CompanyClass ,@CertificatePrintOption ,@JurisdictionOfRegistration ,@DateOfRegistration ,@CompanySubclass ,@AccountNumber ,@SupplierN
+ame ,@SupplierABN ,@RegisteredAgentName ,@RegisteredAgentAddress ,@InvoiceDescription ,@InvoiceAmmount ,@DocumentNumber ,@FormCode ,@TaxInvoiceText,@TaxCode,@TaxAmmount)
+end
+
+

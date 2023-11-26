@@ -1,0 +1,80 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GoogleAdd</title>
+</head>
+<body>
+    <div> 
+       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcAvPQGW-UrlxgZIn69qLnfOMPh-WnsJM&libraries=places"></script>
+        <script type="text/javascript">
+        google.maps.event.addDomListener(window, 'load', initialize);
+        function initialize() {
+            var autocomplete = new google.maps.places.Autocomplete(document.getElementById('txtAutocomplete'));
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            // Get the place details from the autocomplete object.
+            var place = autocomplete.getPlace();
+            var location = "<b>Address</b>: " + place.formatted_address + "<br/>";
+            location += "<b>Latitude</b>: " + place.geometry.location.A + "<br/>";
+            location += "<b>Longitude</b>: " + place.geometry.location.F;
+            document.getElementById('lblResult').innerHTML = location;
+            var full = "";
+            var route = ""; var locality = ""; var sublocality_level_1 = "";
+            var administrative_area_level_2 = "";//sydney
+            var administrative_area_level_1 = "";//NSW
+            var postal_code = "";//
+            var country = "";//
+            var streetname = "";
+            for (var i = 0; i < place.address_components.length; i++) {
+                var addressType = place.address_components[i].types[0];
+                var valuedata=place.address_components[i].short_name;
+                full = full + "<br> " + addressType + "=" + place.address_components[i].short_name;
+                //if (componentForm[addressType]) {
+                    //var val = place.address_components[i][componentForm[addressType]];
+                    //document.getElementById(addressType).value = val;
+                //alert(addressType);
+                //}
+                if (addressType == "route")
+                {
+                    route = valuedata;
+                }
+                if (addressType == "locality") {
+                    locality = valuedata;
+                }
+                if (addressType == "sublocality_level_1") {
+                    sublocality_level_1 = valuedata;
+                }
+                if (addressType == "administrative_area_level_2") {
+                    administrative_area_level_2 = valuedata;
+                }
+                if (addressType == "administrative_area_level_1") {
+                    administrative_area_level_1 = valuedata;
+                }
+                if (addressType == "postal_code") {
+                    postal_code = valuedata;
+                }
+                if (addressType == "country") {
+                    country = valuedata;
+                }
+            }
+            streetname = ((route + " " + locality + " ").trim() + sublocality_level_1).trim();
+            document.getElementById('lblResult').innerHTML += full+"<hr>Street Name="+streetname;
+    
+
+            });
+        }
+        </script>
+<span>Location:</span>
+<input type="text" id="txtAutocomplete" style="width: 300px" placeholder="Enter your address" /><br /><br />
+<label id="lblResult" /><br />
+        Full Details :
+        <label id="lblfull" />
+ </div>
+</body>
+</html>

@@ -1,0 +1,497 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <style type="text/css">
+        body {
+            margin-top: 0px;
+            font-size: 11.04pt;
+            line-height: 1.2em;
+            margin-left: 0px;
+        }
+
+        p {
+            font-style: normal;
+            font-weight: normal;
+            font-family: Calibri,serif;
+            color: #111;
+            font-size: 11.04pt;
+            line-height: 1.2em;
+            margin-top: 0;
+        }
+
+        .page {
+            margin: 45px 0 15px 15px;
+            margin: auto;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+            font-size: 16px;
+            line-height: 25px;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #111;
+            display: block;
+            max-width: 800px;
+        }
+
+        .tablerow {
+            width: 400px;
+            border-collapse: separate;
+            border-spacing: 0px;
+        }
+
+            .tablerow td.bordertop {
+                border-top: 3px solid #0f243e;
+                height: 40px;
+            }
+
+            .tablerow td.borderbottom {
+                border-bottom: 3px solid #0f243e;
+                height: 40px;
+            }
+
+        .tblborder {
+            font-family: sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+            line-height: 15px;
+            border-spacing: 0;
+        }
+
+            .tblborder td,
+            .tblborder th {
+                border: .2px solid #111;
+                text-align: left;
+                padding: 8px;
+                font-weight: 400;
+            }
+
+        .headfill th {
+            font-weight: bold;
+            background-color: #bbb;
+        }
+
+        .heading {
+            font-style: normal;
+            font-weight: normal;
+            font-family: Calibri,serif;
+            color: #2e5395;
+            font-size: 15.96pt;
+        }
+
+        .sub_heading {
+            font-style: normal;
+            font-weight: 700;
+            font-family: Calibri,serif;
+            color: black;
+            font-size: 15.96pt;
+        }
+
+        .subheading {
+            font-style: normal;
+            font-weight: 700;
+            font-family: Calibri_TrueType_0,Calibri,serif;
+            font-size: 12.96pt;
+            margin: .9em 0;
+        }
+
+        .tblin td {
+            height: 25px;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        .listn {
+            font-family: Calibri_TrueType_0,Calibri,serif;
+            font-size: 11.04pt;
+            line-height: 1.2em;
+            margin: .5em 0;
+        }
+
+            .listn li {
+                margin-bottom: 10px;
+            }
+
+
+        .listalpha {
+            list-style-type: lower-alpha;
+            font-family: Calibri_TrueType_0,Calibri,serif;
+            font-size: 11.04pt;
+            line-height: 1.2em;
+        }
+
+        .listroman {
+            list-style-type: lower-roman;
+            font-family: Calibri_TrueType_0,Calibri,serif;
+            font-size: 11.04pt;
+            line-height: 1.2em;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 11.04pt;
+            line-height: 1.2em;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            vertical-align:top;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div style="padding:0 50px 50px;">
+            <p class="heading" style="text-align:center">
+                MINUTES OF MEETING OF TRUSTEES OF
+            </p>
+            <p class="heading" style="text-align:center">
+                {trustname}
+            </p>
+            <table class="tbl">
+                <tbody>
+
+                    <tr>
+                        <td class="subheading">Venue </td>
+                        <td>{member1add}</td>
+
+                    </tr>
+                    <tr>
+                        <td class="subheading">Date & Time</td>
+                        <td> {meetingdate}    01:00 PM</td>
+
+                    </tr>
+                    <tr>
+                        <td class="subheading">Present</td>
+                        <td>{membersname}</td>
+
+                    </tr>
+                    <tr>
+                        <td class="subheading">Chairperson</td>
+                        <td>{chairperson}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+
+            <table style="border: 0;border-collapse: collapse;border: none;" border="0">
+                <tbody>
+                    <tr>
+                        <th width="200" style="border:0;padding-bottom:30px">TABLED:</th>
+                        <td style="border:0;">
+                            Draft SMSF Deed, Application to become members & proposed
+                            Investment Strategy.
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="border:0;">RESOLVED THAT: </th>
+                        <td style="border:0;"> </td>
+                    </tr>
+                    <tr>
+                        <th style="border:0;"> Establishment of Fund </th>
+                        <td style="border:0;"> The persons present are intending to form a superannuation fund to provide retirement benefits for Eligible persons and agree to act as the {trustee/s } {director of trustee company } of the Fund.</td>
+                    </tr>
+                    <tr>
+                        <th style="border:0;">Name of the fund</th>
+                        <td style="border:0;">
+                            The fund will be called {trustname}.
+                            The fund will be a Self Managed Superannuation Fund.
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="border:0;">Execute Trust Deed </th>
+                        <td style="border:0;">
+                            The {Trustees} {Directors of the Trustee Company} will execute the Trust Deed tabled at the meeting. The fund will be a regulated complying superannuation fund and commence on the day of execution of the Trust Deed.
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="border:0;"> Application to be regulated</th>
+                        <td style="border:0;">
+                            The {Trustees} {Directors of the Trustee Company} will make an application with the regulator to elect the fund to be a regulated fund and register the fund for, Australian Business Number, Tax File Number and Goods & Services Tax (if necessary).
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="border:0;">Application for Members</th>
+                        <td style="border:0;">
+                            The application forms to become members in the fund was received from following persons
+                            <br />
+                            {membersname}
+                            <br />
+                            are accepted and trustees will give members details of the benefits provided under Rules of the this Fund.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <span style="display:block;page-break-after:always"></span>
+    <div class="page">
+        <div style="padding:0 50px 50px;">
+            <table style="border: 0;border-collapse: collapse;border: none;">
+                <tbody>
+                    <tr>
+                        <th width="200" style="border:0;padding-bottom:30px">Information to members</th>
+                        <td style="border:0;">
+                            The members have been provided with Product Disclosure Statement of the fund and all the necessary information regarding the fund.
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="border:0;">Investment Strategy</th>
+                        <td style="border:0;">
+                            The {Trustees} {Directors of the Trustee Company} will formulate an Investment strategy for the Fund and this will be documented and reviewed on a regular basis.
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="border:0;">Bank Account </th>
+                        <td style="border:0;">The {Trustees} {Directors of the Trustee Company} will open a bank account in the name of the Fund. And with the bank be operated by one or more {Trustees} {Directors of the Trustee Company} who will be the signatories to the bank  account</td>
+                    </tr>
+                    <tr>
+                        <th style="border:0;">Appointment of fund Administrator</th>
+                        <td style="border:0;">
+                            Appointed as the funds Administrator : My SMSF Property
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="border:0;">Appointment of fund Auditor</th>
+                        <td style="border:0;">
+                            Appointed as the funds Auditor :
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="border:0;">Appointment of fund Financial Advisor</th>
+                        <td style="border:0;">
+                            Appointed as the Financial Advisor :
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="border:0;">Contributions, Rollovers & investments</th>
+                        <td style="border:0;">
+                            The {Trustees} {Directors of the Trustee Company} are empowered to Receive contributions and rollovers for members and invest monies as per investment strategy of the fund.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <p>There being no further matters to discuss, the meeting was closed.</p>
+            {memberssign}
+            
+        </div>
+    </div>
+    <span style="display:block;page-break-after:always"></span>
+    <div class="page">
+        <div style="padding:0 50px 50px;">
+            <p class="sub_heading" style="text-align:center">
+                Investment Strategy
+            </p>
+            <p>Recent changes to Superannuation regulations (effective for years commencing 1 July 2017) broadly require SMSF trustees to:</p>
+            <ul class="listn">
+                <li>Consider insurance for members as part of the fund’s investment strategy;</li>
+                <li>Regularly review their investment strategy;</li>
+                <li>Keep money and assets of the fund separate from those held by a trustee; and</li>
+                <li>Value assets at market value for reporting purposes – for FY2015/16 and future years</li>
+            </ul>
+            <br />
+            <p>The legislation does not prescribe what time period constitutes “regularly” reviewing an Investment Strategy. General consensus is that anything less than an annual review would probably not be regarded as regular – accordingly we would expect this document to be reviewed, updated if necessary, signed and filed on an annual basis. </p>
+            <p>As noted above, Trustees are required to consider “whether the trustees of the fund should hold a contract of insurance that provides insurance cover for one or more members of the fund”. This does not mean insurance is compulsory for members but it does mean Trustees need to be able to demonstrate their consideration of the requirement for insurance. Whilst the legislation does not specify how this is done most commentators recommend including a comment in either the Investment Strategy or the fund’s annual minutes. Whilst there is some debate in legal circles as to whether Trustees should explain their decisions regarding insurance (some legal commentators argue explaining why insurance was not put in place may create an avenue for future litigation), we expect most Trustees will provide some basis for their decision. Note: a fund may elect to have insurance for one member but not for others.</p>
+            <p><span class="subheading">Disclaimers:</span> This is a investment strategy template designed to be customised only and needs to be tailored for Trustees individual circumstances. It does not take into account the circumstances of individual trustees and does not represent any form of financial or legal advice. Please obtain advice from a qualified financial advisor if you require assistance in regard to asset allocation and/or product selection for your SMSF.</p>
+
+            <p>
+
+                <span class="subheading">Disclaimers:</span>
+                <em>
+                    This is a template only and needs to be tailored for Trustees individual circumstances. This template does not take into account the circumstances of individual trustees and does not represent any form of financial or legal advice. Please obtain advice from a qualified financial advisor if you require assistance in regard to asset allocation and/or product selection for your SMSF.
+                </em>
+            </p>
+
+        </div>
+    </div>
+    <span style="display:block;page-break-after:always"></span>
+    <div class="page">
+        <div style="padding:0 50px 50px;">
+            <p class="sub_heading" style="text-align:center">
+                Investment Strategy
+            </p>
+            <p class="sub_heading" style="text-align:center">
+                {trustname}
+            </p>
+            <p class="subheading">Background:</p>
+            <p>The investment strategy outlined below represents an expansion and clarification of the Investment Strategy agreed at the formation of the 
+                {trustname}</p>
+            <p class="subheading">Objectives:</p>
+            <p>The objective of the fund is to:</p>
+            <ul class="listn">
+                <li>Provide superannuation benefits to members and their dependants to meet their retirement needs.</li>
+                <li>Ensure that appropriate mixes of investments are held by the fund to support these needs</li>
+                <li>Ensure the fund has sufficient insurance and liquidity arrangements, to meet all commitments</li>
+                <li>Maximise the tax effectiveness of fund investments thereby delivering the best long term after tax return for members.</li>
+            </ul>
+            <p>The Investment objective of the trustees is to aim to achieve real medium to longer-term growth. In recognition of the 25 year investment time frame of members the fund will have a high proportion of growth assets in the portfolio. </p>
+            <p class="subheading">Investment Choice:</p>
+            <p>The Trustees have determined the fund’s investments may include but not be limited to all or one of the following:</p>
+            <ul class="listn">
+                <li>Direct equities, stocks and derivatives including participation in dividend reinvestment programs and right issues, including the use of geared instalment warrants:</li>
+                <li>Property trusts and associated investments:</li>
+                <li>Managed investments and associated products: </li>
+                <li>Direct residential, industrial and commercial property investment including geared property investments purchased using allowable limited recourse borrowing arrangements</li>
+                <li>Deposits and investments with banks and other financial institution securities including Term Deposits, Debentures, Secured and Unsecured Notes and Bonds:</li>
+                <li>Any other investment that the trustees may feel prudent to achieve the objective of the fund.</li>
+            </ul>
+        </div>
+    </div>
+    <span style="display:block;page-break-after:always"></span>
+    <div class="page">
+        <div style="padding:0 50px 50px;">
+            <p>The Trustee may from time to time decide to seek professional advice from Accountants, Solicitors or Financial Planners in the formulation or implementation of this or any future investment strategy. </p>
+            <p>In formulating this strategy the trustees have taken into consideration relevant features of the various investments in accordance with both the fund’s objectives and appropriate legislation.</p>
+            <p>In drafting this investment strategy, the trustees have taken into account all of the circumstances of the fund, including:</p>
+            <ul class="listn">
+                <li>the risks and likely return associated with each investment;</li>
+                <li>the range and diversity of investments held by the fund;</li>
+                <li>any risks coming from limited diversification;</li>
+                <li>the liquidity of the fund’s investments;</li>
+                <li>the ages and preferences of its members;</li>
+                <li>expected cash flow requirements; and</li>
+                <li>the ability of the fund to meet its existing and prospective liabilities such as paying benefits to its members.</li>
+            </ul>
+            <p class="subheading">Policies:</p>
+            <p><em> The policies adopted by the Trustees in order to achieve these objectives are: </em></p>
+            <ul class="listn">
+                <li>Regular monitoring of the performance of the fund’s investments, the overall investment mix and the expected cash flow requirements of the fund.</li>
+                <li>Re-balancing the fund’s investment portfolio due to changes in market conditions through asset sales and new investments as appropriate.</li>
+            </ul>
+            <p>The Trustees will aim to follow the investment strategy, however, they will at all times reserve the right to change the investment mix depending on the market situation and opportunities available to better meet the objectives of the fund.</p>
+            <p>A copy of the Investment Strategy of the fund will be available to members of the fund on request.</p>
+            <p class="subheading">Risk profile and risk tolerance:</p>
+            <p>The Fund has a medium/long time horizon. Further the members are prepared to endure a reasonable level of volatility of returns in expectation of long term growth. The members have existing equity and property investments outside superannuation and are familiar with the variability of both returns and capital values which are associated with such investments.</p>
+            <p>Members understand </p>
+            <ul class="listn">
+                <li>the trade-off between investment risk and long term capital and income growth and have indicated [capital preservation & stability/asset growth] is a priority</li>
+                <li>Investment risk is borne by the members, as fluctuations in investment returns will affect the level of benefits available to members.</li>
+            </ul>
+        </div>
+    </div>
+    <span style="display:block;page-break-after:always"></span>
+    <div class="page">
+        <div style="padding:0 50px 50px;">
+            <p class="subheading">
+                Geared Investments:
+            </p>
+            <p>The Trustees have elected to purchase direct residential property using limited recourse borrowing arrangements. The Trustees have indicated they understand and are prepared to accept the increased volatility of returns associated with borrowing to invest, including the risk of loss, including the risk of total loss of invested assets where such assets are subject to limited recourse borrowing arrangements]   </p>
+            <p class="subheading">
+                Insurance:
+            </p>
+            <p>The Trustees have considered whether the Fund should hold a contract of insurance for its members and concluded that: </p>
+            <ul class="listn">
+                <li>The Trustees recognise the need for additional insurance and will take the following actions </li>
+            </ul>
+            <p style="padding-left:100px">-	Apply for life and Tpd cover funded via their SMSF  </p>
+            <p class="subheading">
+                Liquidity:
+            </p>
+            <p>The Members of the 
+            {trustnamewithmemberage}
+             and have no significant assets outside of superannuation. At the present time neither expect to access their superannuation prior to age 65. Cash in excess of anticipated liquidity requirement will be invested in accordance with the Fund’s investment strategy. </p>
+            <p class="subheading">
+                Asset Allocation:
+            </p>
+            <p>The targeted asset allocation will recognise the need to have a diversified asset mix, however, given the long-term investment horizon of the members of up to 87 years until life expectancy and the lack of significant assets outside of superannuation, the allocation will have a strong growth asset bias and be focused on maximising capital growth.</p>
+            <p>The Trustees recognise the higher risk in investing predominantly in growth assets and the volatility associated with shares and property.  The volatility will be compensated by the prospect of achieving higher returns and growth in the longer term.  In order to minimise this risk, the member / Trustees will consider investing in different industries and sectors where possible.</p>
+        </div>
+    </div>
+    <span style="display:block;page-break-after:always"></span>
+    <div class="page">
+        <div style="padding:0 50px 50px;">
+            <p>The final targeted asset allocation will be in the following ranges: </p>
+            <table class="tbl">
+                <tbody>
+                    <tr>
+                        <th class="subheading">Growth Assets</th>
+                        <th class="subheading">Long term range</th>
+                        <th class="subheading">Current target</th>
+                    </tr>
+                    <tr>
+                        <td> •	Australian listed equities</td>
+                        <td>0%-0% eg 40-60%</td>
+                        <td>xx%</td>
+                    </tr>
+                    <tr>
+                        <td>•	International listed equities</td>
+                        <td>0%-0%  </td>
+                        <td>yy%</td>
+                    </tr>
+                    <tr>
+                        <td>•	Australian listed property</td>
+                        <td>0%-0% </td>
+                        <td>ww%</td>
+                    </tr>
+                    <tr>
+                        <td>•	Direct Property</td>
+                        <td>0%-0% </td>
+                        <td>vv%</td>
+                    </tr>
+                    <tr>
+                        <td>•	Collectables / Other</td>
+                        <td>0%-0% </td>
+                        <td>zz%</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td> </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="subheading">Defensive assets</td>
+                        <td> </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>•	Cash and term deposits</td>
+                        <td> 0%-0% eg 40-60%</td>
+                        <td>xx%</td>
+                    </tr>
+                    <tr>
+                        <td>•	Australian cash and bond funds</td>
+                        <td>0%-0% </td>
+                        <td>yy%</td>
+                    </tr>
+                    <tr>
+                        <td>•	International cash and bond funds</td>
+                        <td>0%-0% </td>
+                        <td>ww%</td>
+                    </tr>
+                    <tr>
+                        <td>•	Gold Bullion</td>
+                        <td>0%-0% </td>
+                        <td>vv%</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>100%</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <p>All Trustees/Directors of the Trustee Company and SMSF to sign</p>
+            <br />
+            <p>Signed & dated</p>
+            <br />
+            <br />
+            {membersfooter}
+            
+        </div>
+    </div>
+
+
+</body>
+</html>

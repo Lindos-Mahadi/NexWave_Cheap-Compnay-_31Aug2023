@@ -1,0 +1,110 @@
+﻿@model comdeeds.TblContact
+@{
+    ViewBag.Title = "contact";
+}
+
+<div id="titlebar">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Contact us</h2>
+                <nav id="breadcrumbs">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li>Contact us</li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container margin-bottom-45">
+
+    <div class="row">
+
+        <!-- Contact Details -->
+        <div class="col-md-4">
+
+            <h4 class="headline margin-bottom-30">Our Details</h4>
+
+            <!-- Contact Details -->  
+            <div class="sidebar-textbox">
+                <p>Whether you are an IT contractor,small business owner or entrepreneur, Comdeeds is here to help and support you.We are just passionate about Business and Trusts.</p>
+
+                <ul class="contact-details">
+                    <li><i class="sl sl-icon-phone"></i> <strong>Phone:</strong> <span> 1300253429 </span></li>  @*(02) 80110790*@
+                    <li><i class="sl sl-icon-location"></i> <strong>Address:</strong> <span>PO BOX 878 North Sydney NSW 2059 </span></li>
+                    <li><i class="sl sl-icon-globe"></i> <strong>Web:</strong> <span><a href="www.comdeeds.com.au">www.comdeeds.com.au</a></span></li>
+                    <li><i class="sl sl-icon-envolope"></i> <strong>E-Mail:</strong> <span><a href="mailto:info@comdeeds.com.au">info@comdeeds.com.au</a></span></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Contact Form -->
+        <div class="col-md-8">
+
+            <section id="contact">
+                <h4 class="headline margin-bottom-35">Contact Form</h4>
+
+                @Html.Raw(ViewBag.msg)
+
+
+                @using (Html.BeginForm("contact", "Home", FormMethod.Post, new { @id = "contactform" }))
+                {
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                @Html.TextBoxFor(Model => Model.Name, new { @placeholder = "Your name" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                @Html.TextBoxFor(Model => Model.Email, new { @placeholder = "Email address" })
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        @Html.TextBoxFor(Model => Model.Subject, new { @placeholder = "Subject" })
+                    </div>
+
+
+                            <div>
+                                @Html.TextAreaFor(Model => Model.Message, new { @placeholder = "Message", @cols = "40", @rows = "3", @spellcheck = "true" })
+                            </div>
+
+
+                            <input type="submit" class="submit button" id="submit" value="Submit Message">
+
+                }
+
+
+
+
+
+            </section>
+        </div>
+        <!-- Contact Form / End -->
+
+    </div>
+
+</div>
+<script src="~/Content/scripts/jquery.validate.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#contactform").validate({
+            rules: {
+                Name: { required: true },
+                Email: { required: true  ,email: true },                
+                Message: { required: true }
+            },
+            messages: {
+                Name: { required: "Please enter your name" },
+                Email: { required: "Please enter your email address.",email: "Please provide a valide email address." },
+                Message: { required: "Please enter your message."}
+            }
+        });
+    });
+</script>

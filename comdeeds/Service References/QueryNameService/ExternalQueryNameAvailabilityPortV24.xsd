@@ -1,0 +1,869 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:fss.types="uri:fss.types.asic.gov.au" xmlns:types="uri:types.asic.gov.au" xmlns:ascot.types="uri:ascot.types.asic.gov.au" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="uri:fss.types.asic.gov.au" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="ExternalQueryNameAvailabilityPortV2.xsd3.xsd" namespace="uri:types.asic.gov.au" />
+  <xs:complexType name="fssCustomerType">
+    <xs:sequence>
+      <xs:element name="account" type="fss.types:fssAccountType" />
+      <xs:element minOccurs="0" name="abn" type="types:abnType" />
+      <xs:choice>
+        <xs:element name="person" type="types:personNameType" />
+        <xs:element name="organisationName" type="types:nniNameType" />
+      </xs:choice>
+      <xs:element name="name">
+        <xs:annotation>
+          <xs:documentation>composite person name or organisation name</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="200" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="correspondenceName">
+        <xs:annotation>
+          <xs:documentation>Shortened name for letter windows </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="40" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="dateRegistration" type="xs:date" />
+      <xs:element minOccurs="0" name="dateRenewalReview" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>Business Name Renewal Date or Company Review Date</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="status">
+        <xs:annotation>
+          <xs:documentation>DRGD Deregistered
+PEND Pending Payment
+REGD Registered
+RJCT Rejected ...</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="4" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="phoneNumber" type="types:telephoneNumberType" />
+      <xs:element minOccurs="0" name="faxNumber" type="types:telephoneNumberType" />
+      <xs:element minOccurs="0" name="emailAddress" type="types:emailType" />
+      <xs:element minOccurs="0" name="agent">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="account" type="fss.types:fssAccountType">
+              <xs:annotation>
+                <xs:documentation>acts for customer</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="removeAgent" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation>only valid for updates</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="manager">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="40" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="creditLimit" type="types:amountType">
+        <xs:annotation>
+          <xs:documentation>0 if ommitted</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="billingAddress">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="address" type="types:addressType" />
+            <xs:element name="addressType">
+              <xs:annotation>
+                <xs:documentation>BILLING Billing Address
+CONTACT Contact Address
+PO Primary Office Address
+POH Primary Office Holder Address</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="40" />
+                  <xs:enumeration value="BILLING" />
+                  <xs:enumeration value="CONTACT" />
+                  <xs:enumeration value="PO" />
+                  <xs:enumeration value="POH" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="returnToSenderIndicator" type="xs:boolean" />
+            <xs:element minOccurs="0" name="removeAddress" type="xs:boolean">
+              <xs:annotation>
+                <xs:documentation>To be provided with address type</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="fssSimpleAccountType">
+    <xs:sequence>
+      <xs:element name="ledgerNumber">
+        <xs:annotation>
+          <xs:documentation>22 Companies Lodging
+33 Professional Licensees e.g. Auditors, Liquidators
+34 FSR Licensees
+35 Credit Licensees
+44 9103 - Annual Return Penalties
+Miscellaneous Payments/Annual Return Compliance
+55 Registered Agent Lodging
+75 ECharges Direct Debit
+77 ECR Direct Debit
+85 Business Names
+99 Sundry Debtor</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="fss.types:ledgerType">
+            <xs:minInclusive value="1" />
+            <xs:maxInclusive value="99" />
+            <xs:totalDigits value="2" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="asicIdentifier">
+        <xs:annotation>
+          <xs:documentation>ASIC Identifier
+ACN
+BNN
+ARBN
+ARSN
+License Number
+Registered Agent Number</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:positiveInteger">
+            <xs:totalDigits value="9" />
+            <xs:minInclusive value="1" />
+            <xs:maxInclusive value="999999999" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="fssAccountType">
+    <xs:sequence>
+      <xs:element name="asicType">
+        <xs:annotation>
+          <xs:documentation>APTY Australian Private Company
+APUB Australian Public Company
+BUSN Business Name
+REGA Regsitered Agent
+...</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="4" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="ledgerNumber">
+        <xs:annotation>
+          <xs:documentation>22 Companies Lodging
+33 Professional Licensees e.g. Auditors, Liquidators
+34 FSR Licensees
+35 Credit Licensees
+44 9103 - Annual Return Penalties
+Miscellaneous Payments/Annual Return Compliance
+55 Registered Agent Lodging
+75 ECharges Direct Debit
+77 ECR Direct Debit
+85 Business Names
+99 Sundry Debtor</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="fss.types:ledgerType">
+            <xs:minInclusive value="1" />
+            <xs:maxInclusive value="99" />
+            <xs:totalDigits value="2" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="asicIdentifier">
+        <xs:annotation>
+          <xs:documentation>ASIC Identifier
+ACN
+BNN
+ARBN
+ARSN
+License Number
+Registered Agent Number</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:positiveInteger">
+            <xs:totalDigits value="9" />
+            <xs:minInclusive value="1" />
+            <xs:maxInclusive value="999999999" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="fssItemType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reportingParty" type="fss.types:fssAccountType">
+        <xs:annotation>
+          <xs:documentation>party that lodgement is against</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="fee" type="fss.types:feeType" />
+      <xs:element name="dateProcessed" type="xs:date" />
+      <xs:element name="dateEffective" type="xs:date" />
+      <xs:element minOccurs="0" name="dateLastEffective" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>Required for 388, 405, 406</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="reversalIndicator" type="xs:boolean" />
+      <xs:element minOccurs="0" name="registryDocumentNumber" type="types:documentNoType" />
+      <xs:element minOccurs="0" name="amount" type="types:amountType" />
+      <xs:element minOccurs="0" name="taxAmount" type="types:amountType" />
+      <xs:element minOccurs="0" name="taxCode">
+        <xs:annotation>
+          <xs:documentation>GST Goods And Services Tax</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="3" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="channel">
+        <xs:annotation>
+          <xs:documentation>E Electronic
+P Paper</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="1" />
+            <xs:enumeration value="E" />
+            <xs:enumeration value="P" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="quantity">
+        <xs:annotation>
+          <xs:documentation>L Large
+S Small</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="1" />
+            <xs:enumeration value="L" />
+            <xs:enumeration value="S" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="suffix">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="2" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="feeType">
+    <xs:sequence>
+      <xs:element name="feeType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="5" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="feeSubType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="2" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="feeDescription">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="10" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="ledgerType">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:totalDigits value="9" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="customerReferenceNumberType">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:totalDigits value="19" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="feesType">
+    <xs:annotation>
+      <xs:documentation>** DEPRECATED**
+Asic output of statutory fees</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="lodgementUnit" type="types:asicNumericIdType" />
+      <xs:element name="lodgementDate" type="xs:date" />
+      <xs:element minOccurs="0" name="paymentMethod" type="fss.types:paymentMethodType" />
+      <xs:element name="totalAmountOwing" type="types:amountType" />
+      <xs:element minOccurs="0" name="invoice">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="asicName">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="50" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="asicAbn">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:minLength value="11" />
+                  <xs:maxLength value="11" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="debtorName">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="200" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="debtorAddress" type="types:addressType" />
+            <xs:element name="debtorAccount" type="fss.types:fssAccountType" />
+            <xs:element name="debtorBpayReference">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="13" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element maxOccurs="2" name="debtorDetail">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="prefix">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="12" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="suffix">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="60" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="invoiceIssueDate" type="xs:date" />
+            <xs:element name="invoiceItems">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element maxOccurs="50" name="item">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element maxOccurs="2" name="description">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                              <xs:maxLength value="50" />
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="amount" type="types:amountType" />
+                        <xs:element minOccurs="0" name="taxCode">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                              <xs:maxLength value="3" />
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:element>
+                        <xs:element minOccurs="0" name="taxAmount" type="types:amountType" />
+                        <xs:element minOccurs="0" name="referenceNo">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                              <xs:maxLength value="16" />
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:element>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="asicBpayBillerCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="5" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="asicTitleForPayment">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="100" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="asicAddressForPayment">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="100" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="asicPhoneForQueries">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="12" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="fssTransactionType">
+    <xs:sequence>
+      <xs:element name="dueDate" type="xs:date" />
+      <xs:element name="type">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="254" />
+            <xs:enumeration value="Fee" />
+            <xs:enumeration value="Refund" />
+            <xs:enumeration value="Waiver" />
+            <xs:enumeration value="Payment" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="description">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="254" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="referenceId">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="254" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="allocationReference">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="254" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="originalAmount" type="types:amountType" />
+      <xs:element name="outstandingAmount" type="types:amountType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="suffixType">
+    <xs:restriction base="xs:string">
+      <xs:length value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="paymentMethodType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="8" />
+      <xs:enumeration value="CC" />
+      <xs:enumeration value="DD" />
+      <xs:enumeration value="INVOICE" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ascotDocumentNoType">
+    <xs:annotation>
+      <xs:documentation> Ascot document number</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="9" />
+      <xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="transactionType">
+    <xs:sequence>
+      <xs:element name="reportingParty" type="fss.types:fssAccountType" />
+      <xs:element name="date" type="xs:date" />
+      <xs:element minOccurs="0" name="code">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="32" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="descriptionLine1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="80" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="descriptionLine2">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="80" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="reference">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="40" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="amount" type="types:amountType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="invoiceType">
+    <xs:sequence>
+      <xs:element name="debtor" type="fss.types:debtorType" />
+      <xs:element name="dateIssued" type="xs:date" />
+      <xs:element minOccurs="0" name="invoicePeriod">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="dateStart" type="xs:date" />
+            <xs:element name="dateEnd" type="xs:date" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="paid" type="fss.types:transactionsType" />
+      <xs:element minOccurs="0" name="oldUnpaid" type="fss.types:transactionsType" />
+      <xs:element minOccurs="0" name="currentUnpaid" type="fss.types:transactionsType" />
+      <xs:element name="totalDue" type="types:amountType">
+        <xs:annotation>
+          <xs:documentation>Sum of currentUnpaid.total and oldUnpaid.total</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="asicPaymentDetails">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="abn" type="types:abnType" />
+            <xs:element name="titleForPayment">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="200" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="addressForPayment">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="100" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="phoneForQueries">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="12" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="barcode">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="80" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="bpay">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="billerCode">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="5" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="ref">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="13" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="postBillpay">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="billpayCode">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="10" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="ref">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="18" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="eftReferenceNumber" type="xs:positiveInteger" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="receiptType">
+    <xs:sequence>
+      <xs:element name="debtor" type="fss.types:debtorType" />
+      <xs:element name="dateIssued" type="xs:date" />
+      <xs:element maxOccurs="99" name="transaction" type="fss.types:transactionType" />
+      <xs:element name="total" type="types:amountType" />
+      <xs:element name="totalDue" type="types:amountType" />
+      <xs:element minOccurs="0" name="dateDue" type="xs:date" />
+      <xs:element minOccurs="0" name="asicPaymentDetails" type="fss.types:asicPaymentDetailsType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="paymentDetailsType">
+    <xs:sequence>
+      <xs:element name="abn" type="types:abnType" />
+      <xs:element name="titleForPayment">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="200" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="addressForPayment">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="100" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="phoneForQueries">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="12" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="barcode">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="80" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="bpay">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="billerCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="5" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="ref">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="13" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="postBillpay">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="billpayCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="10" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="ref">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="19" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="eftReferenceNumber" type="xs:positiveInteger" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="transactionsType">
+    <xs:sequence>
+      <xs:element maxOccurs="99" name="transaction" type="fss.types:transactionType" />
+      <xs:element name="total" type="types:amountType">
+        <xs:annotation>
+          <xs:documentation>Total unpaid for current period</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="dateDue" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>Use for currentUnpaid only</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="debtorType">
+    <xs:sequence>
+      <xs:element name="account" type="fss.types:fssAccountType" />
+      <xs:element name="name" type="types:nniNameType">
+        <xs:annotation>
+          <xs:documentation>Business name, company name, etc</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:choice>
+        <xs:element minOccurs="0" name="abn" type="types:abnType" />
+        <xs:element minOccurs="0" name="abnReferenceNumber">
+          <xs:simpleType>
+            <xs:restriction base="xs:positiveInteger">
+              <xs:totalDigits value="13" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:choice>
+      <xs:element name="address" type="types:addressType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="feeWithAmountType">
+    <xs:sequence>
+      <xs:element name="type">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="5" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="subType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="2" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="description">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="60" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="amount" type="types:amountType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="priceType">
+    <xs:sequence>
+      <xs:element maxOccurs="99" name="fee" type="fss.types:feeWithAmountType" />
+      <xs:element name="totalAmount" type="types:amountType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="asicPaymentDetailsType">
+    <xs:sequence>
+      <xs:element name="abn" type="types:abnType" />
+      <xs:element name="titleForPayment">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="200" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="addressForPayment">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="100" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="phoneForQueries">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="12" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="barcode">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="80" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="bpay">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="billerCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="5" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="ref">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="13" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="postBillpay">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="billpayCode">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="10" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="ref">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="18" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="eftReferenceNumber" type="xs:positiveInteger" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

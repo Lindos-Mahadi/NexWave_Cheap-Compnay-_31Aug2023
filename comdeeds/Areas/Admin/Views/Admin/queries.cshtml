@@ -1,0 +1,205 @@
+﻿<div id="bindview">
+    <div class="main-content container-fluid">
+        <div class="panel panel-default panel-table">
+            <div class="panel-heading">
+                Queries
+
+                <div class="tools">
+                    <button class="btn btn-primary" data-bind="visible: visiblebtn(), click: self.updatepages.bind($data,'del')">
+                        <i class="mdi mdi-delete" style="color:#fff;"></i>
+                    </button>
+
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive noSwipe">
+                    <table id="grid" class="table table-striped table-hover table-condensed"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div id="modalview" tabindex="-1" role="dialog" class="modal fade colored-header colored-header-primary">
+        <div class="modal-dialog modal-lg custom-width">
+            <div class="modal-content" data-bind="with:row">
+                <div class="modal-header">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><span class="mdi mdi-close"></span></button>
+                    <h3 class="modal-title" data-bind="text:'Query from '+$data.Name "></h3>
+                </div>
+                <div class="modal-body">
+
+                    <div>
+                        <small class="text-muted">Subject</small>
+                        <p class="lead" data-bind="text:$data.Subject"></p>
+                        <hr />
+
+                        <small class="text-muted">User detail</small>
+                        <h4 style="margin-top:0px;"><b data-bind="text:$data.Name"></b></h4>
+                        <p data-bind="text:$data.Email" style="margin-bottom:8px;"></p>
+                        <p data-bind="text:$data.Phone"></p>
+
+                        <hr />
+                        <small class="text-muted">Message</small>
+                        <p data-bind="text:$data.Message"></p>
+
+                        <hr />
+                        <small class="text-muted">Sent on </small>
+                        <p data-bind="text:moment($data.AddedDate).format('dddd, MMMM Do YYYY, h:mm:ss a')"></p>
+                    </div>
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default md-close" id="cClose"  onclick="myFunction()">Close</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function myFunction() {
+        var id = document.getElementById("cClose");
+        if (id != null) {
+            setTimeout(function () {// wait for 1 secs(2)
+                location.reload(); // then reload the page.(3)
+            }, 1000)
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    window.onload = function () {
+
+        function bindko() {
+            var self = this;
+            self.visiblebtn = ko.observable(false);
+            self.row = ko.observableArray();
+            self.isajax = ko.observable(false);
+
+            self.bindgrid = function () {
+                var grid = $('#grid').grid({
+                    dataSource: '/api/AdminApi/getcontactform/',
+                    selectionType: 'multiple',
+                    selectionMethod: 'checkbox',
+                    //rowReorder: true,
+                    primaryKey: "Id",
+                    columns: [
+                            { field: 'AddedDate', title: 'Date', width: 150 },
+                            { field: 'Name', title: "Name", width: 150 },
+                            { field: 'Email', title: "Email", width: 220 },
+                            { field: 'Subject', title: "Subject" },
+                            { field: 'Status', title: "Status" },
+                            { field: 'Id', title: 'Action', sortable: true, tmpl: "<button>View</button>", width: 150, events: { 'click': viewrow } },
+                    ],
+                    style: {
+                        pager: {
+                            stateDisabled: 'icon-disabled'
+                        }
+                    },
+                    pager: ElePager
+
+                });
+
+                grid.on('cellDataBound', function (e, $displayEl, id, column, record) {
+                    if ('AddedDate' === column.field) {
+                        $displayEl.text("").append(moment(record.AddedDate).format('Do MMM YYYY'));
+                    }
+                    if ('Status' === column.field) {
+                        if (record.Status) {
+                            $displayEl.text("").append("<span class='label label-default'>VIEWED</span>");
+                        }else
+                        {
+                            $displayEl.text("").append("<span class='label label-warning'>UNREAD</span>");
+                        }
+                    }
+                });
+
+                grid.on('rowSelect', function (e, $row, id, record) {
+                    var selections = grid.getSelections();
+                    if (selections.length > 0) {
+                        self.visiblebtn(true);
+                    } else {
+                        self.visiblebtn(false);
+                    }
+                });
+
+                grid.on('rowUnselect', function (e, $row, id, record) {
+                    var selections = grid.getSelections();
+                    if (selections.length > 0) {
+                        self.visiblebtn(true);
+                    } else {
+                        self.visiblebtn(false);
+                    }
+                });
+
+
+            };
+
+            self.updatepages = function () {
+                if (confirm("Are you sure ,This will delete records permanently?")) {
+                    var selections = $('#grid').grid().getSelections();
+                    if (selections.length > 0) {
+                        var dt = JSON.stringify(selections);
+                        $.ajax({
+                            type: "POST",
+                            data: dt,
+                            url: "/api/AdminApi/delcontact/",
+                            contentType: "application/json",
+                            success: function (d) {
+                                if (d.msg == "success") {
+                                    alert("Records deleted successfully.");
+                                    $("#grid").grid().reload();
+                                } else {
+                                    alert("Error, please try again.");
+                                }
+                            },
+                            error: function () {
+                                alert("Error,  please try again.");
+                            }
+                        });
+                    }
+                }
+            }
+
+            self.viewrow = function (e) {
+                var d = e.data;
+                var row = d.record;
+                self.row(row);
+                $("#modalview").modal();
+                $.ajax({
+                    type: "GET",
+                    url: "/api/AdminApi/updatecontact/?id="+row.Id,
+                    contentType: "application/json",
+                    success: function (d) {
+                      
+                    },
+                    error: function () {
+                        alert("Error,  server error.");
+                    }
+                });
+
+
+            }
+
+
+
+
+
+            self.bindgrid();
+        };
+
+
+        ko.applyBindings(bindko(), document.getElementById("bindview"));
+    };
+
+</script>

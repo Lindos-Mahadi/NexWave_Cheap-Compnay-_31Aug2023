@@ -1,0 +1,99 @@
+﻿@model IEnumerable<TblOption>
+@{
+
+    var stripeapi = Model.Any(x => x.OptionName == "paymentapikey") ? Model.Where(x => x.OptionName == "paymentapikey").FirstOrDefault().OptionValue : "";
+    var paymentMode = Model.Any(x => x.OptionName == "paymentmode") ? Model.Where(x => x.OptionName == "paymentmode").FirstOrDefault().OptionValue : "";
+    var c_asicfees = Model.Any(x => x.OptionName == "asicfee") ? Model.Where(x => x.OptionName == "asicfee").FirstOrDefault().OptionValue : "";
+    var companygst = Model.Any(x => x.OptionName == "companygst") ? Model.Where(x => x.OptionName == "companygst").FirstOrDefault().OptionValue : "";
+    var companysetupcost = Model.Any(x => x.OptionName == "companysetupcost") ? Model.Where(x => x.OptionName == "companysetupcost").FirstOrDefault().OptionValue : "";
+    var trustsetupcost = Model.Any(x => x.OptionName == "trustsetupcost") ? Model.Where(x => x.OptionName == "trustsetupcost").FirstOrDefault().OptionValue : "";
+    var trustgst = Model.Any(x => x.OptionName == "trustgst") ? Model.Where(x => x.OptionName == "trustgst").FirstOrDefault().OptionValue : "";
+    var creditcardfee = Model.Any(x => x.OptionName == "creditcardfee") ? Model.Where(x => x.OptionName == "creditcardfee").FirstOrDefault().OptionValue : "";
+    var processingfee = Model.Any(x => x.OptionName == "processingfee") ? Model.Where(x => x.OptionName == "processingfee").FirstOrDefault().OptionValue : "";
+
+}
+
+<div class="main-content container-fluid" id="bindview">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading-divider ">
+                    Site settings
+                </div>
+                <div class="panel-body">
+                    <form method="post" action="@Url.Action("settings", "Admin")" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.Raw(ViewBag.msg)
+                                <div class="form-group">
+                                    <label for="txtapikey">Stripe Payment api key</label>
+                                    <input type="text" name="paymentapikey" class="form-control" placeholder="Stripe Payment Api key" value="@stripeapi" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">Payment mode</label>
+                                    <select class="form-control" id="ddpaymentmode" name="paymentmode">
+                                        <option value="">Select</option>
+                                        <option value="live" @{if (paymentMode == "live") { <text> selected="selected"</text>} }>Live</option>
+                                        <option value="test" @{if (paymentMode == "test") { <text> selected="selected"</text>} }>Test</option>
+                                    </select>
+
+                                </div>
+
+                                <hr />
+                                <div class="form-group">
+                                    <label for="companycost">Company setup fees (ASIC)</label>
+                                    <input type="text" class="form-control" name="asicfee" value="@c_asicfees" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="companycost">Company setup fees (Comdeeds)</label>
+                                    <input type="text" class="form-control" name="companysetupcost" value="@companysetupcost" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="companycost">Company setup tax (GST)</label>
+                                    <input type="text" class="form-control" name="companygst" value="@companygst" />
+                                </div>
+
+                                <hr />
+
+                                <div class="form-group">
+                                    <label for="companycost">Trust setup fees (Comdeeds)</label>
+                                    <input type="text" class="form-control" name="trustsetupcost" value="@trustsetupcost" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="companycost">Trust setup tax (GST)</label>
+                                    <input type="text" class="form-control" name="trustgst" value="@trustgst" />
+                                </div>
+
+                                <hr />
+
+                                <div class="form-group">
+                                    <label for="companycost">Credit card fees (%)</label>
+                                    <input type="text" class="form-control" name="creditcardfee" value="@creditcardfee" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="companycost">Processing fee</label>
+                                    <input type="text" class="form-control" name="processingfee" value="@processingfee" />
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

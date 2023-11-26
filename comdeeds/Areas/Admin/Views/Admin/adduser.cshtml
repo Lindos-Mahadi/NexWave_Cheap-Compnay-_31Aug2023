@@ -1,0 +1,230 @@
+﻿<style>
+    .validationMessage
+    {
+        color:red;
+        font-size:12px;
+    }
+</style>
+
+<div class="main-content container-fluid" id="bindview">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading-divider">
+                    Add user
+                </div>
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="register-form-inner">
+                                <div id="registermsg" data-bind="visible:msg">
+                                    <div role="alert" class="alert  alert-dismissible" data-bind="css:'alert-'+msgclass()">
+                                        <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="mdi mdi-close"></span></button>
+                                        <span data-bind="text:msg"></span>
+                                    </div>
+                                </div>
+
+                                <form id="registerForm" method="post" enctype="multipart/form-data" data-bind="foreach:user">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>First Name<sup>*</sup></label>
+                                                <input required type="text" class="form-control" id="txtfname" name="firstname" placeholder="First name" data-bind="value:firstname">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Last Name<sup>*</sup></label>
+                                                <input type="text" class="form-control" id="txtlastname" name="lastname" placeholder="Last name" data-bind="value:lastname">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>Email<sup>*</sup></label>
+                                                <input type="text" class="form-control" id="txtemail" name="email" placeholder="Email" data-bind="value:email">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Contact no.</label>
+                                                <input type="tel" class="form-control" id="txtphone" name="phone" placeholder="Please enter contact no." maxlength="15" pattern="^[0-9\-\+]{9,15}$" checked="checked" data-bind="value:phone">
+                                               
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>Password<sup>*</sup></label>
+                                                <input type="password" class="form-control" id="txtpassword" name="password" placeholder="Please enter password" data-bind="value:password">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Repeat Password <sup>*</sup></label>
+                                                <input type="password" class="form-control" id="txtconfpass" name="confpass" placeholder="Please confirm password" data-bind="value:confpassword">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>User role<sup>*</sup></label>
+                                                <select class="form-control" data-bind="value:userRole">
+                                                    <option value="">Choose user role</option>
+                                                    <option value="ADMIN">Admin</option>
+                                                    <option value="SUBADMIN">Sub admin</option>
+                                                    <option value="SUBUSER">Sub user</option>
+                                                </select>
+                                            </div>                                            
+                                        </div>                                        
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">                                            
+                                            <div class="col-sm-12">
+                                                <div class="be-checkbox">
+                                                    <input id="checkemail" type="checkbox" data-bind="checked:emailoption" value="true">
+                                                    <label for="checkemail">Send verification email</label>
+                                                </div>
+                                                <small>If this is uncheck , user will able to login without email check.</small>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                    <button type="button" data-bind="click:registeruser,enable:!isajax()" class="btn btn-lg btn-primary">
+                                        <span data-bind="visible:!isajax()">Add new user</span>
+                                        <span style="display:none" data-bind="visible:isajax()"><i class="mdi mdi-spinner fa-spin"></i> Processing</span>
+                                    </button>
+                                    <a class="btn btn-default btn-lg" href="/admin/users">Back</a>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    window.onload = function () {
+
+        ko.validation.init({
+            grouping: {
+                deep: true,
+                live: true,
+                observable: true
+            }
+        }, true);
+
+
+
+        ko.validation.rules['areSame'] = {
+            getValue: function (o) {
+                return (typeof o === 'function' ? o() : o);
+            },
+            validator: function (val, otherField) {
+                return val === this.getValue(otherField);
+            },
+            message: 'Password is not same.'
+        };
+        ko.validation.registerExtenders();
+
+        var userModel = function (f, l, e, p, c, ph,ur,em) {
+            var s = this;
+            s.firstname = ko.observable(f).extend({ required: true });
+            s.lastname = ko.observable(l).extend({ required: true});
+            s.email = ko.observable(e).extend({ required: true }).extend({ email: true });
+            s.password = ko.observable(p).extend({ required: true }).extend({ minLength: 6});
+            s.confpassword = ko.observable(c).extend({ required: true }).extend({ minLength: 6 }).extend({ areSame: s.password });
+            s.phone = ko.observable(ph).extend({ required: true }).extend({maxLength :10});
+            s.userRole = ko.observable(ur).extend({ required: true });
+            s.emailoption = ko.observable(em);
+            return s;
+        };
+
+        function bindko() {
+            var self = this;
+            self.user = ko.observableArray();
+            self.msg = ko.observable("");
+            self.msgclass = ko.observable("");
+            self.isajax = ko.observable(false);
+            self.user().push(new userModel("", "", "", "", "", "","user","true"));
+            
+            self.registeruser = function () {
+
+                self.uerror = ko.validation.group(self.user(), {
+                    deep: true
+                });
+
+                if (self.uerror().length !== 0) {
+                    self.uerror.showAllMessages();
+                } else {
+
+                    var dt = ko.toJS(self.user());
+
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/AdminApi/adduser/",
+                        data: JSON.stringify(dt[0]),
+                        contentType: "application/json",
+                        beforeSend: function () {
+                            self.isajax(true);
+                        },
+                        complete: function () {
+                            self.isajax(false);
+
+                        },
+                        success: function (r) {
+                            if (r.msg == "success") {
+                                self.msg("User created successfully.");
+                                self.msgclass("success");
+                                self.user()[0].firstname("");
+                                self.user()[0].lastname("");
+                                self.user()[0].email("");
+                                self.user()[0].password("");
+                                self.user()[0].phone("");
+                                self.user()[0].emailoption("true");
+                                self.user()[0].userRole("user");
+                                self.user()[0].confpassword("");
+                                //self.user().push(new userModel("", "", "", "", "", "", "user", "true"));
+
+
+                            } else if (r.msg == "exists") {
+                                self.msg("User already exists.");
+                                self.msgclass("warning");
+                            }
+                            else if (r.msg == "invalidemail") {
+                                self.msg("Invalid email id.");
+                                self.msgclass("danger");
+                            }
+                            else if (r.msg == "emailpasserr") {
+                                self.msg("Please provide email and password.");
+                                self.msgclass("warning");
+                            }
+                            else if (r.msg == "nameerr") {
+                                self.msg("Please enter full user name.");
+                                self.msgclass("warning");
+                            }else
+                            {
+                                self.msg("Error - User did not created.");
+                                self.msgclass("danger");
+                            }
+                          
+                        },
+                        error: function () {
+                            toastr.error("There is a server error occured.");
+
+                        }
+                    });
+                }
+
+
+
+            };
+        };
+        ko.applyBindings(bindko(), document.getElementById("bindview"));
+    };
+</script>

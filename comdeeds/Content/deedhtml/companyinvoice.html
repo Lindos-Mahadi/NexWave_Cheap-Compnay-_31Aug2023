@@ -1,0 +1,292 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Invoice</title>
+
+    <style>
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 10px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+            font-size: 16px;
+            line-height: 24px;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
+        }
+        .txtright
+        {
+            text-align:right;
+        }
+
+            .invoice-box table {
+                width: 100%;
+                line-height: inherit;
+                text-align: left;
+            }
+
+                .invoice-box table td {
+                    padding: 5px;
+                    vertical-align: top;
+                }
+                .invoice-box table tr.item  td,
+                .invoice-box table tr.heading td,
+                .invoice-box table tr.total td{
+                    padding: 10px;
+                    vertical-align: top;
+                }
+
+                .invoice-box table tr.top td:nth-child(2),
+                .invoice-box table tr.information td:nth-child(2) {
+                    text-align:right;
+                }
+
+                .invoice-box table tr.top table td {
+                    padding-bottom: 20px;
+                }
+
+                    .invoice-box table tr.top table td.title {
+                        font-size: 45px;
+                        line-height: 45px;
+                        color: #333;
+                    }
+
+                .invoice-box table tr.information table td {
+                    padding-bottom: 40px;
+                }
+
+                .invoice-box table tr.heading td {
+                    background: #eee;
+                    border-bottom: 1px solid #ddd;
+                    font-weight: bold;
+                }
+
+                .invoice-box table tr.details td {
+                    padding-bottom: 20px;
+                }
+
+                .invoice-box table tr.item td {
+                    border-bottom: 1px solid #eee;
+                }
+
+                .invoice-box table tr.item.last td {
+                    border-bottom: none;
+                }
+
+                .invoice-box table tr.total td{
+                    border-top: 2px solid #eee;
+                    font-weight: bold;
+                }
+
+        @media only screen and (max-width: 600px) {
+            .invoice-box table tr.top table td {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+
+            .invoice-box table tr.information table td {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="invoice-box">
+        <table cellpadding="8" cellspacing="0">
+            <tr class="top">
+                <td colspan="4">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <img src="https://comdeeds.com.au/Content/images/logo.jpg" style="width:140px; max-width:300px;" />
+                            </td>
+
+                            <td class="txtright">
+                                <strong> Invoice #{invoiceno}</strong><br/>
+                                Created: {date}<br/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr class="information">
+                <td colspan="4">
+                    <table>
+                        <tr>
+                            <td>
+                                Comdeeds<br />
+                                Po Box 878 <br />
+                                North Sydney NSW 2059 <br />
+                                Tel : 02 80110790
+                            </td>
+
+                            <td class="txtright">
+                                <p style="line-height:24px;display:block"><strong>To</strong></p>
+                                {username} <br/>
+                                {address}<br/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            
+
+            <tr class="heading">
+                <td width="100">
+                    Quantity
+                </td>
+
+                <td>
+                    Description
+                </td>
+                <td width="150">
+                    Unit Price
+                </td>
+                <td  width="100">
+                    Total
+                </td>
+            </tr>
+            <tr class="item">
+                <td width="">
+                    1
+                </td>
+                <td>
+                    ASIC FEES
+                </td>
+                <td>
+                    {asicfee}
+                </td>
+                <td>
+                    {asictotal}
+                </td>
+            </tr>
+            <tr class="item">
+                <td width="">
+                    2
+                </td>
+                <td>
+                    {deedname}
+                </td>
+                <td>
+                    {unitcost}
+                </td>
+                <td>
+                    {unittotal}
+                </td>
+            </tr>
+         
+            <tr class="item">
+                <td width="">
+                    3
+                </td>
+                <td>
+                   CONSTITUTION FEES
+                </td>
+                <td>
+                    {constdfees}
+                </td>
+                <td>
+                    {consttotel}
+                </td>
+            </tr>
+            <tr class="item">
+                <td width="">
+                    
+                </td>
+                <td>
+                    <strong>PAID</strong>
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+            </tr>
+
+            
+            <tr class="total">
+                <td> </td>
+                <td> </td>
+                <td>Subtotal :</td>
+                <td>
+                    {subtotal}
+                </td>
+            </tr>
+            <tr class="total">
+                <td></td>
+                <td></td>
+                <td>GST :</td>
+                <td>
+                    {gst}
+                </td>
+            </tr>
+            <tr class="total">
+                <td></td>
+                <td></td>
+                <td>Credit card fees :</td>
+                <td>
+                    {creditcardfees} ({creditcardfeesp})
+                </td>
+            </tr>
+            <tr class="total">
+                <td></td>
+                <td></td>
+                <td>Processing fees :</td>
+                <td>
+                    {processingfees}
+                </td>
+            </tr>
+            <tr class="total">
+                <td></td>
+                <td></td>
+                <td>Total Due :</td>
+                <td>
+                    {total}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <hr />
+                    <p style="text-align:right;margin-bottom:-10px;">Thank you for your business.</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <table align="center">
+                        <tr>
+                            <td width="50%">                                
+                                <span style="font-size:12px;">
+                                    Website : https://www.comdeeds.com.au/ 
+                                </span>
+                            </td>
+                            <td width="50%" class="txtright">
+                                <span style="font-size:12px;float:right">                                    
+                                    Email : info@comdeeds.com.au
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <hr />
+                    <p style="text-align:center;font-size:12px;padding:10px 0 0 0">
+                        Freedom Wealth Advisers Trading as Comdeeds A.B.N: 83 138 817 571
+                    </p>
+                    </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

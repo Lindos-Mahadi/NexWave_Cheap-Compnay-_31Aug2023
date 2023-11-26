@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:nni.types="uri:nni.types.asic.gov.au" xmlns:business.document.header.types="uri:business.document.header.types.asic.gov.au" xmlns:types="uri:types.asic.gov.au" xmlns:external.query.name.availability="uri:v2.external.query.name.availability.asic.gov.au" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" elementFormDefault="qualified" targetNamespace="uri:v2.external.query.name.availability.asic.gov.au" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="ExternalQueryNameAvailabilityPortV2.xsd3.xsd" namespace="uri:types.asic.gov.au" />
+  <xs:import schemaLocation="ExternalQueryNameAvailabilityPortV2.xsd4.xsd" namespace="uri:nni.types.asic.gov.au" />
+  <xs:import schemaLocation="ExternalQueryNameAvailabilityPortV2.xsd5.xsd" namespace="uri:business.document.header.types.asic.gov.au" />
+  <xs:import schemaLocation="ExternalQueryNameAvailabilityPortV2.xsd6.xsd" namespace="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" />
+  <xs:element name="request" type="external.query.name.availability:queryNameAvailabilityRequestType" />
+  <xs:element name="reply" type="external.query.name.availability:queryNameAvailabilityReplyType" />
+  <xs:complexType name="queryNameAvailabilityRequestType">
+    <xs:sequence>
+      <xs:element ref="business.document.header.types:businessDocumentHeader" />
+      <xs:element minOccurs="0" name="businessDocumentBody" type="nni.types:queryNniNameType" />
+    </xs:sequence>
+    <xs:attribute ref="wsu:Id" />
+  </xs:complexType>
+  <xs:complexType name="queryNameAvailabilityReplyType">
+    <xs:sequence>
+      <xs:element ref="business.document.header.types:businessDocumentHeader" />
+      <xs:element minOccurs="0" name="businessDocumentBody" type="types:nameAvailabilityResponseType" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

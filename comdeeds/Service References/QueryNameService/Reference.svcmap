@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="34655821-cdb7-4397-9c50-9ea93c67faf1" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://www.gateway.asic.gov.au/gateway/ExternalQueryNameAvailabilityPortV2?WSDL" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ExternalQueryNameAvailabilityPortV2.xsd" MetadataType="Schema" ID="08e91ab9-b68a-4ed3-840f-d7dcc4f143b6" SourceId="1" SourceUrl="https://www.gateway.asic.gov.au/gateway/ExternalQueryNameAvailabilityPortV2.xsd10.xsd" />
+    <MetadataFile FileName="ExternalQueryNameAvailabilityPortV21.xsd" MetadataType="Schema" ID="339454c9-1ccb-4707-b925-545f51db65e2" SourceId="1" SourceUrl="https://www.gateway.asic.gov.au/gateway/ExternalQueryNameAvailabilityPortV2.xsd7.xsd" />
+    <MetadataFile FileName="ExternalQueryNameAvailabilityPortV22.xsd" MetadataType="Schema" ID="dfc08f47-9514-4f1b-a7a4-f0a7d00fbd40" SourceId="1" SourceUrl="https://www.gateway.asic.gov.au/gateway/ExternalQueryNameAvailabilityPortV2.xsd6.xsd" />
+    <MetadataFile FileName="ExternalQueryNameAvailabilityPortV23.xsd" MetadataType="Schema" ID="6c09439e-e7e9-47df-82b6-a57abd84d604" SourceId="1" SourceUrl="https://www.gateway.asic.gov.au/gateway/ExternalQueryNameAvailabilityPortV2.xsd3.xsd" />
+    <MetadataFile FileName="ExternalQueryNameAvailabilityPortV24.xsd" MetadataType="Schema" ID="560c5da8-75cf-4d60-be51-cfbf352ebc21" SourceId="1" SourceUrl="https://www.gateway.asic.gov.au/gateway/ExternalQueryNameAvailabilityPortV2.xsd9.xsd" />
+    <MetadataFile FileName="ExternalQueryNameAvailabilityPortV25.xsd" MetadataType="Schema" ID="cd7785da-3023-4d20-b3ab-a7a740d24c74" SourceId="1" SourceUrl="https://www.gateway.asic.gov.au/gateway/ExternalQueryNameAvailabilityPortV2.xsd4.xsd" />
+    <MetadataFile FileName="ExternalQueryNameAvailabilityPortV26.xsd" MetadataType="Schema" ID="569fb370-29cf-47c1-8d3a-3a1586503f09" SourceId="1" SourceUrl="https://www.gateway.asic.gov.au/gateway/ExternalQueryNameAvailabilityPortV2.xsd8.xsd" />
+    <MetadataFile FileName="ExternalQueryNameAvailabilityPortV27.xsd" MetadataType="Schema" ID="873f7ff5-a153-43ab-8cce-dceb7bbbb288" SourceId="1" SourceUrl="https://www.gateway.asic.gov.au/gateway/ExternalQueryNameAvailabilityPortV2.xsd2.xsd" />
+    <MetadataFile FileName="ExternalQueryNameAvailabilityPortV28.xsd" MetadataType="Schema" ID="690befb7-3969-46d5-baac-3a0a760a7e93" SourceId="1" SourceUrl="https://www.gateway.asic.gov.au/gateway/ExternalQueryNameAvailabilityPortV2.xsd5.xsd" />
+    <MetadataFile FileName="ExternalQueryNameAvailabilityPortV2.wsdl" MetadataType="Wsdl" ID="be8db938-798c-4d00-b73a-d9ba6c967dac" SourceId="1" SourceUrl="https://www.gateway.asic.gov.au/gateway/ExternalQueryNameAvailabilityPortV2?WSDL" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

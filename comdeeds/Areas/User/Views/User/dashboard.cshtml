@@ -1,0 +1,50 @@
+﻿@model comdeeds.Models.BaseModel.LoginUserData
+    @{ 
+        var u = Model;
+    }
+
+<div class="container margin-bottom-45 margin-top-45">
+
+    <div class="row">
+        <div class="col-md-3">
+            @{Html.RenderPartial("sidebar");}
+        </div>
+        <div class="col-md-9">
+            <h4 class="headline">Welcome back, @u.FirstName @u.LastName </h4>
+
+            <div class="row">
+                <div class="col-md-9">
+                    @Html.Raw(ViewBag.msg)
+                    <form method="post" action="@Url.Action("dashboard","User",new { Area="User"})" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>First Name</h5>
+                                    <input type="text" name="FirstName" class="form-control" value="@u.FirstName" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Last Name</h5>
+                                    <input type="text" class="form-control" value="@u.LastName" name="LastName" required />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <h5>Email</h5>
+                            <input type="email" required class="form-control" value="@u.email" name="email" readonly />
+                        </div>
+                        <div class="form-group">
+                            <h5>Phone</h5>
+                            <input type="text" class="form-control" value="@u.Phone" name="Phone" />
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="button">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

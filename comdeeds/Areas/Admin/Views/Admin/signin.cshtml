@@ -1,0 +1,138 @@
+﻿@model comdeeds.Models.BaseModel.ClassUserLoginForm
+@{
+    ViewBag.Title = "signin";
+    var results = ViewBag.msg;
+    Layout = "";
+    var _checked = Model.rememberme ? "checked" : "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Signin admin comdeeds</title>
+    <link rel="stylesheet" type="text/css" href="~/Areas/Admin/assets/lib/perfect-scrollbar/css/perfect-scrollbar.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Areas/Admin/assets/lib/material-design-icons/css/material-design-iconic-font.min.css" />
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="~/Areas/Admin/assets/css/style.css" type="text/css" />
+</head>
+<body class="be-splash-screen">
+    <div class="be-wrapper be-login">
+        <div class="be-content">
+            <div class="main-content container-fluid">
+                <div class="splash-container">
+                    @Html.Raw(ViewBag.msg)
+                    <div class="panel panel-default panel-border-color panel-border-color-primary">
+                        <div class="panel-heading"><img src="~/Content/images/image__2_logo.png" alt="logo" width="200" height="100" class="logo-img"><span class="splash-description">Please enter your user information.</span></div>
+                        <div class="panel-body">
+                            <form action="@Url.Action("signin", "Admin", new { area = "Admin" })" method="post">
+                                @Html.AntiForgeryToken()
+                                <div class="form-group">
+                                    <input id="username" name="loginemail" type="text" placeholder="Username" autocomplete="off" class="form-control" value="@Model.loginemail">
+                                </div>
+                                <div class="form-group">
+                                    <input id="password" name="loginpassword" type="password" placeholder="Password" class="form-control">
+                                </div>
+                                <div class="form-group row login-tools">
+                                    <div class="col-xs-6 login-remember">
+                                        <div class="be-checkbox">
+                                            <input type="checkbox" id="remember" value="true" name="rememberme" @_checked>
+                                            <label for="remember">Remember Me</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 login-forgot-password"><a href="#" data-target="#pwdModal" data-toggle="modal">Forgot Password?</a></div>
+                                </div>
+                                <div class="form-group login-submit">
+                                    <button type="submit" class="btn btn-primary btn-xl">Sign in</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--modal-->
+    <div id="pwdModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="col-md-12">
+                    <div class="pull-left" style="width:100%;padding-top: 4px; text-align: left;" id="fgtModal"></div>
+                </div>
+                <div class="modal-header">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h1 class="text-center"><img src="~/Content/images/logo.jpg" alt="logo" width="102" height="27" style=" width: 168px; height: 34px;" class="logo-img"></h1>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="text-center">
+
+                                    <p>If you have forgotten your password you can reset it here.</p>
+                                    <div class="panel-body">
+                                        <fieldset>
+                                            <form action="@Url.Action("forgetpwd", "Admin", new { area = "Admin" })" method="post">
+                                                <div class="form-group">
+                                                    <input class="form-control input-lg" placeholder="E-mail Address" name="email" type="email" value="@Model.loginemail">
+                                                </div>
+                                                <input class="btn btn-lg btn-primary btn-block" value="Send My Password" onclick="return DoAjaxPostAndMore(this)" type="button">
+                                            </form>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @*<div class="col-md-12">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Areas/Admin/assets/lib/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="~/Areas/Admin/assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
+    <script src="~/Areas/Admin/assets/js/main.js" type="text/javascript"></script>
+    <script src="~/Areas/Admin/assets/lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        function DoAjaxPostAndMore(btnClicked) {
+            var $form = $(btnClicked).parents('form');
+
+            $.ajax({
+                type: "POST",
+                url: $form.attr('action'),
+                data: $form.serialize(),
+                error: function (xhr, status, error) {
+                    //do something about the error
+                },
+                success: function (response) {
+                    //do something with response
+                    // $('#pwdModal').modal('hide');
+                    $("#fgtModal").html(response);
+
+                }
+            });
+
+            return false;// if it's a link to prevent post
+
+        }
+
+        $(document).ready(function () {
+            //initialize the javascript
+            App.init();
+
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1083 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:fss.types="uri:fss.types.asic.gov.au" xmlns:types="uri:types.asic.gov.au" xmlns:bn.types="uri:bn.types.asic.gov.au" xmlns:abn.types="uri:abn.types.asic.gov.au" elementFormDefault="qualified" targetNamespace="uri:bn.types.asic.gov.au" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="ExternalQueryNameAvailabilityPortV2.xsd3.xsd" namespace="uri:types.asic.gov.au" />
+  <xs:import schemaLocation="ExternalQueryNameAvailabilityPortV2.xsd8.xsd" namespace="uri:abn.types.asic.gov.au" />
+  <xs:import schemaLocation="ExternalQueryNameAvailabilityPortV2.xsd9.xsd" namespace="uri:fss.types.asic.gov.au" />
+  <xs:annotation>
+    <xs:documentation>Contains various ASIC definitions of BN standard types</xs:documentation>
+  </xs:annotation>
+  <xs:complexType name="organisationLodgeType">
+    <xs:sequence>
+      <xs:element name="name">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="200" />
+            <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="acn" type="types:nniNumberType">
+        <xs:annotation>
+          <xs:documentation>Company only</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="orgNumber" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="99" name="address" type="types:addressLodgeType">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="emailAddress" type="types:emailType" />
+      <xs:element minOccurs="0" name="startDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="endDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="organisationType">
+    <xs:sequence>
+      <xs:element name="name">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="200" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="acn" type="types:nniNumberType">
+        <xs:annotation>
+          <xs:documentation>Company only</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="orgNumber" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="99" name="address" type="types:addressExtType">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="emailAddress" type="types:emailType" />
+      <xs:element minOccurs="0" name="startDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="endDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="urlType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="250" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="termType">
+    <xs:restriction base="xs:string">
+      <xs:length value="1" />
+      <xs:enumeration value="1" />
+      <xs:enumeration value="3" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="simpleBnExtractType">
+    <xs:sequence>
+      <xs:element name="business" type="bn.types:businessEntityType" />
+      <xs:element name="businessName" type="bn.types:outboundBusinessNameType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="businessNameExtractType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="99" name="business">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="bn.types:businessEntityType">
+              <xs:sequence>
+                <xs:element minOccurs="0" name="startDate" type="xs:date" />
+                <xs:element minOccurs="0" name="endDate" type="xs:date" />
+                <xs:element minOccurs="0" name="agentAppointed" type="types:trueType" />
+              </xs:sequence>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="businessName" type="bn.types:outboundBusinessNameType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="documentType">
+    <xs:sequence>
+      <xs:element name="documentNumber" type="types:documentNoType" />
+      <xs:element name="dateReceived" type="xs:date" />
+      <xs:element name="formCode" type="types:codeType" />
+      <xs:element minOccurs="0" name="numberOfPages">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+            <xs:maxInclusive value="9999" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="description" type="types:descriptionType" />
+      <xs:element minOccurs="0" maxOccurs="99" name="additionalDescription">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="subformCode" type="types:codeType" />
+            <xs:element name="subformDescription" type="types:descriptionType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="billingType">
+    <xs:sequence>
+      <xs:element name="charge">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="code" type="types:codeType" />
+            <xs:element name="description" type="types:descriptionType" />
+            <xs:element minOccurs="0" name="historical" type="xs:boolean" />
+            <xs:element minOccurs="0" name="large" type="xs:boolean" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="fees" type="fss.types:invoiceType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="chargeType">
+    <xs:sequence>
+      <xs:element name="code" type="types:codeType" />
+      <xs:element name="description" type="types:descriptionType" />
+      <xs:element minOccurs="0" name="historical" type="xs:boolean" />
+      <xs:element minOccurs="0" name="large" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="previousStateTerritoryType">
+    <xs:sequence>
+      <xs:element name="number">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="20" />
+            <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="stateTerritoryCode" type="types:stateTerritoryCodeType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="contactPersonType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="name" type="types:personNameLodgeType" />
+      <xs:element name="phoneNumber" nillable="true" type="types:telephoneNumberType" />
+      <xs:element minOccurs="0" name="emailAddress">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="200" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="contactPersonWithAddressType">
+    <xs:complexContent mixed="false">
+      <xs:extension base="bn.types:contactPersonType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="address" type="types:addressType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="outboundContactPersonType">
+    <xs:complexContent mixed="false">
+      <xs:extension base="bn.types:contactPersonType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="startDate" type="xs:date" />
+          <xs:element minOccurs="0" name="endDate" type="xs:date" />
+          <xs:element minOccurs="0" name="documentNumber" type="types:documentNoType">
+            <xs:annotation>
+              <xs:documentation>~Internal~</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="outboundContactPersonWithAddressType">
+    <xs:complexContent mixed="false">
+      <xs:extension base="bn.types:outboundContactPersonType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="address" type="types:addressType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="personWithRolesType">
+    <xs:complexContent mixed="false">
+      <xs:extension base="types:personNameBirthType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="role">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="business" type="bn.types:businessEntityType" />
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="businessName" type="bn.types:outboundBusinessNameType" />
+                <xs:element minOccurs="0" name="type" type="bn.types:roleTypeType" />
+                <xs:element minOccurs="0" name="address" type="types:addressExtType" />
+                <xs:element minOccurs="0" name="startDate" type="xs:date" />
+                <xs:element minOccurs="0" name="endDate" type="xs:date" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="personsWithRolesType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="person" type="bn.types:personWithRolesType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bnCredentialsType">
+    <xs:sequence>
+      <xs:element name="number" type="types:nniNumberType" />
+      <xs:element name="key" type="types:keyType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="outboundBusinessNameType">
+    <xs:sequence>
+      <xs:element name="nniNumber" type="xs:string" />
+      <xs:element minOccurs="0" name="bnReferenceNumber" type="types:bnReferenceNumberType" />
+      <xs:element name="name" type="types:distinguishedNameExtType" />
+      <xs:element maxOccurs="99" name="status" type="types:intervalStatusType" />
+      <xs:element minOccurs="0" name="term" type="bn.types:termType" />
+      <xs:element minOccurs="0" name="previousStateOrTerritory" type="bn.types:previousStateTerritoryType" />
+      <xs:element minOccurs="0" name="jurisdiction">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="80" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="dateRegistered" type="xs:date" />
+      <xs:element minOccurs="0" name="dateRenewal" type="xs:date" />
+      <xs:element minOccurs="0" name="dateDeregistered" type="xs:date" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="address" type="types:addressExtType" />
+      <xs:element minOccurs="0" name="emailAddress" type="types:emailType" />
+      <xs:element minOccurs="0" name="smsNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="15" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="99" name="representative" type="bn.types:representativeType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bnLodgeFormType">
+    <xs:annotation>
+      <xs:documentation>Form BZ1 definition</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="name" type="types:distinguishedNameType" />
+      <xs:element name="term" type="bn.types:termType" />
+      <xs:element minOccurs="0" name="dateRenewal" type="xs:date" />
+      <xs:element minOccurs="0" maxOccurs="9" name="address" type="types:addressLodgeType" />
+      <xs:element name="emailAddress" nillable="true" type="types:emailType" />
+      <xs:element minOccurs="0" name="smsNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="businessEntity" type="bn.types:businessEntityLodgeType" />
+      <xs:element minOccurs="0" name="transferKey" type="xs:string" />
+      <xs:element minOccurs="0" name="contact" type="bn.types:contactPersonType" />
+      <xs:element name="signatory" type="types:signatoryType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bnRenewalFormType">
+    <xs:annotation>
+      <xs:documentation>BN Renewal Form definition </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="accountNumber" type="types:accountNumberType">
+          <xs:annotation>
+            <xs:documentation>Account number of the Business name</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="ABN" type="types:abnType" />
+        <xs:element name="transactionId" type="types:transactionIdType">
+          <xs:annotation>
+            <xs:documentation>TransactionId for the BN renewal request.
+											 NOT IN CURRENT IMPLEMENTATION.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element name="businessName" type="types:distinguishedNameType">
+        <xs:annotation>
+          <xs:documentation>Business name</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="term" type="bn.types:termType">
+        <xs:annotation>
+          <xs:documentation>The duration of the next registration period for the nominated business name. It can be one or three years.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="paymentType" type="types:paymentMethodType">
+        <xs:annotation>
+          <xs:documentation>Specify the payment option. Currently this is restricted to invoicing (INV) to the BN account only.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="emailAddress" nillable="true" type="types:emailType">
+        <xs:annotation>
+          <xs:documentation>Contact email address</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="signatory" type="types:signatoryType">
+        <xs:annotation>
+          <xs:documentation>~ExternalMandatory~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bnUpdateFormType">
+    <xs:annotation>
+      <xs:documentation>Form BZ4 definition</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="number" type="bn.types:bnIdentifier" />
+      <xs:element name="name" type="types:distinguishedNameType" />
+      <xs:element minOccurs="0" name="term" type="bn.types:termType" />
+      <xs:element minOccurs="0" name="dateRegistered" type="xs:date" />
+      <xs:element minOccurs="0" name="dateRenewal" type="xs:date" />
+      <xs:element minOccurs="0" maxOccurs="9" name="address" type="types:addressType" />
+      <xs:element minOccurs="0" name="emailAddress" nillable="true" type="types:emailType" />
+      <xs:element minOccurs="0" name="smsNumber" nillable="true">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="15" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="99" name="representative" type="bn.types:representativeType" />
+      <xs:element minOccurs="0" name="businessEntity" type="bn.types:businessEntityType" />
+      <xs:element name="signatory" type="types:signatoryType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bnCancelFormType">
+    <xs:annotation>
+      <xs:documentation>Form BZ5 definition
+BZ5A Owner cancellation
+BZ5C Staff cancellation
+BZ5D ABR cancellation</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="businessName" type="bn.types:bnIdentifier" />
+      <xs:element minOccurs="0" name="transfer" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>Transfers every business name identified by abn</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="signatory" type="types:signatoryType">
+        <xs:annotation>
+          <xs:documentation>~ExternalMandatory~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="fileNotes" type="types:fileNotesType">
+        <xs:annotation>
+          <xs:documentation>~Internal~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="returnExtract" type="types:trueType">
+        <xs:annotation>
+          <xs:documentation>~Internal~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bnLinkFormType">
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="abn" type="types:abnType">
+          <xs:annotation>
+            <xs:documentation>abn of business name owner</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="nniNumber" type="types:nniNumberType" />
+      </xs:choice>
+      <xs:element name="agent" type="types:agentType" />
+      <xs:element name="action">
+        <xs:annotation>
+          <xs:documentation>ADD or CEASE</xs:documentation>
+          <xs:documentation>true  organisation is currently registered</xs:documentation>
+          <xs:documentation>false  organisation is not currently registered</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="5" />
+            <xs:enumeration value="ADD" />
+            <xs:enumeration value="CEASE" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="signatory" type="types:signatoryType">
+        <xs:annotation>
+          <xs:documentation>~ExternalMandatory~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="fileNotes" type="types:fileNotesType">
+        <xs:annotation>
+          <xs:documentation>~Internal~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="individualType">
+    <xs:sequence>
+      <xs:element name="name" type="types:personNameType" />
+      <xs:element minOccurs="0" name="previousName" type="types:personNameType" />
+      <xs:element minOccurs="0" name="birthDetails" type="types:birthDetailsType">
+        <xs:annotation>
+          <xs:documentation>~Private~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="address" type="types:addressExtType" />
+      <xs:element minOccurs="0" name="emailAddress" nillable="true" type="types:emailType" />
+      <xs:element minOccurs="0" name="changeOfIndividual" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>Change Of Details only</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="startDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="endDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="bnStatusCodeType">
+    <xs:annotation>
+      <xs:documentation>APPL Reconsideration
+DRGD  Deregistered
+EXPD Expiring
+MCON Ministerial Consent
+PEND Awaiting Payment
+REGD Registered
+RJCT Rejected
+SNSD Referred
+SOFF Strike Off</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="4" />
+      <xs:enumeration value="APPL" />
+      <xs:enumeration value="EXPD" />
+      <xs:enumeration value="DRGD" />
+      <xs:enumeration value="MCON" />
+      <xs:enumeration value="PEND" />
+      <xs:enumeration value="REGD" />
+      <xs:enumeration value="RJCT" />
+      <xs:enumeration value="SNSD" />
+      <xs:enumeration value="SOFF" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="bnApplicationStatusCodeType">
+    <xs:annotation>
+      <xs:documentation>APPL Reconsideration
+MCON Ministerial Consent
+PEND Awaiting Payment
+SNSD Referredf</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="4" />
+      <xs:enumeration value="APPL" />
+      <xs:enumeration value="MCON" />
+      <xs:enumeration value="PEND" />
+      <xs:enumeration value="SNSD" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="bnSearchStatusCodeType">
+    <xs:annotation>
+      <xs:documentation>DRGD Deregistered
+PEND Pending Payment
+REGD Registered
+			</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="4" />
+      <xs:enumeration value="DRGD" />
+      <xs:enumeration value="PEND" />
+      <xs:enumeration value="REGD" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="businessEntityType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="abrEntity" type="abn.types:abrEntityType" />
+      <xs:element minOccurs="0" name="abnExemption" type="types:trueType">
+        <xs:annotation>
+          <xs:documentation>Xmas Island and Cocos Islands residents</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:choice minOccurs="0">
+        <xs:element name="individual" type="bn.types:individualType">
+          <xs:annotation>
+            <xs:documentation>Sole Trader
+Individual</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="organisation" type="bn.types:organisationType">
+          <xs:annotation>
+            <xs:documentation>Company
+Partnership
+UnincorporateStructure</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element minOccurs="0" name="ownerType">
+        <xs:annotation>
+          <xs:documentation>IND - Individual/Sole trader
+IB - Incorporated Body
+PTSH - Partnership
+USTR - Unincoporated Structure
+JV - Joint Venture</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="4" />
+            <xs:enumeration value="IND" />
+            <xs:enumeration value="IB" />
+            <xs:enumeration value="PTSH" />
+            <xs:enumeration value="USTR" />
+            <xs:enumeration value="JV" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="500" name="associate" type="bn.types:associateType">
+        <xs:annotation>
+          <xs:documentation>Partners for Partnerships
+Reps for Trusts etc
+Ventures for Joint Venturers</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="dateReview" type="xs:date" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="associateType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="abrEntity" type="abn.types:abrEntityType">
+        <xs:annotation>
+          <xs:documentation>Joint Ventures only</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:choice>
+        <xs:element name="individual" type="bn.types:individualType">
+          <xs:annotation>
+            <xs:documentation>Sole Trader
+Individual</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="organisation" type="bn.types:organisationType">
+          <xs:annotation>
+            <xs:documentation>Company
+Partnership
+UnincorporateStructure</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element minOccurs="0" name="startDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="endDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="action" type="bn.types:updateActionType">
+        <xs:annotation>
+          <xs:documentation>Change Of Details only</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="9" name="partnerAssociate" type="bn.types:partnerAssociateType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="partnerAssociateType">
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="individual" type="bn.types:individualType">
+          <xs:annotation>
+            <xs:documentation>Individual</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="organisation" type="bn.types:organisationType">
+          <xs:annotation>
+            <xs:documentation>Company
+</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element minOccurs="0" name="startDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="endDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="action" type="bn.types:updateActionType">
+        <xs:annotation>
+          <xs:documentation>Change Of Details only</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="representativeType">
+    <xs:sequence>
+      <xs:element name="type" type="bn.types:representativeTypeType">
+        <xs:annotation>
+          <xs:documentation>GG Legal Personal Representative
+GH Debtor Representative
+GI Principal Contact Representative
+GJ Nominated Successor Representative
+GK Nominated Manager Representative</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:choice>
+        <xs:element name="individual" type="bn.types:individualType">
+          <xs:annotation>
+            <xs:documentation>Individual</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="organisation" type="bn.types:organisationType">
+          <xs:annotation>
+            <xs:documentation>Company
+</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element minOccurs="0" name="startDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="endDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="action" type="bn.types:updateActionType">
+        <xs:annotation>
+          <xs:documentation>Change Of Details only</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="personExtractRequestType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="searchId" type="types:asicNumericIdType" />
+      <xs:element name="personIds">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="99" name="personId" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="showHistory" type="types:trueType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bnGetRegistrationRecordRequestType">
+    <xs:sequence>
+      <xs:element name="registrationRecord">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="bnReferenceNumber" type="types:nniNumberType" />
+            <xs:element name="nniNumber" type="types:nniNumberType" />
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bnSearchRequestType">
+    <xs:sequence>
+      <xs:element name="search">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="abn" type="types:abnType">
+              <xs:annotation>
+                <xs:documentation>Abn for business name organisation holder</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="orgNumber" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>Asic identifier for business name organisation holder</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="nniNumber" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>Asic identifier for business name</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="organisation">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="name">
+                    <xs:annotation>
+                      <xs:documentation>Holder name or business name, according with roleCategory value in filter element</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="200" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="previousStateOrTerritory" type="bn.types:previousStateTerritoryType" />
+            <xs:element name="bnReferenceNumber" type="types:bnReferenceNumberType" />
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="filter">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="roleCategory">
+              <xs:annotation>
+                <xs:documentation>Default to BUSINESSNAME</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="20" />
+                  <xs:enumeration value="HOLDER" />
+                  <xs:enumeration value="BUSINESSNAME" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="3" name="statusCode" type="bn.types:bnSearchStatusCodeType" />
+            <xs:element minOccurs="0" name="principalPlaceOfBusiness" type="bn.types:locationType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="maxResult" type="xs:positiveInteger" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="locationType">
+    <xs:choice>
+      <xs:element name="postCode">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="12" />
+            <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="localityState">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="locality" type="xs:string" />
+            <xs:element name="state" type="types:stateTerritoryCodeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="bnExtractRequestType">
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="abn">
+          <xs:annotation>
+            <xs:documentation>ABN for the business name organisation holder</xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="20" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="orgNumber" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Asic Identifier for the business name organisation holder</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="nniNumber" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Asic Identifier for the business name</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element minOccurs="0" name="bnReferenceNumber" type="types:bnReferenceNumberType" />
+        <xs:element name="stateTerritory">
+          <xs:annotation>
+            <xs:documentation>Details of previous registration by States and Territories before referral of powers to ASIC. </xs:documentation>
+            <xs:documentation>Identifier must be the state and state number</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="previousStateNumber">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="issuingStateTerritory" type="types:stateTerritoryCodeType" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+      <xs:element minOccurs="0" name="summaryDetailsOnly" type="types:trueType" />
+      <xs:element minOccurs="0" name="maxDocuments" type="xs:positiveInteger" />
+      <xs:element minOccurs="0" name="showHistory" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="representativeTypeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="2" />
+      <xs:enumeration value="GG" />
+      <xs:enumeration value="GH" />
+      <xs:enumeration value="GI" />
+      <xs:enumeration value="GJ" />
+      <xs:enumeration value="GK" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="roleCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="2" />
+      <xs:enumeration value="DR" />
+      <xs:enumeration value="SR" />
+      <xs:enumeration value="LD" />
+      <xs:enumeration value="GA" />
+      <xs:enumeration value="GB" />
+      <xs:enumeration value="GF" />
+      <xs:enumeration value="GG" />
+      <xs:enumeration value="GH" />
+      <xs:enumeration value="GI" />
+      <xs:enumeration value="GJ" />
+      <xs:enumeration value="GK" />
+      <xs:enumeration value="GT" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="bnRoleCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="2" />
+      <xs:enumeration value="GA" />
+      <xs:enumeration value="GB" />
+      <xs:enumeration value="GF" />
+      <xs:enumeration value="GG" />
+      <xs:enumeration value="GH" />
+      <xs:enumeration value="GI" />
+      <xs:enumeration value="GJ" />
+      <xs:enumeration value="GK" />
+      <xs:enumeration value="GT" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="roleTypeType">
+    <xs:sequence>
+      <xs:element name="code" type="bn.types:roleCodeType">
+        <xs:annotation>
+          <xs:documentation>DR Director
+SR Secretary
+LD Alternate Director 
+GA Business Name Holder
+GB Contact
+GF Business Name Associate
+GG Legal Personal Representative 
+GH Debtor Representative
+GI Principal Contact Representative
+GJ Nominated Successor Representative
+GK Nominated Manager Representative
+GT Transfer Contact</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="80" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="addRemoveActionType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="8" />
+      <xs:enumeration value="ADD" />
+      <xs:enumeration value="REMOVE" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="updateActionType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="8" />
+      <xs:enumeration value="ADD" />
+      <xs:enumeration value="CURRENT" />
+      <xs:enumeration value="REMOVE" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="reportDataType">
+    <xs:sequence>
+      <xs:element name="reportIdentifier" type="types:referenceNoType" />
+      <xs:element name="reportType" type="bn.types:bnReportType" />
+      <xs:element name="createDate" type="xs:date" />
+      <xs:element minOccurs="0" name="reportPeriod" type="bn.types:periodType" />
+      <xs:element minOccurs="0" name="state" type="types:stateTerritoryCodeType" />
+      <xs:element minOccurs="0" name="reportSize" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="reportRequestType">
+    <xs:sequence>
+      <xs:element name="reportType" type="bn.types:bnReportType" />
+      <xs:element name="reportPeriod" type="bn.types:periodType" />
+      <xs:element minOccurs="0" name="state" type="types:stateTerritoryCodeType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="bnReportType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="50" />
+      <xs:minLength value="1" />
+      <xs:enumeration value="REGISTRATION" />
+      <xs:enumeration value="UPDATE" />
+      <xs:enumeration value="CANCEL" />
+      <xs:enumeration value="SNAPSHOT" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="periodType">
+    <xs:sequence>
+      <xs:element name="startDate" type="xs:date" />
+      <xs:element name="endDate" type="xs:date" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bnIdentifier">
+    <xs:choice>
+      <xs:element name="nniNumber" type="types:nniNumberType" />
+      <xs:element name="bnReferenceNumber" type="types:bnReferenceNumberType" />
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="businessEntityLodgeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="abrEntity" type="abn.types:abrEntityType" />
+      <xs:element minOccurs="0" name="abnExemption" type="types:trueType">
+        <xs:annotation>
+          <xs:documentation>Xmas Island and Cocos Islands residents</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:choice>
+        <xs:element name="individual" type="bn.types:individualLodgeType">
+          <xs:annotation>
+            <xs:documentation>Sole Trader
+Individual</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="organisation" type="bn.types:organisationLodgeType">
+          <xs:annotation>
+            <xs:documentation>Company
+Partnership
+UnincorporateStructure</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element name="ownerType">
+        <xs:annotation>
+          <xs:documentation>IND - Individual/Sole trader
+IB - Incorporated Body
+PTSH - Partnership
+USTR - Unincoporated Structure
+JV - Joint Venture</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="4" />
+            <xs:enumeration value="IND" />
+            <xs:enumeration value="IB" />
+            <xs:enumeration value="PTSH" />
+            <xs:enumeration value="USTR" />
+            <xs:enumeration value="JV" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="500" name="associate" type="bn.types:associateLodgeType">
+        <xs:annotation>
+          <xs:documentation>Partners for Partnerships
+Reps for Trusts etc
+Ventures for Joint Venturers</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="dateReview" type="xs:date" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="associateLodgeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="abrEntity" type="abn.types:abrEntityType">
+        <xs:annotation>
+          <xs:documentation>Joint Ventures only</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:choice>
+        <xs:element name="individual" type="bn.types:individualLodgeType">
+          <xs:annotation>
+            <xs:documentation>Sole Trader
+Individual</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="organisation" type="bn.types:organisationLodgeType">
+          <xs:annotation>
+            <xs:documentation>Company
+Partnership
+UnincorporateStructure</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element minOccurs="0" name="startDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="endDate" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="9" name="partnerAssociate" type="bn.types:partnerAssociateLodgeType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="partnerAssociateLodgeType">
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="individual" type="bn.types:individualLodgeType">
+          <xs:annotation>
+            <xs:documentation>Individual</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="organisation" type="bn.types:organisationLodgeType">
+          <xs:annotation>
+            <xs:documentation>Company
+</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="individualLodgeType">
+    <xs:sequence>
+      <xs:element name="name" type="types:personNameLodgeType" />
+      <xs:element name="birthDetails" type="types:birthDetailsLodgeType" />
+      <xs:element minOccurs="0" name="address" type="types:addressLodgeType" />
+      <xs:element minOccurs="0" name="emailAddress" nillable="true" type="types:emailType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="renewalReplyDataType">
+    <xs:sequence>
+      <xs:element name="bnNumber" type="types:nniNumberType" />
+      <xs:element name="renewalResult" type="bn.types:renewalResultType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="renewalResultType">
+    <xs:choice>
+      <xs:element name="renewalTo" type="xs:date" />
+      <xs:element name="renewalFailed" type="types:trueType" />
+    </xs:choice>
+  </xs:complexType>
+</xs:schema>

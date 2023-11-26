@@ -1,0 +1,80 @@
+﻿@{
+    var redirectUrl = "";
+    if (ViewBag.type == "c")
+    {
+        redirectUrl = "/user/order/company";
+    }
+    else if (ViewBag.type == "t")
+    {
+        redirectUrl = "/user/order/trust";
+    }
+    else
+    {
+        redirectUrl = "/AdminC/UserSearchList.aspx";
+    }
+
+
+}
+<div id="titlebar">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container margin-bottom-45">
+    <div class="row">
+        <div class="col-md-12">
+            @{
+                if (ViewBag.type == "c")
+                {
+                    <div class="notification success closeable">
+                        <h4><strong> Your documents are being processed, please try in  5 -10 minutes. </strong>  </h4>
+                        <a class="close"></a>
+                    </div>
+                    //Please wait, your certificate has been under processing ...
+
+                    <br />
+                    <a href="/user/order/company" class="link">Redirect Now</a>
+                }
+                else if (ViewBag.type == "t")
+                {
+                    <div class="notification success closeable">
+                        <h4><strong> Your documents are being processed, please try in  5 -10 minutes.</strong> </h4>
+                        <a class="close"></a>
+                    </div>
+
+                    <br />
+                    <a href="/user/order/trust" class="link">Redirect Now</a>
+                }
+                else
+                {
+                    <div class="notification success closeable">
+                        <h4><strong>Your documents are being processed, please try in  5 -10 minutes. </strong> </h4>
+                        <a class="close"></a>
+                    </div>
+
+
+
+                    <br />
+                    <a href="/AdminC/UserSearchList.aspx" class="link">Redirect Now</a>
+                }
+
+            }
+
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    window.setTimeout(function () {
+        window.location.href = "@redirectUrl";
+    }, 3000);
+</script>
+
+

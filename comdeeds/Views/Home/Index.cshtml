@@ -1,0 +1,337 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<div id="bindview">
+    <div style="background-image: url(/Content/images/nsw2.jpg);background-size: cover;background-repeat: no-repeat;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="search-container">
+                        <h2 style="background-color: #fcfcfcd1; color: #023c77;/* text-transform: uppercase; */ font-weight: bold; font-family: Ubuntu, sans-serif; font-size: 38px;padding: 6px 12px; border-radius: 10px;">
+                            Cheap and Fast Online Company setup in Australia -<span style="color:#a1b800;"> $508*</span>
+                        </h2>
+                        <div class="row with-forms">
+                            <div class="col-md-12">
+                                <form>
+                                    <!--data-bind="submit:checkname"-->
+                                    <div class="main-search-input">
+                                        <input type="text" placeholder="Type your company name to see if its available" data-bind="value:txtname" /> <i class="tip" style="    position: absolute; margin-left: 634px;  margin-top: 21px;" data-tip-content="Do not use words like 'bank' , 'trust' , 'Royal' , 'Incorporated' in company name.You can't use words that could mislead people about a company's activities. This includes associations with Australian government, the Royal Family, or any ex-servicemen's organisations."></i>
+                                        <button type="button" class="button" style="background-color: #05487d;" data-bind="click:checkname,disable:ajproc()"><i class="fa fa-search"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-12">
+                            </div>
+                        </div>
+                        <div class="adv-search-btn">
+                            @*<a href="/company-setup">SETUP COMPANY NOW</a>*@
+                            <button type="button" class="button" data-bind="click:setupnow,enable:estatus()" style="background-color: #05487d;">SETUP COMPANY NOW</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="fullwidth border-bottom margin-top-0 margin-bottom-0 padding-top-50 padding-bottom-50">
+
+        <!-- Content  //023c77-->
+        <div class="container">
+            <div class="col-md-12 padding-top-20">
+                <h3 class="headline centered margin-bottom-35 margin-top-0" style="color:#143350;font-size:32px;">How it works</h3>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Icon Box -->
+                    <div class="alternative">
+                        <img src="~/Content/images/setting.png" class="circleimg" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-12 padding-top-50">
+                <h3 class="headline centered margin-bottom-35 margin-top-10">Setup-Options</h3>
+            </div>
+
+            <div class="col-md-12">
+                <div class="pricing-container margin-top-40">
+
+                    <!-- Plan #1 -->
+
+                    <div class="plan">
+
+                        <div class="plan-price">
+                            <h3>Basic Company Setup</h3>
+                            <span class="value">$508</span>
+                        </div>
+
+                        <div class="plan-features">
+                            <ul>
+                                <li>ACN Registration</li>
+                                <li>Constitution -add $10</li>
+                                <li>Share certificates</li>
+                                <li><del> 2 YRS Free Domain Registration </del></li>
+                                <li><del>Free Logo Design</del></li>
+                                <li><del>New Bank Account</del></li>
+                            </ul>
+                            <a class="button border" href="/company-setup">Get Started</a>
+                        </div>
+                    </div>
+
+                    <!-- Plan #3 -->
+                    <div class="plan featured">
+
+                        <div class="listing-badges">
+                            <span class="featured" style="font-size: 11.5px;">Recommended</span>
+                        </div>
+
+                        <div class="plan-price">
+                            <h3>PREMIUM COMPANY SETUP</h3>
+                            <span class="value">$749</span>
+                            <br />
+                            @*<span class="period">One time fee for one listing, highlighted in the search results</span>*@
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li>ACN Registration</li>
+                                <li>Constitution</li>
+                                <li>ABN/TFN registration</li>
+                                <li>2 YRS Free Domain Registration</li>
+                                <li>Free Logo Design</li>
+                                <li>New Bank Account</li>
+                            </ul>
+                            <a class="button" href="/company-setup">Get Started</a>
+                        </div>
+                    </div>
+
+                    <!-- Plan #3 -->
+                    <div class="plan">
+
+                        <div class="plan-price">
+                            <h3>SETUP A NEW TRUST</h3>
+                            <span class="value">$199</span>
+                            @*<span class="period">Monthly subscription for unlimited listings and availability</span>*@
+                        </div>
+
+                        <div class="plan-features">
+                            <ul>
+                                <li>SMSF Deed -allows crypto investment</li>
+                                <li>Bare Trust Deed</li>
+                                <li>Family Trust ( coming soon )</li>
+                                <li>Unit Trust ( coming soon )</li>
+                                <li>&nbsp;</li>
+                                <li>&nbsp;</li>
+                            </ul>
+                            <a class="button border" href="/trustsetup">Get Started</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="fullwidth margin-top-105 margin-bottom-0 padding-bottom-80 padding-top-95" data-background-color="#f7f7f7">
+        <h3 class="headline-box">Why Comdeeds</h3>
+        <div class="container">
+            <div class="row">
+                @*<div class="col-md-12">
+                        <div class="testimonials-subtitle">We collect reviews from our customers so you can get an honest opinion of what an apartment is really like!</div>
+                    </div>*@
+
+                <div class="col-md-4">
+                    <div class="icon-box-1 alternative">
+                        <img src="~/Content/images/icon/icons_agent.png" class="circleimg sm" />
+                        <h4 style="color:#125985">ASIC Agent : 36194 ASIC Accredited Software Provider No: 2083</h4>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="icon-box-1 alternative">
+                        <img src="~/Content/images/icon/Icons_Lawyer.png" class="circleimg sm" />
+                        <h4 style="color:#125985;">Specialist Lawyers <br />GC Legal</h4>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="icon-box-1 alternative">
+                        <img src="~/Content/images/icon/Icons_tax.png" class="circleimg sm" />
+                        <h4 style="color:#125985;">Registered Tax Adviser</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="icon-box-1 alternative">
+                        <img src="~/Content/images/icon/Icons_truck.png" class="circleimg sm" />
+                        <h4 style="color:#125985;">Fast / Online</h4>
+                        <p style="color:#333333;">In most cases applications are completed within 5 minutes of submission</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="icon-box-1 alternative">
+                        <img src="~/Content/images/icon/Icons_support.png" class="circleimg sm" />
+                        <h4 style="color:#125985;">Great Service Support</h4>
+                        <p style="color:#333333;">We take pride in providing a simple and efficient service </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="icon-box-1 alternative">
+                        <img src="~/Content/images/icon/Icons_bank.png" class="circleimg sm" />
+                        <h4 style="color:#125985;">Value</h4>
+                        <p style="color:#333333;">Company setups starting from just $508* with support.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parallax -->
+    <div style="background-color:#f0f0f0;display:none;" class="border-bottom">
+        <!-- Infobox -->
+        <div class="padding-top-40 padding-bottom-40">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img src="~/Content/images/book_trust.png" class="img-responsive" />
+                            </div>
+                            <div class="col-md-8">
+                                <h2>Trusts & Company Ebook</h2>
+                                <p>Find out the how to structure a trust and the benefits of trusts. We'll tell you how to structure a company to suit your needs.</p>
+                                <a href="/" class="button margin-top-5 medium"><i class="fa fa-download"></i> Download E-book</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Parallax / End -->
+
+    <div id="result-modal" style="display:none" data-bind="visible:resultbinded()">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-md-offset-4 bg-white padding-top-25 padding-bottom-25" style="margin-left: 238px; border: 1px solid #0a4e9499;border-radius: 21px; height: 335px;">
+                    <h3 class="text-uppercase">Proposed Name - <span data-bind="text:txtname" class="text-uppercase"></span></h3>
+                    <div class="notification" data-bind="css:resclass">
+                        <table class="table">
+                            <thead class=".thead-light">
+                                <tr>
+                                    <th scope="col" class="text-uppercase" style="color:#333;">Status</th>
+                                    <th scope="col" class="text-uppercase" style="color:#333;">Description</th>
+                                    @*<th scope="col"></th>*@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row"><h4 data-bind="text:stats"></h4></th>
+                                    <td> <p style="margin-top: 11px;" data-bind="text:desc"></p></td>
+                                    @*<td>
+                                            <table class="table-responsive">
+                                                <tr>
+                                                    <td>
+                                                        <a id="lnksetup" class="button" data-bind="click:setupnow" style="text-transform:uppercase;width:150px;">Setup Now</a>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="button border" data-bind="click:closeModal">Close</button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>*@
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr />
+                    <div class="pull-right">
+                        <a id="lnksetup" class="button btn-success" style="text-transform:uppercase;background-color:#4bb10bfa;" data-bind="click:setupnow">Setup Now</a>
+                        <button type="button" class="button border" data-bind="click:closeModal" style="text-transform:uppercase;">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    window.onload = function () {
+        function binndviews() {
+            var self = this;
+            self.txtname = ko.observable("");
+            //self.txtname = ko.observable().extend({ pattern: '^[a-zA-Z0-9.&].$' });
+            self.resultbinded = ko.observable(false);
+            self.stats = ko.observable("");
+            self.desc = ko.observable("");
+            self.resclass = ko.observable("");
+            self.ajproc = ko.observable(false);
+            self.estatus = ko.observable(false);
+            self.dvLoader = ko.observable(true);
+
+            self.checkname = function (f) {
+                debugger;
+                if (Boolean(self.txtname())) {
+                    $.ajax({
+                        type: "GET",
+                        beforeSend: function () { self.ajproc(true); },
+                        complete: function () { self.ajproc(false); },
+                        url: "/api/SiteApi/CheckName/?name=" + encodeURIComponent(self.txtname()),
+                        contentType: "application/json",
+                        success: function (d) {
+
+                            $.magnificPopup.open({
+                                items: {
+                                    src: '#result-modal'
+                                },
+                                type: 'inline',
+                                modal: true
+                            });
+                            self.stats(d.status);
+                            self.desc(Boolean(d.msg) ? d.msg : "");
+                            $("#lnksetup").hide();
+                            if (d.status == "Available") {
+                                $("#lnksetup").show();
+                                self.resclass("notification success");
+                                self.desc("'" + self.txtname() + "' is available to register.");
+                                self.estatus(true);
+
+                            } else if (d.status == "empty" || d.status == "error") {
+                                self.resclass("notification error");
+                            } else if (d.status == "Subject To Names Determination") {
+                                $("#lnksetup").show();
+                                self.resclass("notification success");
+                                self.desc("'" + self.txtname() + "' is available to register.")
+                                self.estatus(true);
+                            }
+                            else {
+                                self.resclass("notification warning");
+                                self.desc("'" + self.txtname() + "' is unavailable.")
+                            }
+                            self.resultbinded(true);
+                        },
+                        error: function () {
+                            alert("Server error !");
+                        }
+                    });
+                }
+            };
+
+            self.closeModal = function () {
+                $.magnificPopup.close();
+            };
+
+            self.setupnow = function () {
+                var x = self.txtname();
+
+                //alert(self.txtname());
+                location.href = "company-setup?cname=" + encodeURIComponent(x);
+            }
+        };
+        ko.applyBindings(binndviews(), document.getElementById("bindview"))
+
+    };
+</script>

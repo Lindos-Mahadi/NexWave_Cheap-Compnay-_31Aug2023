@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:types="uri:types.asic.gov.au" xmlns:abn.types="uri:abn.types.asic.gov.au" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="uri:abn.types.asic.gov.au" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="ExternalQueryNameAvailabilityPortV2.xsd3.xsd" namespace="uri:types.asic.gov.au" />
+  <xs:complexType name="abnRecordType">
+    <xs:sequence>
+      <xs:element maxOccurs="100" name="ABN" type="abn.types:identifierType">
+        <xs:annotation>
+          <xs:documentation>The ABN is the Australian Business Number allocated to the entity.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="100" name="ACN" type="abn.types:identifierType">
+        <xs:annotation>
+          <xs:documentation>ACN/ARBN Value.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="100" name="ANZSIC">
+        <xs:annotation>
+          <xs:documentation> The ANZSIC (Australian New Zealand Standard Industry Classification) describes the classification for the type of industry in which an organisation operates, or in which a person is employed						</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="mainActivityDescription" type="abn.types:ANZSICdescriptionType" />
+            <xs:element name="mainIndustryCode" type="abn.types:ANZSICCodeType" />
+            <xs:element name="code" type="abn.types:ANZSICCodeType">
+              <xs:annotation>
+                <xs:documentation>The code is the ANSZIC code allocated to the entity.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="description" type="abn.types:ANZSICdescriptionType">
+              <xs:annotation>
+                <xs:documentation>The ANZSIC description stores information that was captured to explain the allocation of the particular ANZSIC code. </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="100" name="entityType" type="abn.types:entityTypeType">
+        <xs:annotation>
+          <xs:documentation>The entityType describes the specific type of the party (e.g. family partnership, individual/sole trader).  This is the publicly releasable entity type.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="100" name="goodsAndServicesTax">
+        <xs:annotation>
+          <xs:documentation>The goodsAndServicesTax allows for an entity to have GST status.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:all>
+            <xs:element minOccurs="0" name="effectiveFrom" type="abn.types:dateType">
+              <xs:annotation>
+                <xs:documentation>The effectiveFrom defines the date from which a GST staus is effective. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="effectiveTo" type="abn.types:dateType">
+              <xs:annotation>
+                <xs:documentation>The effectiveTo defines the date from which a GST Status is no longer effective. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="100" name="deductibleGiftRecipient">
+        <xs:annotation>
+          <xs:documentation>The deductibleGiftRecipient allows for an entity to have DGR status.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:all>
+            <xs:element minOccurs="0" name="DGRStatusCode" type="xs:string" />
+            <xs:element minOccurs="0" name="effectiveFrom" type="abn.types:dateType">
+              <xs:annotation>
+                <xs:documentation>The effectiveFrom defines the date from which a DGR staus is effective. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="effectiveTo" type="abn.types:dateType">
+              <xs:annotation>
+                <xs:documentation>The effectiveTo defines the date from which a DGR Status is no longer effective. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="100" name="legalName">
+        <xs:annotation>
+          <xs:documentation>The legalName describes the  legal name of the entity.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="organisation">
+              <xs:annotation>
+                <xs:documentation>The organisation indicates that the legal name is an organisation.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:complexContent mixed="false">
+                  <xs:extension base="abn.types:organisationNameType" />
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="individual">
+              <xs:annotation>
+                <xs:documentation>The individual describes that the legal name is an individual.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:complexContent mixed="false">
+                  <xs:extension base="abn.types:individualNameType" />
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="100" name="mainTradingName">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="organisation">
+              <xs:annotation>
+                <xs:documentation>The organisation indicates that the main trading name is an organisation.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:complexContent mixed="false">
+                  <xs:extension base="abn.types:organisationNameType" />
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="100" name="otherTradingName">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="organisation">
+              <xs:annotation>
+                <xs:documentation>The organisation indicates that the other trading name is an organisation.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:complexContent mixed="false">
+                  <xs:extension base="abn.types:organisationNameType" />
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="100" name="serviceOfNoticePhysicalAddress" type="abn.types:geographicType">
+        <xs:annotation>
+          <xs:documentation>The serviceOfNoticePhysicalAddress describes the address to which notices may be served.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="100" name="serviceOfNoticeEmailAddress" type="abn.types:abnEmailType">
+        <xs:annotation>
+          <xs:documentation>The serviceOfNoticeEmailAddress describes the email address to which notices may be served.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="100" name="mainBusinessPhysicalAddress" type="abn.types:geographicType">
+        <xs:annotation>
+          <xs:documentation>The mainBusinessPhysicalAddress is the main physical address of the organisation.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="100" name="associate">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="legalName">
+              <xs:annotation>
+                <xs:documentation>The legalName allows for the associated person or organisation to declare their legal name.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:choice>
+                  <xs:element name="individual">
+                    <xs:annotation>
+                      <xs:documentation>The associatedIindividual allows for the assocate to be an individual.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:complexContent mixed="false">
+                        <xs:extension base="abn.types:individualNameType" />
+                      </xs:complexContent>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="organisation">
+                    <xs:annotation>
+                      <xs:documentation>The organisation allows for the associate to be an organisation.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:complexContent mixed="false">
+                        <xs:extension base="abn.types:organisationNameType" />
+                      </xs:complexContent>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="100" name="relationship">
+              <xs:annotation>
+                <xs:documentation>The relationship allows for the definition of the position held by the associate.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="positionHeldCode" type="abn.types:positionHeldCodeType">
+                    <xs:annotation>
+                      <xs:documentation>The positionHeldCode classifies the position held by a person or organisation into one of several categories.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element minOccurs="0" name="effectiveTo" type="abn.types:dateType">
+                    <xs:annotation>
+                      <xs:documentation>The effectiveTo date indicates the date from which this associate holding this position is no longer effective. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element minOccurs="0" name="effectiveFrom" type="abn.types:dateType">
+                    <xs:annotation>
+                      <xs:documentation>The effectiveFrom date defines the date from which this associate holding this position becomes effective. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="suppressionIndicator" type="abn.types:indicatorType">
+        <xs:annotation>
+          <xs:documentation>The supressionIndicator desicribes whether or not the record has been supresed.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="organisationNameType">
+    <xs:sequence>
+      <xs:element name="organisationShortName1" type="types:nniNameType" />
+      <xs:element name="organisationShortName2" type="types:nniNameType" />
+      <xs:element name="effectiveFrom" type="abn.types:dateType">
+        <xs:annotation>
+          <xs:documentation>Date from which a name is effective. </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="effectiveTo" type="abn.types:dateType">
+        <xs:annotation>
+          <xs:documentation>Date from which a name is no longer effective.  An empty value (or no effectiveTo element) indicates that the parent element is current.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="deleteIndicator" type="abn.types:indicatorType" />
+      <xs:element name="organisationName" type="types:nniNameType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="identifierType">
+    <xs:all>
+      <xs:element name="identifierValue" type="abn.types:identifierValueType">
+        <xs:annotation>
+          <xs:documentation>The identifierValue stores the value of the identifier.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="identifierStatusCode" type="abn.types:identifierStatusCodeType">
+        <xs:annotation>
+          <xs:documentation>The identifierStatusCode describes the current status of the identifier (e.g Active, Inactive).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="issuingPartyCode" type="abn.types:issuingPartyCodeType">
+        <xs:annotation>
+          <xs:documentation>The issuingPartyCode describes the agency which issued the identifier.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="replacedIndicator" type="abn.types:indicatorType">
+        <xs:annotation>
+          <xs:documentation>The replacedIndicator stores a value to denote whether or not the identifier has been replaced.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="effectiveFrom" type="abn.types:dateType">
+        <xs:annotation>
+          <xs:documentation>The effectiveFrom defines the date from which an identifier is effective. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="effectiveTo" type="abn.types:dateType">
+        <xs:annotation>
+          <xs:documentation>The effectiveTo defines the date from which an identifier is no longer effective. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="deleteIndicator" type="abn.types:indicatorType">
+        <xs:annotation>
+          <xs:documentation>The deleteIndicator indicates whether the identifier record has been logically deleted from the system.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="individualNameType">
+    <xs:all>
+      <xs:element minOccurs="0" name="titleTypeCode" type="abn.types:titleTypeCodeType">
+        <xs:annotation>
+          <xs:documentation>The titleTypeCode describes the title to be used in addressing a person by name, whether by mail, by phone, or in person (e.g. Mr, Mrs, Miss, Ms).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="givenName" type="abn.types:givenNameType">
+        <xs:annotation>
+          <xs:documentation>The givenName stores the first name given to a person party which is that person's identifying name within the family group or the name by which the person is socially identified.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="otherGivenName" type="abn.types:otherGivenNameType">
+        <xs:annotation>
+          <xs:documentation>The otherGivenName stores any second and subsequent names given to a person party which forms part of that person's identifying name within the family group or the name by which the person is socially identified.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="familyName" type="abn.types:familyNameType">
+        <xs:annotation>
+          <xs:documentation>The familyName stores the person party’s family name or surname by which the family group is identified.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="suffixTypeCode" type="abn.types:suffixTypeCodeType">
+        <xs:annotation>
+          <xs:documentation>The suffixTypeCode stores honours, awards and other identifiers following a person party’s name.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="effectiveFrom" type="abn.types:dateType">
+        <xs:annotation>
+          <xs:documentation>The effectiveFrom defines the date from which a name is effective. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="effectiveTo" type="abn.types:dateType">
+        <xs:annotation>
+          <xs:documentation>The effectiveTo defines the date from which a name is no longer effective. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="deleteIndicator" type="abn.types:indicatorType">
+        <xs:annotation>
+          <xs:documentation>The deleteIndicator indicates whether the name record has been logically deleted from the system.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="geographicType">
+    <xs:all>
+      <xs:element minOccurs="0" name="addressLine1" type="abn.types:addressLine1Type">
+        <xs:annotation>
+          <xs:documentation>The addressLine1 stores the first line of an uncomponentised address. This doesn't include the suburb/place/locality, state, postcode, country or DPID.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="addressLine2" type="abn.types:addressLine2Type">
+        <xs:annotation>
+          <xs:documentation>The addressLine2 stores the second line of an uncomponentised address. This doesn't include the suburb/place/locality, state, postcode, country or DPID.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="suburb" type="abn.types:suburbType">
+        <xs:annotation>
+          <xs:documentation>The suburb stores the full name of the general locality containing the specific address.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="postcode" type="abn.types:postcodeType">
+        <xs:annotation>
+          <xs:documentation>The postcode stores the numeric descriptor for a postal delivery area, aligned with a Suburb, Place or Locality.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="stateCode" type="abn.types:stateCodeType">
+        <xs:annotation>
+          <xs:documentation>The StateCode stores the defined state or territory abbreviation for the state or territory in which the address is located.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="countryCode" type="abn.types:countryCodeType">
+        <xs:annotation>
+          <xs:documentation>The countryCode stores the code representing the country in which an overseas address is located.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="DPID" type="abn.types:DPIDType">
+        <xs:annotation>
+          <xs:documentation>The DPID (Delivery Point Identifier). The DPID stores the numeric descriptor for a postal delivery point which is equal to a unique physical address.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="DPIDStatusCode" type="abn.types:DPIDStatusCodeType">
+        <xs:annotation>
+          <xs:documentation>The DPIDStatusCode describes the status of the DPID of the address record (e.g. active, inactive).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="lastConfirmedDate" type="abn.types:dateType">
+        <xs:annotation>
+          <xs:documentation>The lastConfirmedDate stores the date this address was last confirmed as being correct. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="reliabilityIndicatorCode" type="abn.types:indicatorType">
+        <xs:annotation>
+          <xs:documentation>The reliabilityIndicatorCode indicates whether the address record is currently reliable.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="reliabilityIndicatorDate" type="abn.types:dateType">
+        <xs:annotation>
+          <xs:documentation>The reliabiltyIndicatorDate stores the date the address was determined to be reliable/unreliable. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="effectiveFrom" type="abn.types:dateType">
+        <xs:annotation>
+          <xs:documentation>The effectiveFrom defines the date from which an address is effective. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="effectiveTo" type="abn.types:dateType">
+        <xs:annotation>
+          <xs:documentation>The effectiveTo defines the date from which an address is no longer effective. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="deleteIndicator" type="abn.types:indicatorType">
+        <xs:annotation>
+          <xs:documentation>The deleteIndicator indicates whether the address record has been logically deleted from the system.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="searchIdentifierType">
+    <xs:all>
+      <xs:element name="identifierType" type="abn.types:searchIdentifierTypeCodeType">
+        <xs:annotation>
+          <xs:documentation>The identifierType stores the  type of identifier e.g. ABN, ACN.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="identifierValue" type="abn.types:identifierValueType">
+        <xs:annotation>
+          <xs:documentation>The identifierValue stores the value of the identifier.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="date" type="abn.types:dateType">
+        <xs:annotation>
+          <xs:documentation>The date defines the date of records overwhich the search should be made. The format of the date must be ‘yyyy-mm-dd’.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="history" type="abn.types:historyType">
+        <xs:annotation>
+          <xs:documentation>The history defines whether the record's history is required to be returned in the result.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:simpleType name="searchIdentifierTypeCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="6" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="historyType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="identifierValueType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="20" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="identifierStatusCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="4" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="issuingPartyCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="6" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ANZSICCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="5" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ANZSICdescriptionType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="200" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="entityTypeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="4" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="positionHeldCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="4" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="givenNameType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="40" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="otherGivenNameType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="100" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="familyNameType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="40" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="suffixTypeCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="5" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="titleTypeCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="12" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="addressLine1Type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="38" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="addressLine2Type">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="38" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="suburbType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="46" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="stateCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="3" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="countryCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="3" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="postcodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="12" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DPIDType">
+    <xs:restriction base="xs:integer" />
+  </xs:simpleType>
+  <xs:simpleType name="DPIDStatusCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="4" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dateType">
+    <xs:restriction base="xs:dateTime" />
+  </xs:simpleType>
+  <xs:simpleType name="geogReliabilityIndicatorCodeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="4" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="indicatorType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="1" />
+      <xs:minLength value="1" />
+      <xs:enumeration value="Y" />
+      <xs:enumeration value="N" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="abrEntityTypeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="3" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="baseAbrEntityType">
+    <xs:annotation>
+      <xs:documentation>ABR fields used to determine how the business entity is stored</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="abn" type="types:abnType" />
+      <xs:element name="entityName" type="types:nniNameType" />
+      <xs:element name="entityType" type="abn.types:abrEntityTypeType">
+        <xs:annotation>
+          <xs:documentation>Abr entity type</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="effectiveDate" type="xs:date" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="abrEntityType">
+    <xs:annotation>
+      <xs:documentation>ABR fields used to determine how the business entity is stored</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="abn" type="types:abnType" />
+        <xs:element name="abnReferenceNumber" type="types:abnApplicationReferenceNumberType" />
+      </xs:choice>
+      <xs:element minOccurs="0" name="entityName" type="types:nniNameType" />
+      <xs:element minOccurs="0" name="entityType" type="abn.types:abrEntityTypeType">
+        <xs:annotation>
+          <xs:documentation>Abr entity type</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="effectiveDate" type="xs:date" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="abnEmailType">
+    <xs:sequence>
+      <xs:element name="effectiveFrom" type="abn.types:dateType" />
+      <xs:element name="effectiveTo" type="abn.types:dateType" />
+      <xs:element name="deleteIndicator" type="abn.types:indicatorType" />
+      <xs:element name="emailAddress" type="types:emailType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="abnUpdateType">
+    <xs:sequence>
+      <xs:element name="action">
+        <xs:annotation>
+          <xs:documentation>APPROVED
+CEASED
+CHANGED
+REINSTATED
+REJECTED</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="11" />
+            <xs:enumeration value="APPROVED" />
+            <xs:enumeration value="CEASED" />
+            <xs:enumeration value="CHANGED" />
+            <xs:enumeration value="REINSTATED" />
+            <xs:enumeration value="REJECTED" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:choice>
+        <xs:element name="abnReferenceNumber">
+          <xs:simpleType>
+            <xs:restriction base="types:abnApplicationReferenceNumberType">
+              <xs:maxInclusive value="99999999999999" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="abn" type="types:abnType" />
+        <xs:element name="nniNumber" type="types:nniNumberType" />
+      </xs:choice>
+      <xs:element minOccurs="0" name="abrEntity" type="abn.types:baseAbrEntityType">
+        <xs:annotation>
+          <xs:documentation>For action = APROVED, CHANGED</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

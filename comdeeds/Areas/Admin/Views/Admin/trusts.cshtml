@@ -1,0 +1,146 @@
+﻿<div class="main-content container-fluid" id="bindview">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default panel-table">
+                <div class="panel-heading">
+                    Trust deeds
+                    <button class="btn btn-default"
+                            data-bind="visible: visiblebtn(), click: deleterow">
+                        <i class="mdi mdi-delete"></i>  Delete
+                    </button>
+                </div>
+                <div class="panel-body">
+
+                    <div style="margin-bottom:15px;">
+                        <div class="col-md-12">
+                            <div class="pull-right">
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <input type="text" data-bind="value:searchkey" class="form-control input-sm" id="txtsearch" placeholder="Search trust deed">
+                                    </div>
+                                    <button type="button" data-bind="click:advancesearch" class="btn btn-primary btn-lg">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <table class="table" id="grid"></table>
+                    <input type="hidden" value="@TempData["subUserID"]" id="hdnsessionid" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.onload = function () {
+
+        function bindko() {
+            var self = this;
+            self.searchkey = ko.observable("");
+            self.visiblebtn = ko.observable(false);
+
+            self.bindgrid = function () {
+                var sessionid = $("#hdnsessionid").val();
+                var grid = $('#grid').grid({
+                    dataSource: '/api/AdminApi/gettrusts?sessionData="' + sessionid.trim() + '"',
+                    selectionType: 'multiple',
+                    selectionMethod: 'checkbox',
+                    //rowReorder: true,
+                    primaryKey: "Id",
+                    columns: [
+                        { field: 'TrustName', title: "Trust Name", sortable: true },
+                        { field: 'TrustType', title: 'Type', sortable: true },
+                        { field: 'AddedDate', title: 'Creation date', sortable: true },
+                        { field: 'Paid', title: 'Paid', sortable: true },
+                        { field: 'edit', width: 150, title: '', sortable: false, cssClass: 'actions' }
+                    ],
+                    style: {
+                        pager: {
+                            stateDisabled: 'icon-disabled'
+                        }
+                    },
+                    pager: ElePager
+
+                });
+
+                grid.on('rowSelect', function (e, $row, id, record) {
+                    var selections = grid.getSelections();
+                    if (selections.length > 0) {
+                        self.visiblebtn(true);
+                    } else {
+                        self.visiblebtn(false);
+                    }
+                });
+
+                grid.on('rowUnselect', function (e, $row, id, record) {
+                    var selections = grid.getSelections();
+                    if (selections.length > 0) {
+                        self.visiblebtn(true);
+                    } else {
+                        self.visiblebtn(false);
+                    }
+                });
+
+                grid.on('cellDataBound', function (e, $displayEl, id, column, record) {
+                    if ('Paid' === column.field) {
+                        $displayEl.html(record.Paid ? "<span class='label label-success'>Yes</span>" : "<span class='label label-warning'>No</span>");
+                    }
+                    if ('edit' === column.field) {
+                        var s = "";
+                        if (record.Paid) {
+                            s = "<a href='/admin/downloads/downloadsmsf/?id=" + record.Id + "'  class='icon' title='Download Trust Deed' ><i class='mdi mdi-file-text'></i></a> "
+                                //+ "<a href='/admin/downloads/downloadconstitutiontrust/?id=" + record.Id + "'  class='icon' title='Download Trust Constitution' ><i class='mdi mdi-file-text'></i></a> "
+                                + "<a href='/admin/downloads/downloadtrustminuteNew/?id=" + record.Id + "' class='icon ' title='Download Trust Minute' ><i class='mdi mdi-timer'></i></a>"
+                                + "<a href='/admin/downloads/downloadtrustinvoice/?id=" + record.Id + "' class='icon ' title='Download Invoice' ><i class='mdi mdi-view-headline'></i></a>";
+                            //+ "<a href='/admin/downloads/downloadSupplementary_SFD/?id=" + record.Id + "' class='icon ' title='Download Supplementary_SFD' ><i class='mdi mdi-view-headline'></i></a>"
+                            //+ "<a href='/admin/downloads/downloadSMSF_DEED_OF_VARIATION/?id=" + record.Id + "' class='icon ' title='Download SMSF_DEED_OF_VARIATION_' ><i class='mdi mdi-view-headline'></i></a>";
+
+                        }
+
+                        s += "<a href='/trustsetup?continue=" + record.Id + "&type=admin' class='icon ' title='Edit trust' ><i class='mdi mdi-edit'></i></a>";
+                        s += "<a href='/admin/trustdetails?id=" + record.Id + "' class='icon ' title='Trust details' ><i class='mdi mdi-eye'></i></a>";
+                        $displayEl.html(s);
+                    }
+
+                });
+
+            };
+
+            self.deleterow = function () {
+                if (confirm("Are you sure ? This will delete all data Permanently for this entry.")) {
+                    var selections = $('#grid').grid().getSelections();
+                    if (selections.length > 0) {
+                        var dt = JSON.stringify(selections);
+                        $.ajax({
+                            type: "POST",
+                            data: dt,
+                            url: "/api/AdminApi/deltrusts/",
+                            contentType: "application/json",
+                            success: function (d) {
+                                if (d.msg == "success") {
+                                    alert("data deleted successfully.");
+                                    $("#grid").grid().reload();
+                                } else {
+                                    alert("Error, please try again.");
+                                }
+                            },
+                            error: function () {
+                                alert("Error,  please try again.");
+                            }
+                        });
+                    }
+                }
+            }
+
+            self.advancesearch = function () {
+                $("#grid").grid().reload({ search: self.searchkey() });
+            };
+
+            self.bindgrid();
+        };
+
+        ko.applyBindings(bindko(), document.getElementById("bindview"));
+    };
+</script>

@@ -1,0 +1,1214 @@
+﻿using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser;
+using System.Text;
+using System.IO;
+using System.Data;
+using System.Data.SqlClient;
+using System.Text.RegularExpressions;
+using comdeeds.dal;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Collections;
+using Ionic.Zip;
+using System.Net.Mail;
+using System.Configuration;
+
+namespace comdeeds
+{
+    public partial class GeneratePDF : System.Web.UI.Page
+    {
+        ErrorLog oErrorLog = new ErrorLog();
+        string dtallmember_ = "";
+        List<String> DynamicPdfName = new List<string>();
+        dal.Operation op = new dal.Operation();
+        dal.DataAccessLayer dal = new DataAccessLayer();
+        protected void Page_Load1(object sender, EventArgs e)
+        {
+            Response.Redirect("Home/ThankYou",false);
+        }
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                if (Request.QueryString["Email"] != null && Request.QueryString["CompanyID"] != null)
+                {
+                    string val = Request.QueryString["Email"].ToString();
+                    hdnemail.Value  = val;
+
+                    string id = Request.QueryString["CompanyID"].ToString();
+                    hdncompanyid.Value = id;
+                }
+                else
+                {
+                    // Response.Redirect("ABC.aspx", true);
+                }
+
+                //hdncompanyid.Value = "2119";
+                //hdnemail.Value = "teach.msp@gmail.com";
+
+                DataTable dtcompanyname = dal.getdata("select FULLNAME,Asic_ACN from companysearch where id='" + hdncompanyid.Value.ToString() + "'");
+                if (dtcompanyname.Rows.Count > 0)
+                {
+                    hdncompanyname.Value = dtcompanyname.Rows[0]["FULLNAME"].ToString();
+                    hdnacn.Value = dtcompanyname.Rows[0]["Asic_ACN"].ToString();
+                }
+             
+                CreateCustomerFolder();
+                CreateRegisterofAllottedShares();
+                CreateApplicationOfShare();
+                SetConstitute();
+                createConsentactDirector();
+                CreateSecretaryForm();
+                CreateMinuteForm();
+                CreateShareCertificate();
+                mergeallpdf();
+                createpdfZip();
+                Response.Redirect("ThankYou", false);
+            }
+        }
+
+        #region Create Folder
+        private void CreateCustomerFolder()
+        {
+            try
+            {
+                string directoryPath = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value);
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                string directoryPath2 = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Final");
+                if (!Directory.Exists(directoryPath2))
+                {
+                    Directory.CreateDirectory(directoryPath2);
+                }
+            }
+            catch (Exception ex) { }
+        }
+        #endregion
+        #region Set Constitute
+        private void SetConstitute()
+        {
+  
+            DataTable dtcompanyDetails = dal.getdata("select * from step2 where companyid='" + hdncompanyid.Value.ToString() + "'");
+            if (dtcompanyDetails.Rows.Count > 0)
+            {
+                hdnAddress.Value = dtcompanyDetails.Rows[0]["unit_level_suite"].ToString() + " " + dtcompanyDetails.Rows[0]["streetNoName"].ToString() + " " + dtcompanyDetails.Rows[0]["suburb_town_city"].ToString() + " " + dtcompanyDetails.Rows[0]["state"].ToString() + " " + dtcompanyDetails.Rows[0]["postcode"].ToString();
+                
+            }
+
+            Constitutepdf obj = new Constitutepdf();
+           
+            dal.Operation oper = new dal.Operation();
+            obj.txtcompanyname1_1 = hdncompanyname.Value.ToString();
+            obj.txtcompanyname8_1 = hdncompanyname.Value.ToString();
+
+            string acnno = " ACN " + hdnacn.Value.ToString() +" ";
+            obj.txtacn1_1 = acnno.ToString();
+            obj.txtacn8_1 = acnno.ToString();
+
+
+            obj.txtcompanyname2_1 = hdncompanyname.Value.ToString();
+            obj.txtacn2_1 = hdnacn.Value.ToString();
+            obj.txtcompanyname3_1 = hdncompanyname.Value.ToString();
+            obj.txtacn3_1 = hdnacn.Value.ToString();
+            obj.txtaddress2_1 = hdnAddress.Value.ToString();
+      
+           
+            #region FillPDF
+           
+            string defaultPath = Server.MapPath("DefaultDocuments\\");
+            string exportPath = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Final");
+            string pdfTemplate = defaultPath + "ConstitutePart.pdf";
+            string newFile = exportPath + ("//" + "ConstitutePart1.pdf");
+
+            PdfReader pdfReader = new PdfReader(pdfTemplate);
+            PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
+            AcroFields pdfFormFields = pdfStamper.AcroFields;
+
+
+            pdfFormFields.SetField("txtCompanyName", obj.txtcompanyname1_1);
+            pdfFormFields.SetField("txtABN", obj.txtacn2_1);
+            pdfFormFields.SetField("txtAddress", obj.txtaddress2_1);
+            pdfFormFields.SetField("txtCompanyName1", obj.txtcompanyname8_1);
+            pdfFormFields.SetField("txtACN", obj.txtacn2_1);
+            pdfFormFields.SetField("txtCompanyAddress1", obj.txtaddress2_1);
+            pdfFormFields.SetField("txtCompanyName2", obj.txtcompanyname8_1);
+            
+
+            pdfStamper.FormFlattening = false;
+            pdfStamper.Close();
+         
+            #endregion
+        }
+        #endregion
+        #region Minute Form
+        private void CreateMinuteForm()
+        {
+            string companyname = hdncompanyname.Value.ToString();
+            string companyacn =  hdnacn.Value.ToString();
+            dal.Operation oper = new dal.Operation();
+            //BeMinute obj = new BeMinute();
+            //Step4_Minut obj_Minut = new Step4_Minut();
+
+            string defaultPath = Server.MapPath("DefaultDocuments\\");
+            string exportPath = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Final\\");
+            string pdfTemplate = defaultPath + "//MinuteForm.pdf";
+            string newFile = exportPath + "//MinuteForm.pdf";
+
+            string shareHolderName="";
+            string entrydate="";
+            DataTable dt_othermembers = dal.getdata("select A.shareholderdetails,B.sno,B.entrydate from step4_anothershareholder A inner join Share_distribute_grid B on A.dirid=B.linkid  where A.companyid='" + hdncompanyid.Value.ToString() + "'");
+            if (dt_othermembers.Rows.Count > 0)
+            {
+                for(int member=0; member<dt_othermembers.Rows.Count;member++) 
+                {
+                 shareHolderName +=dt_othermembers.Rows[member]["shareholderdetails"].ToString()+"           Share Certificate No. "+dt_othermembers.Rows[member]["sno"].ToString()+"\r\n";
+                 entrydate=Convert.ToDateTime(dt_othermembers.Rows[member]["entrydate"]).ToString("dd/mm/yyyy");
+                }
+            }
+
+            // find  All Director here 
+            string AllDirectorName = "";
+            DataTable dtdirectordetails = dal.getdata("select  * from step3 where companyid='" + hdncompanyid.Value.ToString() + "' and designation='director'");
+            if (dtdirectordetails.Rows.Count > 0)
+            {
+                for (int member = 0; member < dtdirectordetails.Rows.Count; member++)
+                {
+                    AllDirectorName += dtdirectordetails.Rows[member]["firstname"].ToString() + " " + dtdirectordetails.Rows[member]["middlename"].ToString() + " " + dtdirectordetails.Rows[member]["familyname"].ToString() + " ,";
+                }
+                AllDirectorName = AllDirectorName.ToString().TrimEnd(',');
+            }
+
+            // find prancipal Address & Primary address 
+            string primaryAddress = "";
+            string prancipalAddress = "";
+            DataTable HeadAddress = dal.getdata("select  * from step2 where companyid='" + hdncompanyid.Value.ToString() + "'");
+            if (HeadAddress.Rows.Count > 0)
+            {
+                  prancipalAddress = HeadAddress.Rows[0]["unit_level_suite_primary"].ToString() + " " + dtdirectordetails.Rows[0]["streetNoName_primary"].ToString() + " " + dtdirectordetails.Rows[0]["suburb_town_city_primary"].ToString() + " " + dtdirectordetails.Rows[0]["state_primary"].ToString() + " " + dtdirectordetails.Rows[0]["postcode_primary"].ToString();
+                  primaryAddress = HeadAddress.Rows[0]["unit_level_suite_primary"].ToString() + " " + dtdirectordetails.Rows[0]["streetNoName_primary"].ToString() + " " + dtdirectordetails.Rows[0]["suburb_town_city_primary"].ToString() + " " + dtdirectordetails.Rows[0]["state_primary"].ToString() + " " + dtdirectordetails.Rows[0]["postcode_primary"].ToString();
+            }
+
+            //find All member here 
+            DataTable dtdirectordetailsAll = dal.getdata("select  * from step3 where companyid='" + hdncompanyid.Value.ToString() + "'");
+            if (dtdirectordetailsAll.Rows.Count > 0)
+            {
+                for (int i = 0; i < dtdirectordetailsAll.Rows.Count; i++)
+                {
+                    string givenname = dtdirectordetailsAll.Rows[i]["firstname"].ToString() + " " + dtdirectordetailsAll.Rows[i]["middlename"].ToString() + " " + dtdirectordetailsAll.Rows[i]["familyname"].ToString();
+                }
+            }
+
+
+            // create PDF file here
+            PdfReader pdfReader = new PdfReader(pdfTemplate);
+            PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
+            AcroFields pdfFormFields = pdfStamper.AcroFields;
+
+            pdfFormFields.SetField("txtCompnayName_M", hdncompanyname.Value.ToString());
+            pdfFormFields.SetField("txtAlldirector_M", AllDirectorName);
+            pdfFormFields.SetField("txtAddress_M", prancipalAddress);
+            pdfFormFields.SetField("txtMember", AllDirectorName);
+            pdfFormFields.SetField("txtACN_M",hdnacn.Value.ToString());
+            pdfFormFields.SetField("txtAddress_M1", prancipalAddress);
+            pdfFormFields.SetField("txtAddress_M2",primaryAddress);
+            pdfFormFields.SetField("txtAllSharemember_M", shareHolderName);
+            pdfFormFields.SetField("txtDate_M", entrydate);
+
+            pdfStamper.FormFlattening = false;
+            pdfStamper.Close();
+        }
+        #endregion
+        #region Consent act Director
+        private void createConsentactDirector()
+        { 
+         dal.DataAccessLayer dd = new dal.DataAccessLayer();
+         try
+         {
+             string companyname = hdncompanyname.Value.ToString();
+             string acn = hdnacn.Value.ToString();
+             string date = "";
+             string defaultPathDir = Server.MapPath("DefaultDocuments\\ConsentDirector");
+             string exportPathDir = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\");
+
+             dal.Operation op = new dal.Operation();
+
+               string[] lstFiles = new string[10];
+
+               DataTable dtmemberdetails = dd.getdata("select  * from step3 where companyid='" + hdncompanyid.Value.ToString() + "' and designation='director'");
+
+                 if (dtmemberdetails.Rows.Count > 0)
+                 {
+
+                     for (int md = 0; md < dtmemberdetails.Rows.Count; md++)
+                     {
+
+                         lstFiles[md] = exportPathDir + (md + 1) + ".pdf";
+                         string pdfTemplate = defaultPathDir + ".pdf";
+                         string newFile = exportPathDir + "consentdirector" + (md + 1) + ".pdf";
+                         lstFiles[md] = newFile;
+
+                         #region Start Binding
+
+                         string name = dtmemberdetails.Rows[md]["firstname"].ToString() + " " + dtmemberdetails.Rows[md]["middlename"].ToString() + " " + dtmemberdetails.Rows[md]["familyname"].ToString();
+                         string dob = dtmemberdetails.Rows[md]["dob"].ToString();
+                         string birthaddress = dtmemberdetails.Rows[md]["placeofbirth"].ToString() + "," + dtmemberdetails.Rows[md]["countryofbirth"].ToString();
+                         string designation = dtmemberdetails.Rows[md]["designation"].ToString();
+                         date = Convert.ToDateTime(dtmemberdetails.Rows[md]["entrydate"].ToString()).ToString("dd/MM/yyyy");
+                         if (dob != "" && dob != "0-0-0")
+                         {
+                             dob = Convert.ToDateTime(dtmemberdetails.Rows[md]["dob"]).ToString("dd/MM/yyyy");
+                         }
+                         else
+                         {
+                             dob = "";
+                         }
+                         string unit_level_suite_primary = dtmemberdetails.Rows[md]["unit_level_suite_primary"].ToString();
+                         string streetNoName_primary = dtmemberdetails.Rows[md]["streetNoName_primary"].ToString();
+                         string suburb_town_city_primary = dtmemberdetails.Rows[md]["suburb_town_city_primary"].ToString();
+                         string state_primary = dtmemberdetails.Rows[md]["state_primary"].ToString();
+                         string postcode_primary = dtmemberdetails.Rows[md]["postcode_primary"].ToString();
+                         string country = dtmemberdetails.Rows[md]["country"].ToString();
+                         string address = (unit_level_suite_primary + " " + streetNoName_primary + " " + suburb_town_city_primary + " " + state_primary + "-" + postcode_primary + " " + country);
+
+                         PdfReader pdfReader = new PdfReader(pdfTemplate);
+                         PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
+                         AcroFields pdfFormFields = pdfStamper.AcroFields;
+                     
+                         pdfFormFields.SetField("txtCompanyNameDir" , companyname);
+                         pdfFormFields.SetField("txtACNDir" , acn);
+                         pdfFormFields.SetField("txtFullnameDir" , name);
+                         pdfFormFields.SetField("txAddressDir", address);
+                         pdfFormFields.SetField("txtDOBDir" , dob);
+                         pdfFormFields.SetField("txPOBDir" , birthaddress);
+                         pdfFormFields.SetField("txtFullNameDirS" , name);
+                         pdfFormFields.SetField("txtDateDir" , date);
+
+
+                         pdfStamper.FormFlattening = false;
+                         pdfStamper.Close();
+
+                         #endregion
+
+                     }
+                 }
+
+                 int coun = 0;
+                 for (int i = 0; i < lstFiles.Length; i++)
+                 {
+                     if (lstFiles[i] != null)
+                     {
+                         if (lstFiles[i].Trim() != "")
+                         {
+                             coun = coun + 1;
+                         }
+                     }
+                 }
+
+                 string[] lstFilesnew = new string[coun + 1];
+                 for (int ii = 0; ii < coun; ii++)
+                 {
+                     lstFilesnew[ii] = lstFiles[ii].ToString();
+                 }
+                 MergeDirector(lstFilesnew);
+             }
+         catch (Exception ex) { }
+        
+        }
+        #endregion
+        #region Secretary Form
+        private void CreateSecretaryForm()
+        {
+
+            dal.DataAccessLayer dd = new dal.DataAccessLayer();
+            try
+            {
+                string companyname = hdncompanyname.Value.ToString();
+                string acn = hdnacn.Value.ToString();
+                string date = "";
+                string defaultPathDir = Server.MapPath("DefaultDocuments\\ConsentSecretary");
+                string exportPathDir = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\");
+
+                dal.Operation op = new dal.Operation();
+
+                string[] lstFiles = new string[10];
+
+                DataTable dtmemberdetails = dd.getdata("select  * from step3 where companyid='" + hdncompanyid.Value.ToString() + "' and designation='secretary'");
+
+                if (dtmemberdetails.Rows.Count > 0)
+                {
+
+                    for (int md = 0; md < dtmemberdetails.Rows.Count; md++)
+                    {
+
+                        lstFiles[md] = exportPathDir + (md + 1) + ".pdf";
+                        string pdfTemplate = defaultPathDir + ".pdf";
+                        string newFile = exportPathDir + "consentsecretary" + (md + 1) + ".pdf";
+                        lstFiles[md] = newFile;
+
+                        #region Start Binding
+
+                        string name = dtmemberdetails.Rows[md]["firstname"].ToString() + " " + dtmemberdetails.Rows[md]["middlename"].ToString() + " " + dtmemberdetails.Rows[md]["familyname"].ToString();
+                        string dob = dtmemberdetails.Rows[md]["dob"].ToString();
+                        string birthaddress = dtmemberdetails.Rows[md]["placeofbirth"].ToString() + "," + dtmemberdetails.Rows[md]["countryofbirth"].ToString();
+                        string designation = dtmemberdetails.Rows[md]["designation"].ToString();
+                        date = Convert.ToDateTime(dtmemberdetails.Rows[md]["entrydate"].ToString()).ToString("dd/MM/yyyy");
+                        if (dob != "" && dob != "0-0-0")
+                        {
+                            dob = Convert.ToDateTime(dtmemberdetails.Rows[md]["dob"]).ToString("dd/MM/yyyy");
+                        }
+                        else
+                        {
+                            dob = "";
+                        }
+                        string unit_level_suite_primary = dtmemberdetails.Rows[md]["unit_level_suite_primary"].ToString();
+                        string streetNoName_primary = dtmemberdetails.Rows[md]["streetNoName_primary"].ToString();
+                        string suburb_town_city_primary = dtmemberdetails.Rows[md]["suburb_town_city_primary"].ToString();
+                        string state_primary = dtmemberdetails.Rows[md]["state_primary"].ToString();
+                        string postcode_primary = dtmemberdetails.Rows[md]["postcode_primary"].ToString();
+                        string country = dtmemberdetails.Rows[md]["country"].ToString();
+                        string address = (unit_level_suite_primary + " " + streetNoName_primary + " " + suburb_town_city_primary + " " + state_primary + "-" + postcode_primary + " " + country);
+
+                        PdfReader pdfReader = new PdfReader(pdfTemplate);
+                        PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
+                        AcroFields pdfFormFields = pdfStamper.AcroFields;
+
+
+
+                        pdfFormFields.SetField("txtCompanynameSec", companyname);
+                        pdfFormFields.SetField("txtACNSec", acn);
+                        pdfFormFields.SetField("txtFullnameSec", name);
+                        pdfFormFields.SetField("txtAddressSec", address);
+                        pdfFormFields.SetField("txtDOBSec", dob);
+                        pdfFormFields.SetField("txtPOBSec", birthaddress);
+                        pdfFormFields.SetField("txtFullnameSecS", name);
+                        pdfFormFields.SetField("txtDateSec", date);
+
+
+                        pdfStamper.FormFlattening = false;
+                        pdfStamper.Close();
+
+                        #endregion
+
+                    }
+                }
+
+                int coun = 0;
+                for (int i = 0; i < lstFiles.Length; i++)
+                {
+                    if (lstFiles[i] != null)
+                    {
+                        if (lstFiles[i].Trim() != "")
+                        {
+                            coun = coun + 1;
+                        }
+                    }
+                }
+
+                string[] lstFilesnew = new string[coun + 1];
+                for (int ii = 0; ii < coun; ii++)
+                {
+                    lstFilesnew[ii] = lstFiles[ii].ToString();
+                }
+                MergeSecratory(lstFilesnew);
+            }
+            catch (Exception ex) { }
+        
+        
+        }
+        #endregion
+        #region Application Of Share
+        private void CreateApplicationOfShare()
+        {
+            try
+            {
+                DataAccessLayer daldir = new DataAccessLayer();
+                string companyname = hdncompanyname.Value.ToString();
+                string acn = hdnacn.Value.ToString();
+                string defaultPathShare = Server.MapPath("DefaultDocuments\\ApplicationForShare");
+                string exportPathShare = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\");
+
+                string[] lstFiles = new string[10];
+
+                DataTable dt_othermember = op.get_step4_anothershareholder(hdncompanyid.Value);
+
+                #region others
+                string certificateno = "";
+        
+                if (dt_othermember.Rows.Count > 0)
+                {
+                    for (int member = 0; member < dt_othermember.Rows.Count; member++)
+                    {
+                       
+
+                        lstFiles[member] = exportPathShare + (member + 1) + ".pdf";
+                        string pdfTemplate = defaultPathShare + ".pdf";
+                        string newFile = exportPathShare + "applicationforshare" + (member + 1) + ".pdf";
+                        lstFiles[member] = newFile;
+
+                        PdfReader pdfReader = new PdfReader(pdfTemplate);
+                        PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
+                        AcroFields pdfFormFields = pdfStamper.AcroFields;
+
+
+                        string shareholderdetails_ = dt_othermember.Rows[member]["shareholderdetails"].ToString();
+                        string indivisual_company = dt_othermember.Rows[member]["individual_or_company"].ToString().ToLower();
+                        string individual_or_company_name = dt_othermember.Rows[member]["individual_or_company_name"].ToString();
+
+                        if (individual_or_company_name == "")
+                        {
+                            individual_or_company_name = shareholderdetails_.ToString();
+                        }
+                        string individual_or_company_acn = dt_othermember.Rows[member]["individual_or_company_acn"].ToString();
+
+                        #region Details
+                        lstFiles[(member)] = exportPathShare + "applicationforshare" + (member + 1) + ".pdf";
+
+                        int pdfpage_ = member + 1;
+                        string address = "";
+                        string individual_or_company_unit_level_suite = dt_othermember.Rows[member]["individual_or_company_unit_level_suite"].ToString();
+                        string individual_or_company_streetNoName = dt_othermember.Rows[member]["individual_or_company_streetNoName"].ToString();
+                        string individual_or_company_suburb_town_city = dt_othermember.Rows[member]["individual_or_company_suburb_town_city"].ToString();
+                        string individual_or_company_state = dt_othermember.Rows[member]["individual_or_company_state"].ToString();
+                        string individual_or_company_postcode = dt_othermember.Rows[member]["individual_or_company_postcode"].ToString();
+                        string individual_or_company_country = dt_othermember.Rows[member]["individual_or_company_country"].ToString();
+                        address = (individual_or_company_unit_level_suite + " " + individual_or_company_streetNoName + " " + individual_or_company_suburb_town_city + " " + individual_or_company_state + " " + individual_or_company_postcode + " " + individual_or_company_country).Trim();
+
+                        string individual_or_company = dt_othermember.Rows[member]["individual_or_company"].ToString();
+                        if (individual_or_company.Trim() != "")
+                        {
+                            shareholderdetails_ = dt_othermember.Rows[member]["individual_or_company_name"].ToString();
+                        }
+                        string givenname_ = "";
+                        string familyname_ = "";
+                        string companyname_ = dt_othermember.Rows[member]["individual_or_company_name"].ToString();
+                        string companyacn_ = dt_othermember.Rows[member]["individual_or_company_acn"].ToString();
+                        if (shareholderdetails_.Contains(" "))
+                        {
+                            int lastindex = shareholderdetails_.Split(' ').Length - 1;
+                            familyname_ = shareholderdetails_.Split(' ')[lastindex];
+                            givenname_ = shareholderdetails_.Replace(familyname_, "").Trim();
+                        }
+                        else
+                        {
+                            givenname_ = shareholderdetails_;
+                        }
+                       
+                        string isheldanotherorg = dt_othermember.Rows[member]["isheldanotherorg"].ToString();
+                        if (isheldanotherorg.Contains("no"))
+                        {
+                            isheldanotherorg = "NA";
+                        }
+                        else if(isheldanotherorg.Contains("yes"))
+                        {
+                            isheldanotherorg="Y";
+                        }
+                        else
+                        {
+                            isheldanotherorg = dt_othermember.Rows[member]["isheldanotherorg"].ToString(); ;
+                        }
+
+                        pdfFormFields.SetField("txtCompanyNameAFS", companyname);
+                        pdfFormFields.SetField("txtCompanyNameAFS1", companyname);
+                        pdfFormFields.SetField("txtACNAFS", acn);
+                        pdfFormFields.SetField("txtFullName", shareholderdetails_);
+                        pdfFormFields.SetField("txAddressName", address);
+                        pdfFormFields.SetField("txtFullnameSAFS", shareholderdetails_);
+
+                        DataTable dtsharedetails_ = daldir.getdata("select top 100 *,(c_amountpaidpershare+c_amountremaining_unpaidpershare) as shareRate,(case c_totalamountunpaidpershare when 0 then 'Y' else 'N' end) as FullyPaid from Share_distribute_grid where companyid='" + hdncompanyid.Value.ToString() + "' and linkid='"+dt_othermember.Rows[member]["dirid"].ToString()+"'");
+                        if (dtsharedetails_.Rows.Count > 0)
+                        {
+                            for (int i = 0; i < dtsharedetails_.Rows.Count; i++)
+                            {
+                            
+                                string classcode = dtsharedetails_.Rows[i]["shareclass"].ToString();
+                                string noofshares = dtsharedetails_.Rows[i]["c_totalshares"].ToString();
+                                string shareRate = dtsharedetails_.Rows[i]["shareRate"].ToString();
+                                string totalpaid = dtsharedetails_.Rows[i]["c_totalamountpaidpershare"].ToString();
+                                string totalunpaid = dtsharedetails_.Rows[i]["c_totalamountunpaidpershare"].ToString();
+                                string isFullyPaid = dtsharedetails_.Rows[i]["FullyPaid"].ToString();
+                                string amountunpaid = dtsharedetails_.Rows[i]["c_amountremaining_unpaidpershare"].ToString();
+
+                                string c_certificateno = dtsharedetails_.Rows[i]["c_certificateno"].ToString();///
+                                string c_amountpaidpershare = dtsharedetails_.Rows[i]["c_amountpaidpershare"].ToString();///
+                                string c_amountremaining_unpaidpershare = dtsharedetails_.Rows[i]["c_amountremaining_unpaidpershare"].ToString();///
+                                
+
+                                if (classcode.ToLower().Trim() == "ordinary")
+                                {
+                                    classcode = "ORD";
+                                }
+
+                                pdfFormFields.SetField("txtTypeAFS" , classcode);
+                                pdfFormFields.SetField("txtnofshareAFS" , noofshares);
+                                pdfFormFields.SetField("txtPaidpershareAFS" , "$"+c_amountpaidpershare);
+                                pdfFormFields.SetField("txtUnPaidpershareAFS", "$" + c_amountremaining_unpaidpershare);
+                                pdfFormFields.SetField("txtBeneficialAFS" , isheldanotherorg);
+
+                                pdfStamper.FormFlattening = false;
+                                pdfStamper.Close();
+                               
+
+                            }
+
+                        }
+   
+                        #endregion
+
+                    }
+                }
+                #endregion
+               
+                int coun = 0;
+                for (int i = 0; i < lstFiles.Length; i++)
+                {
+                    if (lstFiles[i] != null)
+                    {
+                        if (lstFiles[i].Trim() != "")
+                        {
+                            coun = coun + 1;
+                        }
+                    }
+                }
+                string[] lstFilesnew = new string[coun + 1];
+                for (int ii = 0; ii < coun; ii++)
+                {
+                    lstFilesnew[ii] = lstFiles[ii].ToString();
+                }
+                MergeMembers(lstFilesnew);
+
+            }
+            catch (Exception ex)
+            {
+                oErrorLog.WriteErrorLog(ex.ToString());;
+            }
+        }
+        #endregion
+        #region Register of Allotted Shares
+        private void CreateRegisterofAllottedShares()
+        {
+            int count = 0;
+            try
+            {
+                DataAccessLayer daldir = new DataAccessLayer();
+                string companyname = hdncompanyname.Value.ToString();
+                string acn = hdnacn.Value.ToString();
+                string defaultPathShare = Server.MapPath("DefaultDocuments\\RegisterofAllottedShares");
+                string exportPathShare = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Final");
+
+                #region others
+
+                string pdfTemplate = defaultPathShare + ".pdf";
+               
+                string newFile = exportPathShare + ("//" +"RegisterofAllottedShares.pdf").Replace(" ", "_");
+                long total_shares = 0;    
+                DataTable dt_othermember = new DataTable();
+                dt_othermember = op.get_step4_anothershareholder(hdncompanyid.Value);
+                if (dt_othermember.Rows.Count > 0)
+                {
+                    PdfReader pdfReader = new PdfReader(pdfTemplate);
+                    PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
+                    AcroFields pdfFormFields = pdfStamper.AcroFields;
+
+                    for (int member = 0; member < dt_othermember.Rows.Count; member++)
+                    {
+               
+                        string shareholderdetails_ = dt_othermember.Rows[member]["shareholderdetails"].ToString();
+                        string beneficialownername_ = dt_othermember.Rows[member]["beneficialownername"].ToString();
+                        string address = "";
+                        string individual_or_company_unit_level_suite = dt_othermember.Rows[member]["individual_or_company_unit_level_suite"].ToString();
+                        string individual_or_company_streetNoName = dt_othermember.Rows[member]["individual_or_company_streetNoName"].ToString();
+                        string individual_or_company_suburb_town_city = dt_othermember.Rows[member]["individual_or_company_suburb_town_city"].ToString();
+                        string individual_or_company_state = dt_othermember.Rows[member]["individual_or_company_state"].ToString();
+                        string individual_or_company_postcode = dt_othermember.Rows[member]["individual_or_company_postcode"].ToString();
+                        string individual_or_company_country = dt_othermember.Rows[member]["individual_or_company_country"].ToString();
+                       
+                        string individual_or_company_unit_level_suite1 = dt_othermember.Rows[0]["individual_or_company_unit_level_suite"].ToString();
+                        string individual_or_company_streetNoName1 = dt_othermember.Rows[0]["individual_or_company_streetNoName"].ToString();
+                        string individual_or_company_suburb_town_city1 = dt_othermember.Rows[0]["individual_or_company_suburb_town_city"].ToString();
+                        string individual_or_company_state1 = dt_othermember.Rows[member]["individual_or_company_state"].ToString();
+                        string individual_or_company_postcode1 = dt_othermember.Rows[0]["individual_or_company_postcode"].ToString();
+                        string individual_or_company_country1 = dt_othermember.Rows[0]["individual_or_company_country"].ToString();
+
+                        string FirstDiretcorAddress = individual_or_company_unit_level_suite1 + " " + individual_or_company_streetNoName1 + " " + individual_or_company_suburb_town_city1 + " " + individual_or_company_state1 + " " + individual_or_company_postcode1 + " " + individual_or_company_country1;
+
+
+                        address = (individual_or_company_unit_level_suite + " " + individual_or_company_streetNoName + " " + individual_or_company_suburb_town_city + " " + individual_or_company_state + " " + individual_or_company_postcode + " " + individual_or_company_country).Trim();
+                        if (address.Trim() == "")
+                        {
+                            address = dt_othermember.Rows[member]["individual_or_company_address"].ToString();
+                        }
+                        string individual_or_company = dt_othermember.Rows[member]["individual_or_company"].ToString();
+
+                        if (individual_or_company.Trim().ToLower() == "company" || individual_or_company.Trim().ToLower() == "individual")
+                        {
+                            shareholderdetails_ = dt_othermember.Rows[member]["individual_or_company_name"].ToString();
+                        }
+
+
+                        string FirstDiretcorName = dt_othermember.Rows[0]["shareholderdetails"].ToString();
+                       
+
+                        string isheldanotherorg = dt_othermember.Rows[member]["individual_or_company_name"].ToString();
+                        if (isheldanotherorg.Contains("no"))
+                        {
+                            isheldanotherorg = "N";
+                        }
+                        else if (isheldanotherorg.Contains("yes"))
+                        {
+                            isheldanotherorg = "Y";
+                        }
+                        else
+                        {
+                            isheldanotherorg = "N";
+                        }
+
+                         pdfFormFields.SetField("txtDir1Name", FirstDiretcorName);
+                         pdfFormFields.SetField("txtDir1address", FirstDiretcorAddress);
+                        
+                      
+                        DataTable dtsharedetails_ = daldir.getdata("select top 100 *,(c_amountpaidpershare+c_amountremaining_unpaidpershare) as shareRate,(case c_totalamountunpaidpershare when 0 then 'Y' else 'N' end) as FullyPaid from Share_distribute_grid where companyid='" + hdncompanyid.Value.ToString() + "'");
+                        string Lastname_ = ""; string Firstname_ = "";
+                        if (dtsharedetails_.Rows.Count > 0)
+                        {
+                            for (int i = 0; i < dtsharedetails_.Rows.Count; i++)
+                            {
+                                string classcode = dtsharedetails_.Rows[i]["shareclass"].ToString();
+                                string paid = dtsharedetails_.Rows[i]["c_amountpaidpershare"].ToString();
+                                string unpaid = dtsharedetails_.Rows[i]["c_amountremaining_unpaidpershare"].ToString();
+                                string noofallotedshare = dtsharedetails_.Rows[i]["c_totalshares"].ToString();
+                                string certificateno = dtsharedetails_.Rows[i]["c_certificateno"].ToString();
+                                string pervalueofshare = dtsharedetails_.Rows[i]["shareRate"].ToString();
+                                string c_totalshares = dtsharedetails_.Rows[i]["c_totalshares"].ToString();
+                                string alloteddate = Convert.ToDateTime(dtsharedetails_.Rows[i]["entrydate"].ToString()).ToString("dd-MM-yyyy");
+
+                                total_shares =total_shares+ Convert.ToInt64(c_totalshares);
+                                string Firstname1_ = "";
+                                string Firstname2_ = "";
+                                if (shareholderdetails_.Contains(" "))
+                                {
+                                    int lastindex = shareholderdetails_.Split(' ').Length - 1;
+                                    Lastname_ = shareholderdetails_.Split(' ')[lastindex];
+                                    Firstname_ = shareholderdetails_.Replace(Lastname_, "").Trim();
+                                    if (Firstname_.Contains(" "))
+                                    {
+                                        int lastindex1 = Firstname_.Split(' ').Length - 1;
+                                        Firstname2_ = Firstname_.Split(' ')[lastindex1];
+                                        Firstname1_ = Firstname_.Replace(Firstname2_, "").Trim();
+                                    }
+                                    else
+                                    {
+                                        Firstname1_ = Firstname_;
+                                    }
+                                }
+
+                                if (classcode.ToLower().Trim() == "ordinary")
+                                {
+                                    classcode = "ORD";
+                                }
+
+
+                                pdfFormFields.SetField("txtLastnameAS" + "_" + (member + 1), Lastname_);
+                                pdfFormFields.SetField("txtFirstnameAS" + "_" + (member + 1), Firstname1_);
+                                pdfFormFields.SetField("txtMidddlenameAS" + "_" + (member + 1), Firstname2_);
+                                pdfFormFields.SetField("txtAddressAS" + "_" + (member + 1), address);
+                                pdfFormFields.SetField("txtShareAS" + "_" + (member + 1), c_totalshares + " " + classcode);
+                                pdfFormFields.SetField("txtBeneficalAS" + "_" + (member + 1), isheldanotherorg);
+                                pdfFormFields.SetField("txtPaidShareAS" + "_" + (member + 1), "$" + paid);
+                                pdfFormFields.SetField("txtUnPaidShareAS" + "_" + (member + 1), "$" + unpaid);
+                                pdfFormFields.SetField("txtNoOfShareAS", total_shares.ToString());
+                                pdfFormFields.SetField("txtDate_AS", alloteddate.ToString());
+                                count = count + 1;
+                            }
+                        }
+
+                    }
+                    pdfStamper.FormFlattening = false;
+                    pdfStamper.Close();
+                }
+ 
+                #endregion
+            }
+            catch (Exception ex)
+            {   
+                oErrorLog.WriteErrorLog(ex.ToString());;
+            }
+        }
+
+        #endregion
+        #region ShareCertificate
+
+        private void CreateShareCertificate()
+        {
+            try
+            {
+                DataAccessLayer daldir = new DataAccessLayer();
+                string FullAdd = "";
+                string companyname = hdncompanyname.Value.ToString();
+                string acn ="A.C.N "+ hdnacn.Value.ToString();
+                string defaultPathShare = Server.MapPath("DefaultDocuments\\");
+                string exportPathShare = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\");
+                DataTable dt_Allmember = op.get_step4_anothershareholder(hdncompanyid.Value);
+                DataTable dtmemberdetails = daldir.getdata("select top 10 * from step2 where companyid='" + hdncompanyid.Value.ToString() + "'");
+
+                if (dtmemberdetails.Rows.Count > 0)
+                {
+                    string unit_level_suite_primary = dtmemberdetails.Rows[0]["unit_level_suite_primary"].ToString();
+                    string streetNoName_primary = dtmemberdetails.Rows[0]["streetNoName_primary"].ToString();
+                    string suburb_town_city_primary = dtmemberdetails.Rows[0]["suburb_town_city_primary"].ToString();
+                    string state_primary = dtmemberdetails.Rows[0]["state_primary"].ToString();
+                    string postcode_primary = dtmemberdetails.Rows[0]["postcode_primary"].ToString();
+                    string country = "Australia";
+                  
+                 
+                   FullAdd = (unit_level_suite_primary + " " + streetNoName_primary + " " + suburb_town_city_primary).Trim() + " " + postcode_primary + " " + country;
+                         
+                }
+
+                if (dt_Allmember.Rows.Count > 0)
+                {
+                    string[] lstFiles = new string[10];
+
+                        #region Fill
+   
+                         DataTable dtsharedetails = daldir.getdata("select a.shareholderdetails,a.individual_or_company_address,b.* from step4_anothershareholder a inner join Share_distribute_grid b on a.dirid=b.linkid where a.companyid='" + hdncompanyid.Value.ToString() + "'");
+                       
+                        if (dtsharedetails.Rows.Count > 0)
+                            {
+                                for (int i = 0; i < dtsharedetails.Rows.Count; i++)
+                                {
+
+                                    lstFiles[i] = exportPathShare + (i + 1) + ".pdf";
+                                    string pdfTemplate = defaultPathShare + ".pdf";
+                                    string newFile = exportPathShare + "ShareCertificate" + (i + 1) + ".pdf";
+                                    lstFiles[i] = newFile;
+
+                                    PdfReader pdfReader = new PdfReader(defaultPathShare + "ShareCertificate.pdf");
+                                    PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(exportPathShare + "ShareCertificate" + (i + 1) + ".pdf", FileMode.Create));
+                                    AcroFields pdfFormFields = pdfStamper.AcroFields;
+
+
+                                    pdfFormFields.SetField("txtCompanynameSC", companyname);
+                                    pdfFormFields.SetField("txtACNSC", acn);
+                                    pdfFormFields.SetField("txtAddressSC", FullAdd);
+
+                                    string shareholderdetails = dt_Allmember.Rows[i]["shareholderdetails"].ToString();
+                                    string individual_or_company_address = dt_Allmember.Rows[i]["individual_or_company_address"].ToString();
+                                    string classcode = dtsharedetails.Rows[i]["shareclass"].ToString();
+                                    string noofshares = dtsharedetails.Rows[i]["c_totalshares"].ToString();
+                                    string amountunpaid = dtsharedetails.Rows[i]["c_amountremaining_unpaidpershare"].ToString();
+                                    string entrydate = Convert.ToDateTime(dtsharedetails.Rows[i]["entrydate"].ToString()).ToString("dd/MM/yyyy");
+                                    string c_amountpaidpershare = dtsharedetails.Rows[i]["c_amountpaidpershare"].ToString();
+                                    string c_amountremaining_unpaidpershare = dtsharedetails.Rows[i]["c_amountremaining_unpaidpershare"].ToString();///
+                                    string sno = dtsharedetails.Rows[i]["sno"].ToString();///
+                                  
+                                    if (classcode.ToLower().Trim() == "ordinary")
+                                    {
+                                        classcode = "ORDINARY";
+                                    }
+                                    string fullname = shareholderdetails;
+                                    pdfFormFields.SetField("txtShareName", shareholderdetails);
+                                    pdfFormFields.SetField("txtAddress", individual_or_company_address);
+                                    pdfFormFields.SetField("certifyname", fullname);
+                                    pdfFormFields.SetField("txtSharenameSC", "$" + c_amountpaidpershare +" "+ classcode);
+                                    pdfFormFields.SetField("txttotalshare", sno);
+                                    pdfFormFields.SetField("txtDateSC", entrydate);
+                                    pdfStamper.Close();
+                                }
+                            }
+                                int coun = 0;
+                                for (int i = 0; i < lstFiles.Length; i++)
+                                {
+                                    if (lstFiles[i] != null)
+                                    {
+                                        if (lstFiles[i].Trim() != "")
+                                        {
+                                            coun = coun + 1;
+                                        }
+                                    }
+                                }
+                                string[] lstFilesnew = new string[coun + 1];
+                                for (int ii = 0; ii < coun; ii++)
+                                {
+                                    lstFilesnew[ii] = lstFiles[ii].ToString();
+                                }
+                              Merge_Certificate_Members(lstFilesnew);
+
+                           }
+                    
+                     #endregion
+           
+            }
+            catch (Exception ex)
+            {
+                //oErrorLog.WriteErrorLog(ex.ToString());;
+            }
+
+        }
+
+        #endregion
+        #region Merge PDF
+
+        private void Merge_Certificate_Members(string[] lstFiles)
+        {
+
+            PdfReader reader = null;
+            Document sourceDocument = null;
+            PdfCopy pdfCopyProvider = null;
+            PdfImportedPage importedPage;
+            string outputPdfPath = @"E:/pdf/HolderFinal.pdf";
+            string exportPath = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Final\\"+ "ShareCertificateFinal.pdf");
+            outputPdfPath = exportPath;
+            sourceDocument = new Document();
+
+            pdfCopyProvider = new PdfCopy(sourceDocument, new System.IO.FileStream(outputPdfPath, System.IO.FileMode.Create));
+            sourceDocument.Open();
+
+            try
+            {
+                //Loop through the files list
+                for (int f = 0; f < lstFiles.Length - 1; f++)
+                {
+                    int pages = get_pageCcount(lstFiles[f]);
+
+                    reader = new PdfReader(lstFiles[f]);
+                    //Add pages of current file
+                    for (int i = 1; i <= pages; i++)
+                    {
+                        importedPage = pdfCopyProvider.GetImportedPage(reader, i);
+                        pdfCopyProvider.AddPage(importedPage);
+                    }
+
+                    reader.Close();
+                }
+                //At the end save the output file
+                sourceDocument.Close();
+
+            }
+            catch (Exception ex)
+            {
+                oErrorLog.WriteErrorLog(ex.ToString());;
+            }
+        }
+
+        private void MergeAllocateShare(string[] lstFiles)
+        {
+           
+            PdfReader reader = null;
+            Document sourceDocument = null;
+            PdfCopy pdfCopyProvider = null;
+            PdfImportedPage importedPage;
+            string outputPdfPath = @"E:/pdf/HolderFinal.pdf";
+            string exportPath = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Final\\RegisterofAllottedSharesFinal.pdf");
+            outputPdfPath = exportPath;
+            sourceDocument = new Document();
+            pdfCopyProvider = new PdfCopy(sourceDocument, new System.IO.FileStream(outputPdfPath, System.IO.FileMode.Create));
+            sourceDocument.Open();
+
+            try
+            {
+                //Loop through the files list
+                for (int f = 0; f < lstFiles.Length - 1; f++)
+                {
+                    int pages = get_pageCcount(lstFiles[f]);
+
+                    reader = new PdfReader(lstFiles[f]);
+                    //Add pages of current file
+                    for (int i = 1; i <= pages; i++)
+                    {
+                        importedPage = pdfCopyProvider.GetImportedPage(reader, i);
+                        pdfCopyProvider.AddPage(importedPage);
+                    }
+
+                    reader.Close();
+                }
+                //At the end save the output file
+                sourceDocument.Close();
+
+
+            }
+            catch (Exception ex)
+            {
+               oErrorLog.WriteErrorLog(ex.ToString());;
+            }
+        }
+
+        private void MergeMembers(string[] lstFiles)
+        {
+
+            PdfReader reader = null;
+            Document sourceDocument = null;
+            PdfCopy pdfCopyProvider = null;
+            PdfImportedPage importedPage;
+            string outputPdfPath = @"E:/pdf/HolderFinal.pdf";
+            string exportPath = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Final\\ApplicationForShareFinal.pdf");
+            outputPdfPath = exportPath;
+            sourceDocument = new Document();
+            pdfCopyProvider = new PdfCopy(sourceDocument, new System.IO.FileStream(outputPdfPath, System.IO.FileMode.Create));
+            sourceDocument.Open();
+
+            try
+            {
+
+                //Loop through the files list
+                for (int f = 0; f < lstFiles.Length - 1; f++)
+                {
+                    int pages = get_pageCcount(lstFiles[f]);
+
+                    reader = new PdfReader(lstFiles[f]);
+                    //Add pages of current file
+                    for (int i = 1; i <= pages; i++)
+                    {
+                        importedPage = pdfCopyProvider.GetImportedPage(reader, i);
+                        pdfCopyProvider.AddPage(importedPage);
+                    }
+
+                    reader.Close();
+                }
+                //At the end save the output file
+                sourceDocument.Close();
+
+
+            }
+            catch (Exception ex)
+            {
+                 oErrorLog.WriteErrorLog(ex.ToString());;
+            }
+        }
+        private void MergeDirector(string[] lstFiles)
+        {
+
+            PdfReader reader = null;
+            Document sourceDocument = null;
+            PdfCopy pdfCopyProvider = null;
+            PdfImportedPage importedPage;
+            string outputPdfPath = @"E:/pdf/HolderFinal.pdf";
+            string exportPath = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Final\\consentdirectorFinal.pdf");
+            outputPdfPath = exportPath;
+            sourceDocument = new Document();
+            pdfCopyProvider = new PdfCopy(sourceDocument, new System.IO.FileStream(outputPdfPath, System.IO.FileMode.Create));
+            sourceDocument.Open();
+
+            try
+            {
+
+                //Loop through the files list
+                for (int f = 0; f < lstFiles.Length - 1; f++)
+                {
+                    int pages = get_pageCcount(lstFiles[f]);
+
+                    reader = new PdfReader(lstFiles[f]);
+                    //Add pages of current file
+                    for (int i = 1; i <= pages; i++)
+                    {
+                        importedPage = pdfCopyProvider.GetImportedPage(reader, i);
+                        pdfCopyProvider.AddPage(importedPage);
+                    }
+
+                    reader.Close();
+                }
+                //At the end save the output file
+                sourceDocument.Close();
+
+            }
+            catch (Exception ex)
+            {
+                // oErrorLog.WriteErrorLog(ex.ToString());;
+            }
+        }
+        private void MergeSecratory(string[] lstFiles)
+        {
+            PdfReader reader = null;
+            Document sourceDocument = null;
+            PdfCopy pdfCopyProvider = null;
+            PdfImportedPage importedPage;
+            string outputPdfPath = @"E:/pdf/HolderFinal.pdf";
+            string exportPath = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Final\\consentsecratoryFinal.pdf");
+            outputPdfPath = exportPath;
+            sourceDocument = new Document();
+            pdfCopyProvider = new PdfCopy(sourceDocument, new System.IO.FileStream(outputPdfPath, System.IO.FileMode.Create));
+            sourceDocument.Open();
+
+            try
+            {
+                //Loop through the files list
+                for (int f = 0; f < lstFiles.Length - 1; f++)
+                {
+                    int pages = get_pageCcount(lstFiles[f]);
+
+                    reader = new PdfReader(lstFiles[f]);
+                    //Add pages of current file
+                    for (int i = 1; i <= pages; i++)
+                    {
+                        importedPage = pdfCopyProvider.GetImportedPage(reader, i);
+                        pdfCopyProvider.AddPage(importedPage);
+                    }
+
+                    reader.Close();
+                }
+                //At the end save the output file
+                sourceDocument.Close();
+
+            }
+            catch (Exception ex)
+            {
+                // oErrorLog.WriteErrorLog(ex.ToString());;
+            }
+
+        }
+        private int get_pageCcount(string file)
+        {
+            PdfReader pdfReader = new PdfReader(file);
+            int numberOfPages = pdfReader.NumberOfPages;
+            return numberOfPages;
+        }
+       
+        #endregion
+
+        #region MErge & zip all files
+
+        private void mergeallpdf()
+        {
+            try
+            {
+                string directoryPath = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Final\\");
+                int totalcreatedfiles = 0;
+
+                ArrayList arrpdfs = new ArrayList();
+                bool ConstitutePart = false;
+                if (File.Exists(directoryPath + "ConstitutePart1.pdf"))
+                {
+                    totalcreatedfiles = totalcreatedfiles + 1;
+                    ConstitutePart = true;
+                    arrpdfs.Add(directoryPath + "ConstitutePart1.pdf");
+                }
+                bool consentdirectorFinal = false;
+                if (File.Exists(directoryPath + "consentdirectorFinal.pdf"))
+                {
+                    totalcreatedfiles = totalcreatedfiles + 1;
+                    consentdirectorFinal = true;
+                    arrpdfs.Add(directoryPath + "consentdirectorFinal.pdf");
+                }
+                
+                bool consentsecretaryFinal = false;
+                if (File.Exists(directoryPath + "consentsecratoryFinal.pdf"))
+                {
+                    totalcreatedfiles = totalcreatedfiles + 1;
+                    consentsecretaryFinal = true;
+                    arrpdfs.Add(directoryPath + "consentsecratoryFinal.pdf");
+                }
+                bool applicationforshareFinal = false;
+                if (File.Exists(directoryPath + "ApplicationForShareFinal.pdf"))
+                {
+                    totalcreatedfiles = totalcreatedfiles + 1;
+                    applicationforshareFinal = true;
+                    arrpdfs.Add(directoryPath + "ApplicationForShareFinal.pdf");
+                }
+                bool RegisterofMemberFinal = false;
+                if (File.Exists(directoryPath + "RegisterofMemberFinal.pdf"))
+                {
+                    totalcreatedfiles = totalcreatedfiles + 1;
+                    RegisterofMemberFinal = true;
+                    arrpdfs.Add(directoryPath + "RegisterofMemberFinal.pdf");
+                }
+                bool RegisterofAllottedSharesFinal = false;
+                if (File.Exists(directoryPath + "RegisterofAllottedShares.pdf"))
+                {
+                    totalcreatedfiles = totalcreatedfiles + 1;
+                    RegisterofAllottedSharesFinal = true;
+                    arrpdfs.Add(directoryPath + "RegisterofAllottedShares.pdf");
+                }
+                bool MinuteForm = false;
+                if (File.Exists(directoryPath + "MinuteForm.pdf"))
+                {
+                    totalcreatedfiles = totalcreatedfiles + 1;
+                    MinuteForm = true;
+                    arrpdfs.Add(directoryPath + "MinuteForm.pdf");
+                }
+
+                bool ShareCertificateFinal = false;
+                if (File.Exists(directoryPath + "ShareCertificateFinal.pdf"))
+                {
+                    totalcreatedfiles = totalcreatedfiles + 1;
+                    ShareCertificateFinal = true;
+                    arrpdfs.Add(directoryPath + "ShareCertificateFinal.pdf");
+                }
+
+                string[] lstFiles = new string[arrpdfs.Count];
+                for (int ii = 0; ii < arrpdfs.Count; ii++)
+                {
+                    lstFiles[ii] = arrpdfs[ii].ToString();
+                    DynamicPdfName.Add(arrpdfs[ii].ToString());
+                }
+             
+            }
+            catch (Exception ex)
+            {
+                oErrorLog.WriteErrorLog(ex.ToString());;
+            }
+        }
+        private void createpdfZip()
+        {
+            try
+            {
+                string directoryPath = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Final\\");
+                string[] filename = Directory.GetFiles(directoryPath);
+                using (ZipFile zip = new ZipFile())
+                {
+                    zip.AddFiles(filename, "file");
+                    zip.Save(Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Doc_" + hdncompanyid.Value + ".zip"));
+
+                    string username = "";
+                    string Password = "";
+                    string Mailserver = "";
+                    string Port = "";
+                    bool ssl = true;
+                    string apiurl = "";
+                    string Message = "";
+                    string path_Form201 = Server.MapPath("ExportedFiles\\" + hdncompanyid.Value + "\\Form201.pdf");
+                    username = ConfigurationManager.AppSettings["FromMail"].ToString();
+                    Password = ConfigurationManager.AppSettings["Password"].ToString();
+                    Mailserver = ConfigurationManager.AppSettings["mailserver"].ToString();
+                    Port = "587";
+                    MailMessage Msg = new MailMessage();
+                    string fromeamil1 = username.ToString();
+                    Msg.From = new System.Net.Mail.MailAddress(fromeamil1);
+                    Msg.To.Add(new MailAddress(hdnemail.Value.ToString()));
+                    Msg.Subject = "Company Documents";
+                    Msg.Body = Message.ToString();
+                    for (int File = 0; File < DynamicPdfName.Count; File++)
+                    {
+                        if (DynamicPdfName.Count > 0)
+                        {
+                            Msg.Attachments.Add(new Attachment(DynamicPdfName[File]));
+                        }
+                    }
+                    Msg.Attachments.Add(new Attachment(path_Form201));
+                    Msg.IsBodyHtml = true;
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = Mailserver;
+                    smtp.Port = Convert.ToInt32(Port);
+                    smtp.UseDefaultCredentials = false;
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtp.Credentials = new System.Net.NetworkCredential(fromeamil1.ToString(), Password.ToString());
+                    smtp.Timeout = 600000;
+                    smtp.EnableSsl = ssl;
+                    //smtp.Send(Msg);
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                oErrorLog.WriteErrorLog(ex.ToString());;
+            }
+        }
+        #endregion
+    }
+}

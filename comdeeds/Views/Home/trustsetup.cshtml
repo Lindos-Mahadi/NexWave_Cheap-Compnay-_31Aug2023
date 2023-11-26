@@ -1,0 +1,630 @@
+﻿@model comdeeds.Models.BaseModel.ClassUserDetails
+@{
+
+    var isAuth = (bool)ViewBag.isauth;
+    string inputState = "";
+    inputState = isAuth ? "disabled='disabled'" : "";
+
+    ViewBag.Title = "Trust setup";
+
+    var isadminedit = false;
+    if (ViewBag.adminEdit != null)
+    {
+        isadminedit = (bool)ViewBag.adminEdit;
+        ViewBag.openpnl = 2;
+    }
+    var ispaydone = false;
+    if(ViewBag.PayDone != null)
+    {
+        ispaydone = (bool)ViewBag.PayDone;
+    }
+    List<string> Roles = (List<string>)ViewBag.LoggedInRoles;
+}
+<script>
+    var user = {
+        fname: "@Model.Firstname",
+        lname: "@Model.Lastname",
+        email: "@Model.Email",
+        phone: "@Model.Phone",
+    };
+
+    var activepnl = "@ViewBag.openpnl";
+    var isAuth = "@isAuth";
+</script>
+
+<div id="titlebar">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Trust setup</h2>
+                <nav id="breadcrumbs">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li>Trust setup</li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="bindview">
+    <div class="row" id="trustsetup">
+        <div class="col-md-12 margin-bottom-40">
+            <div class="style-2">
+                <ul class="tabs-nav">
+                    <li data-bind="css:tabbing()==1?'active':''"><a href="javascript:;" onclick="return false;"><i class="sl sl-icon-user"></i> User details</a></li>
+                    <li data-bind="css:tabbing()==2?'active':''"><a href="javascript:;" onclick="return false;"><i class="sl sl-icon-doc"></i> Trust details</a></li>
+                    <li data-bind="css:tabbing()==3?'active':''"><a href="javascript:;" onclick="return false;"><i class="sl sl-icon-people"></i> Member details</a></li>
+                    <li data-bind="css:tabbing()==4?'active':''"><a href="javascript:;" onclick="return false;"><i class="sl sl-icon-globe"></i> Summary</a></li>
+                </ul>
+
+                <div class="tabs-container">
+                    <!-- applicant detail-->
+                    <div class="tab-content" data-bind="css:tabbing()==1?'tab-content active':'tab-content'">
+
+                        <form id="applicantform" class="submit-page p-0" data-bind="submit:applicantsubmit" method="post" action="@Url.Action("trustsetup", "Home")">
+                            @Html.Raw(ViewBag.msg)
+                            <fieldset>
+                                <div class="clearfix"></div>
+                                <h3>User details</h3>
+                                <div class="submit-section">
+                                    <div class="row with-forms">
+                                        <div class="col-md-6">
+                                            <div class="row with-forms">
+                                                <div class="col-md-6">
+                                                    <h5>First name</h5>
+                                                    <input type="text" data-bind="value:applicant().firstname" name="Firstname" id="appfname" />
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h5>Last name</h5>
+                                                    <input type="text" data-bind="value:applicant().lastname" name="Lastname" id="applname" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Email</h5>
+                                            <input type="email" data-bind="value:applicant().email" name="Email" id="appemail" @inputState />
+                                        </div>
+                                    </div>
+                                    <div class="row with-forms">
+                                        @{
+                                            if (!isAuth)
+                                            {
+                                                <div class="col-md-6">
+                                                    <h5>Password</h5>
+                                                    <input type="password" data-bind="value:applicant().pass" name="password" id="app_pass">
+                                                </div>
+                                            }
+                                        }
+
+                                        <div class="col-md-6">
+                                            <h5>Phone</h5>
+                                            <input type="tel" data-bind="value:applicant().phone" name="Phone" id="app_phone" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="divider"></div>
+                                <button type="submit" class="button preview pull-right margin-bottom-15">
+                                    Continue
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </button>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <!-- applicant detail-->
+                    <!--Trust details-->
+                    <div class="tab-content" data-bind="css:tabbing()==2?'tab-content active':'tab-content'">
+
+                        <form id="companyform" class="submit-page p-0" data-bind="submit:trustsubmit">
+                            <h3>Trust details</h3>
+                            <div class="submit-section" data-bind="with:trustDetail()">
+                                <div class="row with-forms">
+                                    <div class="col-md-6">
+                                        <h5>Select type of Trust</h5>                      
+                                                <select class="form-control" id="trust_type" name="trust_type" data-bind="value:$data.TrustType">
+                                                    <option value=""> Select Trust Type</option>
+                                                    <option value="Super Fund Trust"> Super Fund Trust </option>
+                                                    <option value="Super Fund Trust - Update"> Super Fund Trust - Update </option>
+                                                    <option value="Bare Trust"> Property (Bare) Trust </option>
+                                                </select>       
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Name your Trust <i class="tip" data-tip-content="You can choose any suitable name for your trust such as, J Smith Unit Trust, Simpson property Trust No 1, Simpson Family Trust."></i></h5>
+                                        <input type="text" data-bind="value:$data.TrustName" placeholder="Full name to be entered" class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="row with-forms" data-bind="visible:$data.TrustType()=='Bare Trust'">
+                                        <div class="col-md-6">
+                                            <h5>Property Trustee Company Name</h5>
+                                            <input type="text" data-bind="value:$data.PropertyTrusteeName" placeholder="Property Trustee Company Name" class="form-control" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>A.C.N </h5>
+                                            <input type="text" data-bind="value:$data.ACN" placeholder="ACN" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row with-forms" data-bind="visible:$data.TrustType()=='Bare Trust'">
+                                        <div class="col-md-6">
+                                            <h5>Date of Property Trustee Company Setup</h5>
+                                            <div class="input-group date datetimepicker" style="width:100%;padding-top:0;margin-top:0;">
+                                                <span class="data-unit" style="top: 40%;"><i class="sl sl-icon-calender"></i></span>
+                                                <input data-min-view="2" type="text"
+                                                       data-date-format="dd/mm/yyyy" class="datepicker form-control"
+                                                       data-bind="datepicker: $data.PropertyTrusteeDate" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row with-forms" data-bind="visible:($data.TrustType()=='Bare Trust' || $data.TrustType()=='Super Fund Trust' || $data.TrustType()=='Super Fund Trust - Update')">
+                                        <div class="col-md-6">
+                                            <h5>SMSF Trustee Company Name</h5>
+                                            <input type="text" data-bind="value:$data.SMSFCompanyName" placeholder="SMSF Trustee Company Name" class="form-control" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>A.C.N.</h5>
+                                            <input type="text" data-bind="value:$data.SMSFACN" placeholder="SMSF Trustee Company ACN" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row with-forms" data-bind="visible:$data.TrustType()=='Bare Trust'">
+                                        <div class="col-md-6">
+                                            <h5>Date of SMSF Trustee Company setup</h5>
+                                            <div class="input-group date datetimepicker" style="width:100%;padding-top:0;margin-top:0;">
+                                                <span class="data-unit" style="top: 40%;"><i class="sl sl-icon-calender"></i></span>
+                                                <input data-min-view="2" type="text"
+                                                       data-date-format="dd/mm/yyyy" class="datepicker form-control"
+                                                       data-bind="datepicker: $data.SMSFSetupDate" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row with-forms" data-bind="visible:$data.TrustType()=='Bare Trust'">
+                                        <div class="col-md-6">
+                                            <h5>SMSF Name</h5>
+                                            <input type="text" data-bind="value:$data.SMSF" placeholder="SMSF Name" class="form-control" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>A.B.N</h5>
+                                            <input type="text" data-bind="value:$data.ABN" placeholder="ABN" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row with-forms" data-bind="visible:$data.TrustType()=='Bare Trust'">
+                                        <div class="col-md-6">
+                                            <h5>Address of Property you are buying<i class="tip" data-tip-content="What is the address of the property you are purchasing?"></i> </h5>
+                                            <input type="text" data-bind="value:$data.PropertyAddress" placeholder="Property Address" class="form-control" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Lender Name <i class="tip" data-tip-content="Who is the lender for your SMSF loan?"></i> </h5>
+                                            <input type="text" data-bind="value:$data.LenderName" placeholder="Lender Name" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row with-forms">
+                                    <div class="col-md-6">
+                                        <h5>Setup Date of Trust</h5>
+                                        <div class="input-group date datetimepicker" style="width:100%;padding-top:0;margin-top:0;">
+                                            <span class="data-unit" style="top: 40%;"><i class="sl sl-icon-calender"></i></span>
+                                            <input data-min-view="2" type="text"
+                                                   data-date-format="dd/mm/yyyy" class="datepicker form-control"
+                                                   data-bind="datepicker: $data.TrustDate" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Which state laws apply to your deed </h5>
+                                        <select class="form-control" id="state" name="state" data-bind="value:$data.TrustState">
+                                            <option value="">Select State</option>
+                                            <option value="New South Wales"> New South Wales </option>
+                                            <option value="Queensland"> Queensland </option>
+                                            <option value="South Australia"> South Australia </option>
+                                            <option value="Tasmania"> Tasmania </option>
+                                            <option value="Victoria"> Victoria </option>
+                                            <option value="Western Australia"> Western Australia </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row with-forms" data-bind="visible:($data.TrustType()=='Super Fund Trust - Update')">
+                                    <div class="col-md-6">
+                                        <h5> Date of Existing Super Trust Deed</h5>
+
+                                        <div class="input-group date datetimepicker" style="width:100%;padding-top:0;margin-top:0;">
+                                            <span class="data-unit" style="top: 40%;"><i class="sl sl-icon-calender"></i></span>
+                                            <input data-min-view="2" type="text"
+                                                   data-date-format="dd/mm/yyyy" class="datepicker form-control"
+                                                   data-bind="datepicker: $data.ExistingSetupDate" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Deed Update Clause Number<i class="tip" data-tip-content="This can be found by searching your current deed via the index variation to deed, update deed, amend deed."></i> </h5>
+                                        <input type="text" data-bind="value:$data.ClauseNumber" placeholder="Clause Number" class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="row with-forms" style="display:none;">
+                                    <div class="col-md-6">
+                                        <h5> Date of initial Super Fund Setup  </h5>
+
+                                        <div class="input-group date datetimepicker" style="width:100%;padding-top:0;margin-top:0;">
+                                            <span class="data-unit" style="top: 40%;"><i class="sl sl-icon-calender"></i></span>
+                                            <input data-min-view="2" type="text"
+                                                   data-date-format="dd/mm/yyyy" class="datepicker form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Clause to vary Deed <i class="tip" data-tip-content="This can be found by searching your current deed via the index variation to deed, update deed, amend deed."></i> </h5>
+                                        <input type="text" placeholder="Clause Number" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+
+                            <button type="submit" class="button preview pull-right margin-bottom-15">
+                                Continue
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </button>
+
+                            @{
+                                if (!isadminedit)
+                                {
+                                    <button type="button" class="button border preview pull-right margin-bottom-15" data-bind="click:toggletab.bind($data,1)">
+                                        <i class="fa fa-arrow-circle-left"></i>
+                                        Back
+                                    </button>
+                                }
+                            }
+                        </form>
+                    </div>
+                    <!--Trust details-->
+                    <!--Unit holders details-->
+                    <div class="tab-content" data-bind="css:tabbing()==3?'tab-content active':'tab-content'">
+
+                        <form id="companyform" class="submit-page p-0" data-bind="submit:submitappointor">
+                            <h3>Member details</h3>
+                            <div class="submit-section">
+
+                                <div data-bind="with:UPrice()">
+                                    @*<div class="row with-forms">
+                                            <div class="col-md-6">
+                                                <h5>What is the price for ordinary units? <i class="tip" data-tip-content="We suggest that you use $1 a unit per member to keep things simple."></i></h5>
+                                                <input type="text" placeholder="$1" class="form-control" data-bind="value:$data.UnitPrice" />
+                                            </div>
+                                        </div>*@
+                                    <div class="row with-forms">
+                                        <div class="col-md-6">
+                                            <h5>Number of Members</h5>
+                                            <select class="form-control" data-bind="value:$data.NoUnitHolders">
+                                                <option value="">Select</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div data-bind="foreach:UnitHolders">
+                                    <div class="row with-forms margin-bottom-20">
+                                        <div class="col-md-12">
+                                            <h4 class="bordered" data-bind="text:'Member '+($index()+1)+' of '+UnitHolders().length"></h4>
+
+                                            <div>
+                                                <div class="clearfix"></div>
+                                                <div data-bind="visible:trustDetail().TrustType()=='Unit Trust'" style="display:none">
+                                                    <h4>Is the Joint Unit Holder a person or a Company ?</h4>
+                                                    <div class="checkboxes margin-top-15 margin-right-15" data-bind="validationOptions: {insertMessages: false}">
+                                                        <input type="radio" name="rdoNameReserve" value="person" data-bind="checked:HolderType,attr:{id:'rdotype'+($index()+1)}" />
+                                                        <label data-bind="attr:{'for':'rdotype'+($index()+1)}">Person</label>
+                                                    </div>
+                                                    <div class="checkboxes margin-top-15" data-bind="validationOptions: {insertMessages: false}">
+                                                        <input type="radio" name="rdoNameReserve" id="rdoname2" value="company" data-bind="checked:HolderType,attr:{id:'rdotypec'+($index()+1)}" />
+                                                        <label data-bind="attr:{'for':'rdotypec'+($index()+1)}">Company</label>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <span class="validationMessage" data-bind="validationMessage: HolderType"></span>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row with-forms" data-bind="visible:$data.HolderType()!='company'">
+                                        <div class="col-md-4">
+                                            <h5>First Name</h5>
+                                            <input type="text" class="form-control" data-bind="value:FirstName" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5>Middle Name <span>(optional)</span></h5>
+                                            <input type="text" class="form-control" data-bind="value:MiddleName" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5>Last Name</h5>
+                                            <input type="text" class="form-control" data-bind="value:LastName" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5>Date of birth</h5>
+                                            <div class="input-group date datetimepicker" style="width:100%;padding-top:0;margin-top:0;">
+                                                <span class="data-unit" style="top: 40%;"><i class="sl sl-icon-calender"></i></span>
+                                                <input data-min-view="2" type="text"
+                                                       data-date-format="dd/mm/yyyy" class="datepicker form-control"
+                                                       data-bind="datepicker: $data.dob" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div data-bind="visible:trustDetail().TrustType()=='Unit Trust'">
+                                        <div class="row with-forms" data-bind="visible:$data.HolderType()=='company'" style="display:none">
+                                            <div class="col-md-4">
+                                                <h5>Company Name</h5>
+                                                <input type="text" class="form-control" data-bind="value:CompanyName" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h5>ACN or ARBN</h5>
+                                                <input type="text" class="form-control" data-bind="value:CompanyACN" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h5>Will it execute the Trust Deed by affixing its common seal?</h5>
+                                                <div class="checkboxes margin-top-15 margin-right-15" data-bind="validationOptions: {insertMessages: false}">
+                                                    <input type="radio" name="rdoaffix" id="rdoaffix1" value="true" data-bind="checked:CommanSeal" />
+                                                    <label for="rdoaffix1">Yes</label>
+                                                </div>
+                                                <div class="checkboxes margin-top-15" data-bind="validationOptions: {insertMessages: false}">
+                                                    <input type="radio" name="rdoaffix" id="rdoaffix2" value="false" data-bind="checked:CommanSeal" />
+                                                    <label for="rdoaffix2">No</label>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <span class="validationMessage" data-bind="validationMessage: CommanSeal"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr />
+                                    <h4>Address</h4>
+                                    <hr />
+                                    <div class="row with-forms">
+                                        <div class="col-md-4">
+                                            <h5>Unit / Level(Optional)</h5>
+                                            <input type="text" name="compaddunit" id="compaddunit" data-bind="value:UnitLevel" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5>Street address</h5>
+                                            <input type="text" name="compaddstreet" id="compaddstreet" data-bind="value:Street" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5>State</h5>
+                                            <select name="ddcompaddstate" id="ddcompaddstate" data-bind="value:State">
+                                                <option value="">Select state</option>
+                                                <option value="ACT">Australian Capital Territory</option>
+                                                <option value="NSW">New South Wales</option>
+                                                <option value="NT">Northern Territory</option>
+                                                <option value="Qld"> Quinsland</option>
+                                                <option value="SA">South Australia</option>
+                                                <option value="Tas">Tasmania</option>
+                                                <option value="Vic">Victoria</option>
+                                                <option value="WA">Western Australia</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5>Suburb</h5>
+                                            <input type="text" name="compaddsuburb" id="compaddsuburb" data-bind="value:Suburb" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5>Postcode</h5>
+                                            <input type="text" name="compaddpostcode" id="compaddpostcode" data-bind="value:PostCode" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5>Country</h5>
+                                            <input type="text" name="compaddcountry" data-bind="value:Country" disabled readonly />
+                                        </div>
+                                    </div>
+
+                                    <div>
+
+                                        <div style="display:none" data-bind="visible:trustDetail().TrustType()=='Unit Trust'">
+                                            <hr />
+                                            <h4>What units are being applied for (By this Holding)?</h4>
+                                            <hr />
+                                            <table class="basic-table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Type of unit</td>
+                                                        <td>Number</td>
+                                                        <td>Total amount paid</td>
+                                                        <td>Amount owing</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label data-bind="text:UnitType"></label>
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" type="text" name="txtnum" data-bind="value:UnitNumber" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" type="text" name="txtamount" placeholder="$1" data-bind="value:UnitTotalAmount" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" type="text" name="txtamntowe" placeholder="$0" data-bind="value:UnitAmountOwing" />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+
+                            <button type="submit" class="button preview pull-right margin-bottom-15">
+                                Continue
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </button>
+                            <button type="button" class="button border preview pull-right margin-bottom-15" data-bind="click:toggletab.bind($data,2)">
+                                <i class="fa fa-arrow-circle-left"></i>
+                                Back
+                            </button>
+                        </form>
+                    </div>
+                    <!--Unit holders details-->
+                    <!--Beneficiaries details-->
+                    <div class="tab-content" data-bind="css:tabbing()==4?'tab-content active':'tab-content'">
+                        <form id="companyform" class="submit-page p-0" data-bind="submit:beneficiarysubmit">
+                            <h3 data-bind="text:!Issummary()?'Trustees / Beneficiaries':'Fees summary'" style="font-weight:800;"></h3>
+                            <div class="submit-section">
+                                <div data-bind="visible:!Issummary()">
+                                    <div class="row with-forms margin-bottom-20">
+                                        <div class="col-md-12">
+                                            <div class="clearfix"></div>
+                                            <div>
+                                                <h4>Is the beneficiary a person or a company ?</h4>
+                                                <div class="checkboxes margin-top-15 margin-right-15" data-bind="validationOptions: {insertMessages: false}">
+                                                    <input type="radio" id="rdoperson" name="rdoatrusteestype" value="person" data-bind="checked:trusteesDetails().bType" />
+                                                    <label for="rdoperson">Person</label>
+                                                </div>
+                                                <div class="checkboxes margin-top-15" data-bind="validationOptions: {insertMessages: false}">
+                                                    <input type="radio" id="rdocompany" name="rdoatrusteestype" value="company"
+                                                           data-bind="checked:trusteesDetails().bType" />
+                                                    <label for="rdocompany">Company</label>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <span class="validationMessage" data-bind="validationMessage: trusteesDetails().bType"></span>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" data-bind="visible:trusteesDetails().bType()=='person'">
+                                        <h4 class="bordered">How many beneficiary will there be?</h4>
+                                        <div data-bind="foreach:trusteesDetails().Members">
+                                            <div class="checkboxes margin-top-15" data-bind="validationOptions: {insertMessages: false}">
+                                                <input type="checkbox" name="rdoatrustees"
+                                                       data-bind="checked:$data.istrustee,attr:{id:'rdoatrustees'+$data.Id()},
+                                                   checkedValue:true,click:validtrustee" />
+                                                <label data-bind="text:$data.Name,attr:{for:'rdoatrustees'+$data.Id()}"></label>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <span class="validationMessage" data-bind="visible:terr()" id="customvalid" style="display:none">One of the members must be appointed as trustee or a company can act as Trustee</span>
+                                    </div>
+
+                                    <div class="" data-bind="visible:trusteesDetails().bType()=='company'">
+                                        <h4 class="bordered">Enter the company details</h4>
+                                        <div data-bind="foreach:trusteesDetails().Company">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <h5>Company name</h5>
+                                                        <input type="text" data-bind="value:$data.CompanyName" name="cname" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <h5>Company ACN</h5>
+                                                        <input type="text" data-bind="value:$data.CompanyACN" name="cacn" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <h5>Company Reg Date</h5>
+                                                        <div class="input-group date datetimepicker" style="width:100%;padding-top:0;margin-top:0;">
+                                                            <span class="data-unit" style="top: 40%;"><i class="sl sl-icon-calender"></i></span>
+                                                            <input data-min-view="2" type="text"
+                                                                   data-date-format="dd/mm/yyyy" class="datepicker form-control"
+                                                                   data-bind="datepicker: $data.RegDate" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <h5>Contact person name</h5>
+                                                        <input type="text" data-bind="value:$data.ContactPerson" name="cpname" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="margin-top-100" data-bind="visible:!Issummary()">
+                                </div>
+                                <div class="margin-bottom-40">
+                                    <h4 class="bordered">Summary of your order</h4>
+                                    <h5 class="margin-top-15 margin-bottom-20">
+                                        Our Fees of $AUD
+                                        <span data-bind="text:setupcost"></span> includes all required legal documents
+                                    </h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <table class="basic-table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Trust Setup (EX GST)</td>
+                                                        <td data-bind="text:'$'+setupcost()"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>ADD GST</td>
+                                                        <td data-bind="text:'$'+setupgst()"></td>
+                                                    </tr>
+                                                 
+                                                    <tr>
+                                                        <th>Total Pay</th>
+                                                        <th data-bind="text:'$'+totalcost()"></th>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="clearfix"></div>
+                                <div class="divider"></div>
+
+                                @{
+                                    if (!isadminedit && ispaydone)
+                                    {
+                                        <a href="/admin/updatetrust" class="button pull-right margin-bottom-15">
+                                            Done
+                                            <i class="fa fa-arrow-circle-right"></i>
+                                        </a>
+                                    }
+
+                                    else
+                                    {
+                                        <button data-bind="visible:!Issummary()" type="submit" class="button preview pull-right margin-bottom-15">
+                                            Proceed
+                                            <i class="fa fa-arrow-circle-right"></i>
+                                        </button>
+                                        <a href="/trustsetup/summary" data-bind="visible:Issummary()" class="button pull-right margin-bottom-15">
+                                            Proceed
+                                            <i class="fa fa-arrow-circle-right"></i>
+                                        </a>
+                                        <button type="button" class="button border preview pull-right margin-bottom-15" data-bind="click:toggletab.bind($data,3)">
+                                            <i class="fa fa-arrow-circle-left"></i>
+                                            Back
+                                        </button>
+                                    }
+                                }
+                            </div>
+                        </form>
+                    </div>
+
+                    <!--Beneficiaries details-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/plugin/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Content/scripts/moment.min.js"></script>
+<script src="/Content/scripts/tformscript.js"></script>

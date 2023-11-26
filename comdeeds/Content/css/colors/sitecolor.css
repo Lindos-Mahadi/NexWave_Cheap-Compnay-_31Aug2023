@@ -1,0 +1,176 @@
+﻿#backtotop a, #top-bar {
+    background-color: #2b7bba;
+}
+
+.custom-zoom-in:hover:before, .custom-zoom-out:hover:before, .infoBox-close:hover {
+    -webkit-text-stroke: 1px #2b7bba;
+}
+
+.list-4 li:before, .list-3 li:before, .list-2 li:before, .list-1 li:before {
+    color: #2b7bba;
+}
+
+.numbered.color ol > li::before {
+    border: 1px solid #2b7bba;
+    color: #2b7bba;
+}
+
+.numbered.color.filled ol > li::before {
+    border: 1px solid #2b7bba;
+    background-color: #2b7bba;
+}
+
+.change-photo-btn:hover, table.manage-table th, mark.color {
+    background-color: #2b7bba;
+}
+
+table.manage-table td.action a:hover, table.manage-table .title-container .title h4 a:hover, .my-account-nav li a.current, .my-account-nav li a:hover, #footer .social-icons li a:hover i, #navigation.style-1 .current, #posts-nav li a:hover, #top-bar .social-icons li a:hover i, .agent .social-icons li a:hover i, .agent-contact-details li a:hover, .agent-page .agent-name h4, .footer-links li a:hover, .header-style-2 .header-widget li i, .header-widget .sign-in:hover, .home-slider-desc .read-more i, .info-box, .info-box h4, .listing-title h4 a:hover, .map-box h4 a:hover, .plan-price .value, .plan.featured .listing-badges .featured, .post-content a.read-more, .post-content h3 a:hover, .post-meta li a:hover, .property-pricing, .style-2 .trigger a:hover, .style-2 .trigger.active a, .style-2 .ui-accordion .ui-accordion-header-active, .style-2 .ui-accordion .ui-accordion-header-active:hover, .style-2 .ui-accordion .ui-accordion-header:hover, .tabs-nav li a:hover, .tabs-nav li.active a, .testimonial-author h4, .widget-button:hover, .widget-text h5 a:hover, a, a.button.border, a.button.border.white:hover {
+    color: #2b7bba;
+}
+
+#header-container.top-border {
+    border-top: 4px solid #2b7bba;
+}
+
+#navigation.style-1 .current {
+    background-color: transparent;
+    border: 1px solid #2b7bba;
+}
+
+#navigation.style-1 ul li:hover {
+    background-color: #2b7bba;
+}
+
+#navigation.style-2 {
+    background-color: #2b7bba;
+}
+
+.menu-responsive i {
+    background: linear-gradient(to bottom,rgba(255,255,255,.07) 0,transparent);
+    background-color: #2b7bba;
+}
+
+.checkboxes input[type=checkbox]:checked + label:before, .range-slider .ui-widget-header, .search-type label.active, .search-type label:hover {
+    background-color: #2b7bba;
+}
+
+.range-slider .ui-slider .ui-slider-handle {
+    border: 2px solid #2b7bba;
+}
+
+.agent-avatar a:before {
+    background: #2b7bba;
+    background: linear-gradient(to bottom,transparent 50%,#2b7bba);
+}
+
+.view-profile-btn {
+    background-color: #2b7bba;
+}
+
+.listing-img-container:after {
+    background: linear-gradient(to bottom,transparent 60%,#2b7bba);
+}
+
+.listing-badges .featured {
+    background-color: #2b7bba;
+}
+
+.list-layout .listing-img-container:after {
+    background: linear-gradient(to bottom,transparent 55%,#2b7bba);
+}
+
+#titlebar.property-titlebar span.property-badge, .back-to-listings:hover, .home-slider-price, .img-box:hover:before, .layout-switcher a.active, .layout-switcher a:hover, .listing-hidden-content, .office-address h3:after, .pagination .current, .pagination ul li a.current-page, .pagination ul li a:hover, .pagination-next-prev ul li a:hover, .property-features.checkboxes li:before {
+    background-color: #2b7bba;
+}
+
+.post-img:after, .tip {
+    background: #2b7bba;
+}
+
+.property-slider-nav .item.slick-current.slick-active:before {
+    border-color: #2b7bba;
+}
+
+.post-img:after {
+    background: linear-gradient(to bottom,transparent 40%,#2b7bba);
+}
+
+.comment-by a.reply:hover, .post-img:before {
+    background-color: #2b7bba;
+}
+
+.map-box .listing-img-container:after {
+    background: linear-gradient(to bottom,transparent 50%,#2b7bba);
+}
+
+#geoLocation:hover, #mapnav-buttons a:hover, #scrollEnabling.enabled, #scrollEnabling:hover, #streetView:hover, .cluster div, .custom-zoom-in:hover, .custom-zoom-out:hover, .infoBox-close:hover, .listing-carousel.owl-theme .owl-controls .owl-next:after, .listing-carousel.owl-theme .owl-controls .owl-prev:before, .listing-carousel.owl-theme.outer .owl-controls .owl-next:hover::after, .listing-carousel.owl-theme.outer .owl-controls .owl-prev:hover::before, .slick-next:after, .slick-prev:after {
+    background-color: #2b7bba;
+}
+
+    .cluster div:before {
+        border: 7px solid #2b7bba;
+        box-shadow: inset 0 0 0 4px #2b7bba;
+    }
+
+.mfp-arrow:hover {
+    background: #2b7bba;
+}
+
+.dropzone:hover {
+    border: 2px dashed #2b7bba;
+}
+
+.dropzone:before {
+    background: linear-gradient(to bottom,rgba(255,255,255,.95),rgba(255,255,255,.9));
+    background-color: #2b7bba;
+}
+
+.chosen-container .chosen-results li.highlighted, .chosen-container-multi .chosen-choices li.search-choice, .select-options li:hover, a.button, a.button.border:hover, button.button, input[type=button], input[type=submit] {
+    background-color: #2b7bba;
+}
+
+.dropzone:hover .dz-message, .sort-by .chosen-container-single .chosen-default, .sort-by .chosen-container-single .chosen-single div b:after {
+    color: #2b7bba;
+}
+
+a.button.border {
+    border: 1px solid #2b7bba;
+}
+
+.plan.featured .plan-price {
+    background: linear-gradient(to bottom,rgba(255,255,255,.1) 0,transparent);
+    background-color: #2b7bba;
+}
+
+.trigger.active a, .ui-accordion .ui-accordion-header-active, .ui-accordion .ui-accordion-header-active:hover {
+    background-color: #2b7bba;
+    border-color: #2b7bba;
+}
+
+.tabs-nav li a:hover, .tabs-nav li.active a {
+    border-color: #2b7bba;
+}
+
+.style-3 .tabs-nav li a:hover, .style-3 .tabs-nav li.active a {
+    border-color: #2b7bba;
+    background-color: #2b7bba;
+}
+
+.style-4 .tabs-nav li.active a, .style-5 .tabs-nav li.active a, table.basic-table th {
+    background-color: #2b7bba;
+}
+
+.info-box {
+    border-top: 2px solid #2b7bba;
+    background: linear-gradient(to bottom,rgba(255,255,255,.98),rgba(255,255,255,.95));
+    background-color: #2b7bba;
+}
+
+    .info-box.no-border {
+        background: linear-gradient(to bottom,rgba(255,255,255,.96),rgba(255,255,255,.93));
+        background-color: #2b7bba;
+    }
+
+.icon-box-1 .icon-container {
+    background-color: #2b7bba;
+}

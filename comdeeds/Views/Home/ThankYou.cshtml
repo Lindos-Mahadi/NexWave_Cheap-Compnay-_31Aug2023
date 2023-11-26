@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Thank you";
+    var redirectUrl = "";
+    if (ViewBag.type == "c")
+    {
+        redirectUrl = "/user/signin";
+    }else if (ViewBag.type == "t")
+    {
+        redirectUrl = "/user/signin";
+    }else
+    {
+        redirectUrl = "/";
+    }
+
+}
+<div id="titlebar">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Thank you</h2>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container margin-bottom-45">
+    <div class="row">
+        <div class="col-md-12">
+            @{
+                if (ViewBag.type == "c")
+                {
+                    <div class="notification success closeable">
+                        <h4><strong>Success!</strong> Thank you for registering your company with Cheap company setup. </h4>
+                        <a class="close"></a>
+                    </div>
+
+                    <p>You are redirecting on your company document page in 3 seconds..</p>
+
+                    <br />
+                    <a href="/user/order/company" class="link">Redirect Now</a>
+                }
+                else if (ViewBag.type == "t")
+                {
+                    <div class="notification success closeable">
+                        <h4><strong>Success!</strong> Thank you for creating your deed with Cheap company setup. </h4>
+                        <a class="close"></a>
+                    </div>
+
+                    <p>You are redirecting on your deed document page in 3 seconds..</p>
+
+                    <br />
+                    <a href="/user/order/trust" class="link">Redirect Now</a>
+                }
+
+            }
+            
+
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    window.setTimeout(function () {
+        window.location.href = "@redirectUrl";
+    }, 3000);
+</script>
+            @*<!DOCTYPE html>
+
+            <html>
+            <head>
+                <meta name="viewport" content="width=device-width" />
+                <title>ThankYou</title>
+            </head>
+            <body>
+                <div style="width: 100%;border: 0px solid gray;text-align: center;padding: 17px 20%;margin-bottom: 10%;margin-top: 3%;">
+                    <h4 style="color: #125985;font-size: 22px;">
+                        Thank you for registering your company with Comdeeds. You will receive your documents
+                        on your registered email-address.
+                    </h4>
+                </div>
+            </body>
+        </html>*@

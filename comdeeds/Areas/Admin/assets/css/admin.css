@@ -1,0 +1,168 @@
+﻿
+.pager-icon {
+    cursor: pointer;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    line-height: 30px;
+    color: #999;
+}
+
+.icon-disabled {
+    color: #ddd;
+}
+
+.pager-input {
+    background-color: transparent;
+    border-radius: 0;
+    width: 65px !important;
+    padding: 0 10px 0;
+    height: 30px;
+    border-color: #aaa;
+    line-height: 1;
+    margin-bottom: 0;
+}
+
+.gj-grid-base-table tfoot th input {
+    margin: 0 5px;
+    width: 26px;
+    text-align: right;
+    height: 30px;
+}
+.gj-grid-base-table tbody tr td,
+.gj-grid-base-table,
+.gj-grid-base-table thead tr th,
+.gj-grid-base-table tfoot th {
+    border-color: transparent;
+    background: transparent;
+}
+
+.btn-default, .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .btn-default.focus, .btn-default:active, .btn-default:focus, .btn-default:hover, .open > .dropdown-toggle.btn-default {
+    background-color: transparent !important;
+    border-color: #999 !important;
+    color: #999 !important;
+}
+
+.modal-content {
+    background-color: #ebeff2;
+}
+
+.gj-grid-base-table tbody tr td,
+.gj-grid-base-table thead tr th {
+    border-bottom: 1px solid #e1e7ea;
+}
+
+.gj-grid-table tfoot div[data-role=display] {
+    padding-top: 40px;
+}
+
+#grid {
+    font-size: 13px;
+}
+
+    #grid.table > thead > tr > th,
+    #grid.table > tbody > tr > th,
+    #grid.table > tfoot > tr > th,
+    #grid.table > thead > tr > td,
+    #grid.table > tbody > tr > td,
+    #grid.table > tfoot > tr > td {
+        padding: 8px 3px;
+            vertical-align: middle;
+    }
+
+.gj-grid-base-table tbody tr td div[data-role=display], .gj-grid-base-table thead tr th div {
+    display: block;
+}
+
+#grid input[type="checkbox"] {
+    line-height: 1;
+    height: auto;
+    margin-bottom: 0;
+}
+#grid thead
+{
+    background-color:#2b7bba;
+    color:#fff;
+}
+.gj-grid-base-table thead tr th {
+    text-transform: uppercase;
+    font-weight: normal;
+    color:#fff;
+    padding:12px 3px !important;
+}
+
+#grid a.button {    
+    padding: 6px 10px;
+    
+}
+
+.table tr td.actions .icon, .table tr th.actions .icon {
+    color: #a1a1a1;
+    font-size: 22px;
+    line-height: 18px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+
+.summary {
+}
+
+    .summary .summary-box {
+        display: block;
+        clear: both;
+        margin-bottom: 40px;
+    }
+
+        .summary .summary-box .headline {
+            font-size: 17px;
+            font-weight: 400;
+            margin-bottom: 15px;
+            text-shadow: 0px 0px 0px #333;
+        }
+
+        .summary .summary-box h5.headline {
+            font-size: 14px;
+        }
+
+        .summary .summary-box table.basic-table th,
+        .summary .summary-box table.basic-table td {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .summary .summary-box table.basic-table th {
+            background-color: rgba(43, 123, 186, 0.52);
+        }
+
+        .summary .summary-box.alt {
+            background-color: rgba(0, 143, 255, 0.1);
+            padding: 20px;
+        }
+
+            .summary .summary-box.alt .checkboxes label {
+                font-size: 13px;
+            }
+
+
+@media print {
+
+    body * {
+        visibility: hidden;
+    }
+
+    #printable, #printable * {
+        visibility: visible;
+    }
+
+    #printable {
+        display: block !important;
+        position: absolute;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        right: 0;
+    }
+}

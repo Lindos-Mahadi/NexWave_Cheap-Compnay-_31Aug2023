@@ -1,0 +1,10 @@
+ZHDASC201	800	0008
+ZCOSETUP {companyname} PTY LTD		{companytype}	{companyclass}	{companysubclass}	N							{companystate}		Y
+ZRG		{companyregaddress}		Y
+ZRP			{companyprincipaladdress}
+{dirdetail}
+{sharedetail}
+ZCG{applicantname}						{applicantaddress}
+ZDC{applicantname}				{datesign}	Y
+ZAM		PDF
+ZTREND201	15

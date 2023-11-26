@@ -1,0 +1,383 @@
+﻿@model comdeeds.Models.BaseModel.ClassFullTrust
+@{
+    var i = 1;
+    var trust = Model.trust;
+    var appointers = Model.appointers;
+    var cost = Model.Cost;
+    var noofTrustee = Model.appointers.Where(x => x.IsTrustee == true).Count();
+    var trustees = Model.appointers.Where(x => x.IsTrustee == true).ToList();
+
+    var chk1 = trust.QuoteForTax == true ? "checked" : "";
+    var chk2 = trust.LegalAssessment == true ? "checked" : "";
+    var chk3 = trust.BorrowingReview == true ? "checked" : "";
+    var chk4 = trust.Agreement == true ? "checked" : "";
+}
+<style>
+    .be-checkbox input[type=checkbox]:disabled + label, .be-checkbox input[type=radio]:disabled + label, .be-radio input[type=checkbox]:disabled + label, .be-radio input[type=radio]:disabled + label {
+        opacity: 1;
+    }
+</style>
+
+<div class="main-content container-fluid" id="bindview">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-divider">
+            <h4 class="panel-title" style="display:inline-block">@trust.TrustName details</h4>
+            <a href="/trustsetup?continue=@trust.Id&type=admin" style="margin-left: 535px;"><i class="fa fa-arrow-left"></i> Edit details</a> &nbsp;&nbsp;&nbsp;
+            <a href="/admin/trusts" class="pull-right"><i class="fa fa-arrow-right"></i> Back to Trust List</a>
+        </div>
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Raw(ViewBag.msg)
+                    <div class="clearfix"></div>
+                    <div class="summary">
+                        <div class="summary-box">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4 class="headline">Summary of fees</h4>
+                                    <div class="fess-summary well">
+                                        <table class="table table-condensed table-striped">
+                                            <tr>
+                                                <td>Our fee (EX GST)</td>
+                                                <td>$@cost.SetupCost</td>
+                                            </tr>
+                                            <tr>
+                                                <td>ADD GST</td>
+                                                <td>$@cost.SetupGST</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Credit Card fee & Processing fee</td>
+                                                <td> 1.75% + 0.3 cents</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total paid</th>
+                                                <th>$@cost.TotalCost</th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h4 class="headline">Customer details</h4>
+                                    <table class="table table-condensed table-striped">
+                                        <tr>
+                                            <td>Customer name</td>
+                                            <td><span> @trust.FirstName @trust.LastName </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Email</td>
+                                            <td><span> @trust.Email </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Customer phone</td>
+                                            <td><span> @trust.Phone</span></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="summary-box">
+                            <h4 class="headline">Trust Information (@trust.TrustType)</h4>
+
+                            @{
+                                if (trust.TrustType == "Bare Trust")
+                                {
+                                    <h5 class="headline">Property Purchase Address - @trust.PropertyAddress</h5>
+                                }
+                            }
+
+                            <table class="table table-condensed table-striped">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Trust name
+                                        </td>
+                                        <td colspan="2">
+                                            <span>
+                                                @trust.TrustName
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    @{
+                                        if (trust.TrustType.ToLower() == "bare trust")
+                                        {
+                                            <tr>
+                                                <td>
+                                                    Property purchase address
+                                                </td>
+                                                <td colspan="2">
+                                                    <span>@trust.PropertyAddress</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr>
+                                        <td>
+                                            Deed setup date
+                                        </td>
+                                        <td colspan="2">
+                                            <span>
+                                                @Convert.ToDateTime(trust.TrustSetupDate).ToLongDateString()
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            State laws which apply to your deed
+                                        </td>
+                                        <td colspan="2">
+                                            <span>  @trust.TrustState</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Trust type
+                                        </td>
+                                        <td colspan="2">
+                                            <span>@trust.TrustType</span>
+                                        </td>
+                                    </tr>
+                                    @{
+                                        if (trust.TrustType.ToLower() == "bare trust")
+                                        {
+
+                                            <tr>
+                                                <td>SMSF trustee company name</td>
+                                                <td>@trust.SmsfCompanyName</td>
+                                            </tr>
+                                            <tr>
+                                                <td>SMSF trustee company ACN</td>
+                                                <td>@trust.Smsfacn</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Date of SMSF trustee setup</td>
+                                                <td>@trust.SmsfTrusteeSetupDate.Value.ToLongDateString()</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    SMSF
+                                                </td>
+                                                <td colspan="2">
+                                                    <span>@trust.Smsf</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    ABN
+                                                </td>
+                                                <td colspan="2">
+                                                    <span>@trust.Abn</span>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    Property Trustee Company Name
+                                                </td>
+                                                <td colspan="2">
+                                                    <span>@trust.PropertyTrusteeName</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Property Trustee Company Name ACN
+                                                </td>
+                                                <td colspan="2">
+                                                    <span>@trust.PropertyTrusteeAcn</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Date of Property Trustee Setup</td>
+                                                <td>@trust.PropertyTrusteeSetupDate.Value.ToLongDateString()</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Lender Name
+                                                </td>
+                                                <td colspan="2">
+                                                    <span>@trust.LenderName</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="summary-box">
+                            <h4 class="headline">Members / Appointors </h4>
+
+                            @{
+                                if (trust.TrustType.ToLower() == "unit trust")
+                                {
+                                    <table class="table table-condensed table-striped">
+                                        <tr>
+                                            <td>What is the price for ordinary units?</td>
+                                            <td>@trust.OrdinaryPrice</td>
+                                        </tr>
+                                        <tr>
+                                            <td><i>Number of Unit Holders</i></td>
+                                            <td>@appointers.Count</td>
+                                        </tr>
+                                        <tr>
+                                            <td><i>Number of Trustee</i></td>
+                                            <td>@noofTrustee</td>
+                                        </tr>
+                                    </table>
+                                }
+                            }
+
+                            @{
+
+                                foreach (var a in appointers.Where(x => x.HolderType == "member"))
+                                {
+                                    var name = a.HolderType.ToLower() == "company" ? a.CompanyName : a.FirstName + " " + a.MiddleName + " " + a.LastName;
+
+                                    <hr />
+                                    <h5 class="headline">Member @i of @appointers.Count</h5>
+
+                                    if (a.HolderType.ToLower() != "member")
+                                    {
+                                        <h6>Unit holder is a <strong style="text-transform:capitalize">@a.HolderType</strong></h6>
+                                    }
+
+                                    <table class="table table-condensed table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <th>Name</th>
+                                                @{
+                                                    if (a.Dob.HasValue)
+                                                    {
+                                                        <th>DOB</th>
+                                                    }
+                                                }
+
+                                                <th>Unit / Level</th>
+                                                <th>Street Address</th>
+                                                <th>State</th>
+                                                <th>Postcode</th>
+                                                <th>Country</th>
+                                            </tr>
+                                            <tr>
+                                                <td>@name</td>
+                                                @{
+                                                    if (a.Dob.HasValue)
+                                                    {
+                                                        <td>@a.Dob.Value.ToShortDateString()</td>
+                                                    }
+                                                }
+                                                <td>@a.UnitLevel</td>
+                                                <td>@a.Street</td>
+                                                <td>@a.State</td>
+                                                <td>@a.PostCode</td>
+                                                <td>@a.Country</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                                        i += 1;
+                                                    }
+                            }
+                        </div>
+                        <div class="clearfix"></div>
+
+                        @{
+                            if (trustees.Count > 0)
+                            {
+                                <div class="summary-box">
+                                    <h4 class="headline">Trustees / Beneficiaries</h4>
+
+                                    @{
+                                        i = 1;
+                                        foreach (var a in trustees)
+                                        {
+                                            var name = a.HolderType.ToLower() == "member" ? a.FirstName + " " + a.MiddleName + " " + a.LastName : a.CompanyName;
+                                            <hr />
+                                            <h5 class="headline">Beneficiary @i of @noofTrustee</h5>
+
+                                            if (a.HolderType == "member")
+                                            {
+                                                <table class="table table-condensed table-striped">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Unit / Level</th>
+                                                            <th>Street Address</th>
+                                                            <th>State</th>
+                                                            <th>Postcode</th>
+                                                            <th>Country</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>@name</td>
+                                                            <td>@a.UnitLevel</td>
+                                                            <td>@a.Street</td>
+                                                            <td>@a.State</td>
+                                                            <td>@a.PostCode</td>
+                                                            <td>@a.Country</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            }
+                                            else
+                                            {
+                                                <table class="table table-condensed table-striped">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>Company name</th>
+                                                            <th>ACN</th>
+                                                            <th>Registration date</th>
+                                                            <th>Contact Person</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>@name</td>
+                                                            <td>@a.CompanyAcn</td>
+                                                            <td>@a.CompanyRegDate.Value.ToLongDateString()</td>
+                                                            <td>@a.ContactPersonName</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            }
+
+                                            i += 1;
+                                        }
+                                    }
+                                </div>
+                                        }
+                        }
+
+                        <div class="summary-box alt">
+                            <h4 class="headline">Free Consultations</h4>
+
+                            <div class="be-checkbox">
+                                <input type="checkbox" disabled name="chkquotefortax" id="chk1" value="true" @chk1 />
+                                <label for="chk1">I would like a FREE quote for the cost of tax services</label>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="be-checkbox">
+                                <input type="checkbox" disabled name="chklegalassesment" id="chk2" value="true" @chk2 />
+                                <label for="chk2">I would like a 1 hour FREE Legal Assessment</label>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="be-checkbox">
+                                <input type="checkbox" disabled name="chkborrowingreview" id="chk3" value="true" @chk3 />
+                                <label for="chk3">I would like a FREE Borrowing review or assessments</label>
+                            </div>
+                        </div>
+                        <div class="summary-box alt">
+                            <h4 class="headline">Agreement</h4>
+
+                            <div class="be-checkbox">
+                                <input type="checkbox" disabled name="chkagreement" id="chk4" @chk4 value="true" />
+                                <label for="chk4">I have read the above and accept responsibility for any liability incurred due to my use of the deed. I understand that this deed does not constitute legal advice and may be unsuitable for the purposes I wish to employ it for" "I intend to seek legal advice after obtaining the Deed or intend to waive my right to seek Independent Legal Advice</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

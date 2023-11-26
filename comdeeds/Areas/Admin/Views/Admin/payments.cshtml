@@ -1,0 +1,92 @@
+﻿<div class="main-content container-fluid" id="bindview">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default panel-table">
+                <div class="panel-heading">
+                    Payment
+
+                </div>
+                <div class="panel-body">
+                    <table class="table" id="grid"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+        window.onload = function () {
+
+            function bindko() {
+                var self = this;
+                self.visiblebtn = ko.observable(false);
+
+                self.bindgrid = function () {
+                    var grid = $('#grid').grid({
+                        dataSource: '/api/AdminApi/getPayments',
+                        selectionType: 'multiple',
+                        selectionMethod: 'checkbox',
+                        //rowReorder: true,
+                        primaryKey:"Id",
+                        columns: [
+                                { field: "Id", title: "Invoice #", sortable: false },
+                                { field: "AddedBy", title: "Created by", sortable: false},
+                                { field: 'adate', title: 'Created date', sortable: true },
+                                { field: 'Amount', title: 'Amount', sortable: false },
+                                { field: 'FormType', title: 'Form Type', sortable: false },
+                                { field: 'TransactionStatus', title: 'Status', sortable: false }
+                        ],
+                        style: {
+                            pager: {
+                                stateDisabled: 'icon-disabled'
+                            }
+                        },
+                        pager: ElePager
+
+                    });
+
+
+                    grid.on('rowSelect', function (e, $row, id, record) {
+                        var selections = grid.getSelections();
+                        if(selections.length>0)
+                        {
+                            self.visiblebtn(true);
+                        }else
+                        {
+                            self.visiblebtn(false);
+                        }
+                    });
+
+                    grid.on('rowUnselect', function (e, $row, id, record) {
+                        var selections = grid.getSelections();
+                        if (selections.length > 0) {
+                            self.visiblebtn(true);
+                        } else {
+                            self.visiblebtn(false);
+                        }
+                    });
+
+                    grid.on('cellDataBound', function (e, $displayEl, id, column, record) {
+                        if ('TransactionStatus' === column.field) {
+                            $displayEl.text(record.TransactionStatus ? "Success" : "Failed");
+                        }
+                        if ('Amount' === column.field) {
+                            $displayEl.text("$" + Math.floor(record.Amount) / 100);
+
+                        }
+
+                    });
+
+                };
+
+
+
+                self.bindgrid();
+            };
+
+
+            ko.applyBindings(bindko(), document.getElementById("bindview"));
+	 	 };
+
+</script>

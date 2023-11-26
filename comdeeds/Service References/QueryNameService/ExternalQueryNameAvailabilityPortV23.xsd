@@ -1,0 +1,1938 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:types="uri:types.asic.gov.au" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="uri:types.asic.gov.au" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="documentNoType">
+    <xs:annotation>
+      <xs:documentation> Ascot document number</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="9" />
+      <xs:minLength value="1" />
+      <xs:pattern value="[A-Z0-9\.]*" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="abnApplicationReferenceNumberType">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:minInclusive value="1" />
+      <xs:maxInclusive value="99999999999999" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="telephoneNumberType">
+    <xs:annotation>
+      <xs:documentation>Telephone number</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="telephoneNumber">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="prefix" type="xs:string" />
+            <xs:element name="number" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="phoneType">
+        <xs:annotation>
+          <xs:documentation>Home
+Mobile
+Work
+</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Home" />
+            <xs:enumeration value="Mobile" />
+            <xs:enumeration value="Work" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addressType">
+    <xs:annotation>
+      <xs:documentation>Address</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="type" type="types:addressTypeType" />
+      <xs:element minOccurs="0" name="careOf">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="60" />
+            <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element maxOccurs="4" name="addressLine">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="60" />
+            <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:choice>
+        <xs:element name="iso3166CountryCode">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="2" />
+              <xs:pattern value="[A-Z]*" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="country">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="75" />
+              <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:choice>
+      <xs:element minOccurs="0" name="DPID">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="8" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="ascotId" type="types:asicNumericIdType">
+        <xs:annotation>
+          <xs:documentation>~Internal~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="isForeign" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>~Internal~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="isPoBox" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>~Internal~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="street" type="types:streetType" />
+      <xs:element minOccurs="0" name="locality">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="30" />
+            <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="postCode">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="12" />
+            <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="state" type="types:stateTerritoryCodeType" />
+      <xs:element minOccurs="0" name="sequence">
+        <xs:annotation>
+          <xs:documentation>~Internal~</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:positiveInteger">
+            <xs:minInclusive value="1" />
+            <xs:maxInclusive value="9999" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:sequence minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>~Inbound~</xs:documentation>
+        </xs:annotation>
+        <xs:element minOccurs="0" name="override" type="xs:boolean" />
+        <xs:element minOccurs="0" name="action">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="8" />
+              <xs:enumeration value="ADD" />
+              <xs:enumeration value="REMOVE" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+      <xs:sequence minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+        <xs:element minOccurs="0" name="startDate" type="xs:date" />
+        <xs:element minOccurs="0" name="endDate" type="xs:date" />
+        <xs:element minOccurs="0" name="documentNumber" type="types:documentNoType">
+          <xs:annotation>
+            <xs:documentation>~Internal~</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addressExtType">
+    <xs:annotation>
+      <xs:documentation>Address (No uppercase limitation)</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="type" type="types:addressTypeType" />
+      <xs:element minOccurs="0" name="careOf">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="60" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element maxOccurs="4" name="addressLine" type="xs:string" />
+      <xs:choice>
+        <xs:element name="iso3166CountryCode">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="2" />
+              <xs:pattern value="[A-Z]*" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="country" type="xs:string" />
+      </xs:choice>
+      <xs:element minOccurs="0" name="DPID">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="8" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="street" type="types:streetType" />
+      <xs:element minOccurs="0" name="locality">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="30" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="postCode">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="12" />
+            <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="state" type="types:stateTerritoryCodeType" />
+      <xs:sequence minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>~Inbound~</xs:documentation>
+        </xs:annotation>
+        <xs:element minOccurs="0" name="override" type="xs:boolean" />
+        <xs:element minOccurs="0" name="action">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="8" />
+              <xs:enumeration value="ADD" />
+              <xs:enumeration value="REMOVE" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+      <xs:sequence minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>~Outbound~</xs:documentation>
+        </xs:annotation>
+        <xs:element minOccurs="0" name="startDate" type="xs:date" />
+        <xs:element minOccurs="0" name="endDate" type="xs:date" />
+      </xs:sequence>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addressLodgeType">
+    <xs:annotation>
+      <xs:documentation>Address for lodgement</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="type" type="types:addressTypeType" />
+      <xs:element minOccurs="0" name="careOf">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="60" />
+            <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="country" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>LOV
+Default to Australia</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="startDate" type="xs:date" />
+      <xs:element minOccurs="0" name="DPID">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="8" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:choice>
+        <xs:element name="physicalAddress">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" name="floorNumber">
+                <xs:annotation>
+                  <xs:documentation>The floor or level number in a building</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element minOccurs="0" name="propertyName">
+                <xs:annotation>
+                  <xs:documentation> property or building name of the address</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element minOccurs="0" name="unitOrOfficeNumber">
+                <xs:annotation>
+                  <xs:documentation>The unit or office number</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element minOccurs="0" name="streetNumber">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element minOccurs="0" name="streetName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element minOccurs="0" name="streetType">
+                <xs:annotation>
+                  <xs:documentation>LOV</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string" />
+                </xs:simpleType>
+              </xs:element>
+              <xs:element minOccurs="0" name="postalDeliveryType">
+                <xs:annotation>
+                  <xs:documentation>Enumeration: CARE PO,CMA,CMB,GPO BOX,LOCKED BAG,MS,PO BOX,PRIVATE BAG,RSD,RMB,RMS,CPA</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element minOccurs="0" name="postalDeliveryNumber">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="locality" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>LOV</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="state" type="types:stateTerritoryCodeType">
+                <xs:annotation>
+                  <xs:documentation>Enumeration: 
+ACT, NSW, NT, QLD, SA, TAS, WA, VIC</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="postCode">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="unstructuredAddress">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="addressLine1">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="addressLine2">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element minOccurs="0" name="addressLine3">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element minOccurs="0" name="addressLine4">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="semiStructuredPhysicalAddress">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="addressLine1">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element minOccurs="0" name="addressLine2">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="locality" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>LOV</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="state" type="types:stateTerritoryCodeType">
+                <xs:annotation>
+                  <xs:documentation>Enumeration: 
+ACT, NSW, NT, QLD, SA, TAS, WA, VIC</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="postCode">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="addressTypeType">
+    <xs:annotation>
+      <xs:documentation>RG Registered Office
+RP Registered Office in Australia
+PA Principal Place of Business
+RO Registered Address in Place of Incorporation
+GC Business Name Individual Residential Address
+GD Business Name Principal Place of Business
+GE Business Name Service of Notice Address
+GL Business Name Contact Address</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="2" />
+      <xs:enumeration value="RG" />
+      <xs:enumeration value="RP" />
+      <xs:enumeration value="PA" />
+      <xs:enumeration value="RO" />
+      <xs:enumeration value="GC" />
+      <xs:enumeration value="GD" />
+      <xs:enumeration value="GE" />
+      <xs:enumeration value="GL" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="asicNumericIdType">
+    <xs:annotation>
+      <xs:documentation>Internal Ascot Ids ie N9</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:integer">
+      <xs:maxInclusive value="999999999" />
+      <xs:minInclusive value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="emailType">
+    <xs:annotation>
+      <xs:documentation>email address</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="200" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nniNameType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="200" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nniNameInputType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="200" />
+      <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nameExtType">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+  <xs:simpleType name="distinguishedWordType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="140" />
+      <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="distinguishedNameExtType">
+    <xs:sequence>
+      <xs:element name="name">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="200" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="distinguishedWord">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="140" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="distinguishedNameType">
+    <xs:sequence>
+      <xs:element name="name" type="types:nniNameType" />
+      <xs:element minOccurs="0" name="distinguishedWord" type="types:distinguishedWordType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="abnType">
+    <xs:annotation>
+      <xs:documentation>ABN as 99999999999</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="11" />
+      <xs:minLength value="11" />
+      <xs:pattern value="([0-9]{11})" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nniNumberType">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:minInclusive value="1" />
+      <xs:maxInclusive value="999999999" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="bnReferenceNumberType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="20" />
+      <xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="personNameType">
+    <xs:annotation>
+      <xs:documentation>Personal name</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="givenNames">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="140" />
+            <xs:minLength value="1" />
+            <xs:whiteSpace value="collapse" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="otherGivenNames">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="140" />
+            <xs:minLength value="1" />
+            <xs:whiteSpace value="collapse" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="familyName">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="40" />
+            <xs:minLength value="2" />
+            <xs:whiteSpace value="collapse" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="personNameOptionalType">
+    <xs:annotation>
+      <xs:documentation>Personal name with optional givenName and familyName</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="givenNames">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="140" />
+            <xs:minLength value="1" />
+            <xs:whiteSpace value="collapse" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="otherGivenNames">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="140" />
+            <xs:minLength value="1" />
+            <xs:whiteSpace value="collapse" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="familyName">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="40" />
+            <xs:minLength value="1" />
+            <xs:whiteSpace value="collapse" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="personNameLodgeType">
+    <xs:annotation>
+      <xs:documentation>Personal name</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="givenNames">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="140" />
+            <xs:minLength value="1" />
+            <xs:whiteSpace value="collapse" />
+            <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="otherGivenNames">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="140" />
+            <xs:minLength value="1" />
+            <xs:whiteSpace value="collapse" />
+            <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="familyName">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="40" />
+            <xs:minLength value="2" />
+            <xs:whiteSpace value="collapse" />
+            <xs:pattern value="[A-Za-z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="personNameWithRoleType">
+    <xs:annotation>
+      <xs:documentation>Personal name</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="types:personNameType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="role">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:minLength value="3" />
+                <xs:maxLength value="5" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="birthDetailsType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="date" type="xs:date" />
+      <xs:element minOccurs="0" name="cityTown">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="30" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="state" type="types:stateTerritoryCodeType" />
+      <xs:choice>
+        <xs:element name="iso3166CountryCode">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="2" />
+              <xs:minLength value="2" />
+              <xs:pattern value="[A-Z]*" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="countryOfBirth">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="75" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="birthDetailsExtType">
+    <xs:sequence>
+      <xs:element name="date">
+        <xs:simpleType>
+          <xs:restriction base="xs:date">
+            <xs:minInclusive value="1582-01-02" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="cityTown">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="30" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="state" type="types:stateTerritoryCodeType" />
+      <xs:choice>
+        <xs:element name="iso3166CountryCode">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="2" />
+              <xs:minLength value="2" />
+              <xs:pattern value="[A-Z]*" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="countryOfBirth">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:maxLength value="75" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="birthDetailsLodgeType">
+    <xs:sequence>
+      <xs:element name="date" type="xs:date" />
+      <xs:element minOccurs="0" name="cityTown" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>LOV</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="state" type="types:stateTerritoryCodeType" />
+      <xs:element name="countryOfBirth">
+        <xs:annotation>
+          <xs:documentation>LOV</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="75" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="personNameBirthType">
+    <xs:sequence>
+      <xs:element name="personId" type="xs:string" />
+      <xs:element name="name" type="types:personNameType" />
+      <xs:element minOccurs="0" name="formerName" type="types:personNameType" />
+      <xs:element minOccurs="0" name="birthDetails" type="types:birthDetailsType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="personNameFormerNameType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="personId" type="xs:string" />
+      <xs:element name="name" type="types:personNameType" />
+      <xs:element minOccurs="0" maxOccurs="10" name="formerName" type="types:personNameType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="statusType">
+    <xs:sequence>
+      <xs:element name="code">
+        <xs:annotation>
+          <xs:documentation>Various codes, including</xs:documentation>
+          <xs:documentation>DMNT  Dormant</xs:documentation>
+          <xs:documentation>DRGD  Deregistered</xs:documentation>
+          <xs:documentation>EXAD  ** Under External Administration And/Or Controller Appointed **</xs:documentation>
+          <xs:documentation>NOAC  Not Active</xs:documentation>
+          <xs:documentation>NRGD  Not Registered</xs:documentation>
+          <xs:documentation>REGD  Registered</xs:documentation>
+          <xs:documentation>SOFF  Strike-Off In Progress</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="4" />
+            <xs:pattern value="[A-Z]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="description">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="80" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="isRegistered" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>interpretation of values of status code</xs:documentation>
+          <xs:documentation>true  organisation is currently registered</xs:documentation>
+          <xs:documentation>false  organisation is not currently registered</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="intervalStatusType">
+    <xs:annotation>
+      <xs:documentation>Base status extended for historical statuses purposes</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="types:statusType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="startDate" type="xs:date" />
+          <xs:element minOccurs="0" name="endDate" type="xs:date" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="amountType">
+    <xs:annotation>
+      <xs:documentation>Special unsigned format for Qsp/PandD N15.2</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="0" />
+      <xs:maxInclusive value="999999999999999.99" />
+      <xs:fractionDigits value="2" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="amountSignedType">
+    <xs:annotation>
+      <xs:documentation>Special signed format for Qsp/PandD N15.2</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="-999999999999999.99" />
+      <xs:maxInclusive value="999999999999999.99" />
+      <xs:fractionDigits value="2" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="organisationIdentifierType">
+    <xs:annotation>
+      <xs:documentation> Generic type for ABN, ACN, ARBN, ARSN, BNN</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="type">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="8" />
+            <xs:enumeration value="ABN" />
+            <xs:enumeration value="ACN" />
+            <xs:enumeration value="ARBN" />
+            <xs:enumeration value="ARSN" />
+            <xs:enumeration value="BNN" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="value" type="types:nniNumberType">
+        <xs:annotation>
+          <xs:documentation>ACN/ARBN/ARSN</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="organisationNamePlusIdType">
+    <xs:sequence>
+      <xs:element name="identifier" type="types:organisationIdentifierType" />
+      <xs:element name="name" type="types:nniNameType" />
+      <xs:element minOccurs="0" name="type">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="4" />
+            <xs:maxLength value="4" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="textType">
+    <xs:annotation>
+      <xs:documentation>Text - will add basic formatting here</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="para">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="4000" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="signatoryType">
+    <xs:annotation>
+      <xs:documentation>Document signatory</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="name" type="types:personNameLodgeType" />
+      <xs:element minOccurs="0" name="capacity">
+        <xs:annotation>
+          <xs:documentation />
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="20" />
+            <xs:enumeration value="COMPANY DIRECTOR" />
+            <xs:enumeration value="COMPANY SECRETARY" />
+            <xs:enumeration value="COMPANY OTHER" />
+            <xs:enumeration value="OWNER" />
+            <xs:enumeration value="TRUSTEE" />
+            <xs:enumeration value="WRITTEN" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="dateSigned" type="xs:date" />
+      <xs:element name="declaresTrueAndCorrect" type="types:trueType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="asicSignatoryType">
+    <xs:annotation>
+      <xs:documentation>ASIC signatory</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="name">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="100" />
+            <xs:minLength value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="capacity">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="100" />
+            <xs:minLength value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="filename">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="256" />
+            <xs:minLength value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="dateSigned" type="xs:date" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="companySignatoryType">
+    <xs:annotation>
+      <xs:documentation>Document signatory</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="name" type="types:personNameLodgeType" />
+      <xs:element minOccurs="0" name="capacity">
+        <xs:annotation>
+          <xs:documentation />
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="3" />
+            <xs:enumeration value="DIR" />
+            <xs:enumeration value="SEC" />
+            <xs:enumeration value="AGT" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="dateSigned" type="xs:date" />
+      <xs:element name="declaresTrueAndCorrect" type="types:trueType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="attachment" type="xs:base64Binary" />
+  <xs:complexType name="messageIdentifierType">
+    <xs:annotation>
+      <xs:documentation>A compound document and message identity.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="asicIdentifier" type="types:documentIdentifierType">
+        <xs:annotation>
+          <xs:documentation>~Internal~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="customerIdentifier">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="customer" type="types:accountIdentifierType" />
+            <xs:element name="identifier">
+              <xs:complexType>
+                <xs:choice>
+                  <xs:element name="browser" type="types:browserIdentifierType">
+                    <xs:annotation>
+                      <xs:documentation>~Internal~</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="soap" type="types:soapSoftwareIdentifierType" />
+                  <xs:element name="internal" type="types:trueType">
+                    <xs:annotation>
+                      <xs:documentation>~Internal~</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="documentIdentifierType">
+    <xs:annotation>
+      <xs:documentation>Identity for a document in ASIC.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ebusiness">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="referenceNumber" type="types:referenceNoType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="ascot">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="documentNumber" type="types:documentNoType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="browserIdentifierType">
+    <xs:annotation>
+      <xs:documentation>Identity for a browser message.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="transactionNo">
+        <xs:annotation>
+          <xs:documentation>eLodgement allocated</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="128" />
+            <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="soapSoftwareIdentifierType">
+    <xs:annotation>
+      <xs:documentation>Identity for a SOAP message and software.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="externalReferenceNumber">
+        <xs:annotation>
+          <xs:documentation>Client provided to be unique within accountIdentifier</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="50" />
+            <xs:minLength value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="organisationalName">
+        <xs:annotation>
+          <xs:documentation>Client provided identifier of client software version</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="100" />
+            <xs:minLength value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="productName">
+        <xs:annotation>
+          <xs:documentation>Client provided identifier of client software version</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="100" />
+            <xs:minLength value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="productVersion">
+        <xs:annotation>
+          <xs:documentation>Client provided identifier of client software version</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="100" />
+            <xs:minLength value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="asicSoftwareNo" type="types:asicNumericIdType">
+        <xs:annotation>
+          <xs:documentation>ASIC issued identifier for client software</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="referenceNoType">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="1" />
+      <xs:maxInclusive value="99999999999" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="realmIdentifierType">
+    <xs:annotation>
+      <xs:documentation>Identity for a realm.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="realm" type="types:realmQualifierType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="realmQualifierType">
+    <xs:sequence>
+      <xs:element name="typeIdentifier">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="32" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="qualifier">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="32" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="name" type="types:nniNameType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="accountIdentifierType">
+    <xs:annotation>
+      <xs:documentation>Identity for an account.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="types:realmIdentifierType">
+        <xs:sequence>
+          <xs:element name="accountIdentifier">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="128" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="rejectedType">
+    <xs:sequence>
+      <xs:element name="rejected" type="types:trueType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="standardHeaderType">
+    <xs:annotation>
+      <xs:documentation>Standard message header for  documents</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="messageType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="32" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="messageVersion">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="4" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="originatingChannel" type="types:originatingChannelType" />
+      <xs:element name="originatingService" type="types:originatingServiceType" />
+      <xs:element minOccurs="0" name="dateReceived" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>received date for Ascot fees assessment</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="timeReceived" type="xs:time">
+        <xs:annotation>
+          <xs:documentation>received time for Ascot fees assessment</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="enteredByAsic" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>true indicates that this document was entered by ASIC staff</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="dateCommenced" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>date creation of this document commenced</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="timeCommenced" type="xs:time">
+        <xs:annotation>
+          <xs:documentation>time creation of this document was commenced</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="dateSubmitted" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>date this document was submitted to ASIC</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="timeSubmitted" type="xs:time">
+        <xs:annotation>
+          <xs:documentation>time this document was submitted to ASIC</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="standardMessageHeaderType">
+    <xs:annotation>
+      <xs:documentation>Standard message header</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="messageType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="32" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="messageVersion">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="4" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="originatingChannel" type="types:originatingChannelType" />
+      <xs:element minOccurs="0" name="originatingService" type="types:originatingServiceType" />
+      <xs:element minOccurs="0" name="transactionId">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="128" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="operation">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="50" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="requestType">
+    <xs:sequence>
+      <xs:element name="messageHeader" type="types:standardMessageHeaderType" />
+      <xs:element minOccurs="0" name="messageIdentifier" type="types:messageIdentifierType" />
+      <xs:element minOccurs="0" name="timestampList" type="types:timestampListType">
+        <xs:annotation>
+          <xs:documentation>~Internal~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="replyType">
+    <xs:sequence>
+      <xs:element name="messageHeader" type="types:standardMessageHeaderType" />
+      <xs:element minOccurs="0" name="messageIdentifier" type="types:messageIdentifierType" />
+      <xs:element name="result">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="requestFulfilled" type="types:trueType">
+              <xs:annotation>
+                <xs:documentation>The request was completed and accepted.  Results are included in the reply.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="requestRejected" type="types:trueType">
+              <xs:annotation>
+                <xs:documentation>The request was completed and rejected.  Reasons are included in the reply.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="requestDelayed" type="types:trueType">
+              <xs:annotation>
+                <xs:documentation>The request was not completed.  The means to determine the final result are message specific.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="requestFailed" type="types:trueType">
+              <xs:annotation>
+                <xs:documentation>The request could not be processed due to processing errors.  Reasons are included in the reply</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="exceptionList" type="types:exceptionListType" />
+      <xs:element minOccurs="0" name="traceList" type="types:traceListType">
+        <xs:annotation>
+          <xs:documentation>~Internal~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="timestampList" type="types:timestampListType">
+        <xs:annotation>
+          <xs:documentation>~Internal~</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultType">
+    <xs:choice>
+      <xs:element name="requestFulfilled" type="types:trueType">
+        <xs:annotation>
+          <xs:documentation>The request was completed and accepted.  Results are included in the reply.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="requestRejected" type="types:trueType">
+        <xs:annotation>
+          <xs:documentation>The request was completed and rejected.  Reasons are included in the reply.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="requestDelayed" type="types:trueType">
+        <xs:annotation>
+          <xs:documentation>The request was not completed.  The means to determine the final result are message specific.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="requestFailed" type="types:trueType">
+        <xs:annotation>
+          <xs:documentation>The request could not be processed due to processing errors.  Reasons are included in the reply</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="timestampType">
+    <xs:annotation>
+      <xs:documentation>~Internal~</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="dateTime" type="xs:dateTime" />
+      <xs:element name="description">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="200" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="timestampListType">
+    <xs:annotation>
+      <xs:documentation>~Internal~</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="timestamp" type="types:timestampType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="trueType">
+    <xs:restriction base="xs:boolean">
+      <xs:pattern value="1" />
+      <xs:pattern value="true" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="exceptionType">
+    <xs:sequence>
+      <xs:element name="code">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="8" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="severity">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="12" />
+            <xs:enumeration value="Reject" />
+            <xs:enumeration value="Warning" />
+            <xs:enumeration value="Information" />
+            <xs:enumeration value="Pended" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="description">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="250" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="userDescription">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="250" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="context">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="20" name="line">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="250" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="nodeXPath">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="200" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="exceptionListType">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="item" type="types:exceptionType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="traceType">
+    <xs:annotation>
+      <xs:documentation>~Internal~</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dateTime" type="xs:dateTime" />
+      <xs:element name="source">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="20" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="text">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="200" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="traceListType">
+    <xs:annotation>
+      <xs:documentation>~Internal~</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="trace" type="types:traceType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="paymentType">
+    <xs:choice>
+      <xs:element name="directDebit" type="types:trueType" />
+      <xs:element name="creditCard" type="types:creditCardType" />
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="creditCardType">
+    <xs:sequence>
+      <xs:element name="brand">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="10" />
+            <xs:enumeration value="AMEX" />
+            <xs:enumeration value="MASTERCARD" />
+            <xs:enumeration value="VISA" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="encrypted">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="256" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="nameType">
+    <xs:sequence>
+      <xs:element name="familyName">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="2" />
+            <xs:maxLength value="40" />
+            <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="givenName1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="30" />
+            <xs:minLength value="2" />
+            <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="givenName2">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="2" />
+            <xs:maxLength value="30" />
+            <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="givenName3">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="2" />
+            <xs:maxLength value="30" />
+            <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="fileNotesType">
+    <xs:annotation>
+      <xs:documentation>~Internal~
+Ascot file notes to be added to document</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element maxOccurs="190" name="line">
+        <xs:annotation>
+          <xs:documentation>Text - will add basic formatting here</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="70" />
+            <xs:pattern value="[a-zA-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="applicationStatusType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="50" />
+      <xs:enumeration value="new" />
+      <xs:enumeration value="accepted" />
+      <xs:enumeration value="manual" />
+      <xs:enumeration value="rejected" />
+      <xs:enumeration value="paid" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="inboxIdentifierType">
+    <xs:choice>
+      <xs:element name="referenceNumber" type="types:referenceNoType" />
+      <xs:element name="externalReferenceNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="50" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="inboxNumber" type="types:referenceNoType" />
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="lodgementIdentifierType">
+    <xs:choice>
+      <xs:element name="referenceNumber" type="types:referenceNoType" />
+      <xs:element minOccurs="0" name="documentNumber" type="types:documentNoType" />
+      <xs:element name="externalReferenceNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="50" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="outboundItemIdentifierType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="referenceNumber" type="types:referenceNoType" />
+      <xs:element minOccurs="0" name="documentNumber" type="types:documentNoType" />
+      <xs:element minOccurs="0" name="externalReferenceNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="50" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="inboxNumber" type="types:referenceNoType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="itemSearchScopeType">
+    <xs:sequence>
+      <xs:element name="itemType" type="types:itemTypeType" />
+      <xs:element minOccurs="0" name="messageType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="100" />
+            <xs:minLength value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="reportingEntityAbn" type="types:abnType" />
+      <xs:element minOccurs="0" name="reportingEntityAcn" type="types:nniNumberType" />
+      <xs:element minOccurs="0" name="dateStart" type="xs:date" />
+      <xs:element minOccurs="0" name="dateEnd" type="xs:date" />
+      <xs:element minOccurs="0" name="unreadOnly" type="types:trueType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="itemTypeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="8" />
+      <xs:enumeration value="INBOX" />
+      <xs:enumeration value="LODGEMENTS" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="itemSummaryType">
+    <xs:sequence>
+      <xs:element name="messageType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="100" />
+            <xs:minLength value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="messageVersion" type="xs:long" />
+      <xs:element minOccurs="0" name="reportingEntity" type="types:entityType" />
+      <xs:element name="itemIdentifier" type="types:outboundItemIdentifierType" />
+      <xs:element name="lodgedDate" type="xs:date" />
+      <xs:element minOccurs="0" name="result" type="types:resultType" />
+      <xs:element minOccurs="0" name="status" type="types:applicationStatusType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="entityType">
+    <xs:sequence>
+      <xs:element name="name" type="types:nniNameType" />
+      <xs:element minOccurs="0" name="abn" type="types:abnType" />
+      <xs:element minOccurs="0" name="realmQualifier" type="types:realmQualifierType" />
+      <xs:element minOccurs="0" name="entityType" type="xs:string" />
+      <xs:element minOccurs="0" name="sourceId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="codeType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="5" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="descriptionType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="80" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="agentNameType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="200" />
+      <xs:pattern value="[A-Z0-9\.\\!\(\):;\?',\-&amp;&quot;=$%#\|/_\{\}\*@ ]*" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="agentType">
+    <xs:sequence>
+      <xs:element name="number" type="types:asicNumericIdType" />
+      <xs:element name="name" type="types:agentNameType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="stateTerritoryCodeType">
+    <xs:annotation>
+      <xs:documentation>Australian state or territory</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="3" />
+      <xs:enumeration value="ACT" />
+      <xs:enumeration value="NSW" />
+      <xs:enumeration value="NT" />
+      <xs:enumeration value="QLD" />
+      <xs:enumeration value="SA" />
+      <xs:enumeration value="TAS" />
+      <xs:enumeration value="WA" />
+      <xs:enumeration value="VIC" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="keyType">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="8" />
+      <xs:maxLength value="8" />
+      <xs:pattern value="[0-9]*" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="objectionType">
+    <xs:sequence>
+      <xs:element name="code">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="20" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="descriptions">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="250" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="context">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="20" name="line">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:maxLength value="250" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="flagType">
+    <xs:sequence>
+      <xs:element name="code">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="20" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="value" type="xs:boolean" />
+      <xs:element minOccurs="0" name="description">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="250" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="nameResultType">
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="nameAvailable" type="xs:boolean" />
+        <xs:element name="nameUnavailable" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>Errors provided in objections</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="nameSubjectToNamesDetermination" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>Reasons provided in objections</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="nameResultWithObjectionsType">
+    <xs:complexContent mixed="false">
+      <xs:extension base="types:nameResultType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="20" name="objections" type="types:objectionType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="streetType">
+    <xs:sequence>
+      <xs:element name="streetNumber" type="xs:string" />
+      <xs:element name="streetName" type="xs:string" />
+      <xs:element name="streetType" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="originatingChannelType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="8" />
+      <xs:enumeration value="EDI" />
+      <xs:enumeration value="COUNTER" />
+      <xs:enumeration value="MAIL" />
+      <xs:enumeration value="PHONE" />
+      <xs:enumeration value="BROW" />
+      <xs:enumeration value="ASCOT" />
+      <xs:enumeration value="PANDD" />
+      <xs:enumeration value="INTERNAL" />
+      <xs:enumeration value="SBR" />
+      <xs:enumeration value="SOAP" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="originatingServiceType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="5" />
+      <xs:enumeration value="NOTES" />
+      <xs:enumeration value="EDGE" />
+      <xs:enumeration value="ELOD" />
+      <xs:enumeration value="SOAP" />
+      <xs:enumeration value="GREEN" />
+      <xs:enumeration value="ASCOT" />
+      <xs:enumeration value="PANDD" />
+      <xs:enumeration value="CPMS" />
+      <xs:enumeration value="ECR" />
+      <xs:enumeration value="BN" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="nameAvailabilityType">
+    <xs:sequence>
+      <xs:element name="code">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="40" />
+            <xs:enumeration value="Available" />
+            <xs:enumeration value="Unavailable" />
+            <xs:enumeration value="SubjectToNamesDetermination" />
+            <xs:enumeration value="UnderTransfer" />
+            <xs:enumeration value="Identical" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element maxOccurs="10" name="shortDescription">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="250" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="10" name="longDescription">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="250" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="20" name="objection" type="types:objectionType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="nameAvailabilityResponseType">
+    <xs:sequence>
+      <xs:element name="code">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="40" />
+            <xs:enumeration value="Available" />
+            <xs:enumeration value="Unavailable" />
+            <xs:enumeration value="SubjectToNamesDetermination" />
+            <xs:enumeration value="UnderTransfer" />
+            <xs:enumeration value="Identical" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="shortDescription">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="2500" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="longDescription">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="2500" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="20" name="objection" type="types:objectionType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="businessNameIdentifierType">
+    <xs:sequence>
+      <xs:element name="nniNumber" type="types:nniNumberType" />
+      <xs:element minOccurs="0" name="bnReferenceNumber" type="types:bnReferenceNumberType" />
+      <xs:element name="name" type="types:nniNameType" />
+      <xs:element minOccurs="0" name="abn" type="types:abnType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="requestRejectedType">
+    <xs:annotation>
+      <xs:documentation>This is for reporting business problems with the data, details of which are to be shown to the user. See requestFailureType for reporting an internal, system or infrastructure failure </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="rejected" type="types:trueType">
+        <xs:annotation>
+          <xs:documentation>restricted by pattern to true. Reasons provided in exceptionList</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="requestFailedType">
+    <xs:annotation>
+      <xs:documentation>This is for reporting an internal, system or infrastructure failure e.g. when an enquiry message hits a problem in response to a transactional service request. See requestRejectType for reporting business problems with the data. </xs:documentation>
+    </xs:annotation>
+    <xs:choice>
+      <xs:element minOccurs="0" name="transient" type="types:trueType">
+        <xs:annotation>
+          <xs:documentation>Message encountered a transient failure and can be retried (restricted by pattern to true). Reasons provided in exceptionList</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="permanent" type="types:trueType">
+        <xs:annotation>
+          <xs:documentation>Message is deemed to be permanently failed (restricted by pattern to true). Reasons provided in exceptionList</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="actionType">
+    <xs:sequence>
+      <xs:element name="code">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="8" />
+            <xs:enumeration value="CEASE" />
+            <xs:enumeration value="CHANGE" />
+            <xs:enumeration value="CURRENT" />
+            <xs:enumeration value="NEW" />
+            <xs:enumeration value="ADD" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="effectiveDate" type="xs:date" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="transactionIdType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="15" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="accountNumberType">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:minInclusive value="1" />
+      <xs:maxInclusive value="99999999999" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="paymentMethodType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="15" />
+      <xs:enumeration value="INV" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

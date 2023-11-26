@@ -1,0 +1,247 @@
+﻿@model comdeeds.Models.BaseModel.ClassDashboardCounters
+@{
+    ViewBag.Title = "dashboard";
+}
+
+
+<div class="main-content container-fluid" data-bind="bindview">
+
+
+    <div class="row">
+     @if ((string)TempData["subadmin"] == "admin") 
+     {
+        <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="widget widget-tile" style="padding: 15px 20px">
+                <div id="spark1" class="chart sparkline" style="width: 50px;">
+                    <i class="icon mdi mdi-accounts" style="font-size:40px"></i>
+                </div>
+                <div class="data-info">
+                    <div class="desc"><a href="/admin/users">Total Users</a></div>
+                    <div class="value">
+                        <span class="indicator indicator-equal mdi mdi-chevron-right"></span>
+                        @{
+                            foreach (var u in Model.users)
+                            {
+                                if (u.userrole != "ADMIN")
+                                {
+                                    <span class="number">@u.id</span>
+                                    <small>(@u.userrole)</small>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+     }
+        <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="widget widget-tile" style="padding: 15px 20px">
+                <div id="spark1" class="chart sparkline" style="width: 50px;">
+                    <i class="icon mdi mdi-globe" style="font-size:40px"></i>
+                </div>
+                <div class="data-info">
+                    <div class="desc"><a href="/AdminC/UserSearchList.aspx">Company setup</a></div>
+                    <div class="value">
+                        <span class="indicator indicator-equal mdi mdi-chevron-right"></span>
+                        <span class="number">
+                            @{ var tc = Model.company.Sum(x => x.Id);}
+                            @tc
+                        </span>
+                        <small>
+                            @{ var pc = Model.company.Where(a => a.TransactionStatus == true).Sum(x => x.Id);}
+                            (@pc PAID)
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="widget widget-tile" style="padding: 15px 20px">
+                <div id="spark1" class="chart sparkline"  style="width: 50px;">
+                    <i class="icon mdi mdi-assignment" style="font-size:40px"></i>
+                </div>
+                <div class="data-info">
+                    <div class="desc"><a href="/admin/trusts"> Trust setup</a></div>
+                    <div class="value">
+                        <span class="indicator indicator-equal mdi mdi-chevron-right"></span>
+                        @{
+                            if (Model.trust.Count > 0)
+                            {
+                                foreach (var t in Model.trust)
+                                {
+                                    t.TrustType = string.IsNullOrEmpty(t.TrustType) ? "Undefined" : t.TrustType;
+                                <span class="number">@t.Id</span>
+                                <small>(@t.TrustType)</small>
+                                }
+                            }
+                            else
+                            {
+                                <span class="number">0</span>
+
+                            }
+                        }
+                        
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    @*@if (((string)TempData["specialUser"] != "specialuser" && ((string)TempData["specialUser"] != null)) || (((string)TempData["subadmin"] != "ADMIN") && ((string)TempData["subadmin"] != null)) && (string)TempData["lawyer"] != "lawyer")*@
+        @if ( ((string)TempData["subadmin"] == "admin")  || (string)TempData["lawyer"] == "Lawyer")
+
+        {
+        <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="widget widget-tile" style="padding: 15px 20px">
+                <div id="spark1" class="chart sparkline">
+                    <i class="icon mdi mdi-email" style="font-size:40px"></i>
+                </div>
+                <div class="data-info">
+                    <div class="desc"><a href="/admin/queries"> Total Queries</a></div>
+                    <div class="value">
+                        <span class="indicator indicator-equal mdi mdi-chevron-right"></span>
+                        <span class="number">
+                            @{ var t_c = Model.contact.Sum(x => x.Id);}
+                            @t_c
+                        </span>
+                        <small>
+                            @{ var p_c = Model.contact.Where(a => a.Status == false).Sum(x => x.Id);}
+                            (@p_c UnRead)
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+     }
+    </div>
+
+
+    <div class="widget widget-fullwidth be-loading">
+        <div class="widget-head">
+            <div class="button-toolbar hidden-xs">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-bind="click:reloadChart.bind($data,2),css:self.days()==2?'active btn btn-default':'btn btn-default'">Today</button>
+                    <button type="button" class="btn btn-default" data-bind="click:reloadChart.bind($data,7),css:self.days()==7?'active btn btn-default':'btn btn-default'">Last 7 Days</button>
+                    <button type="button" class="btn btn-default" data-bind="click:reloadChart.bind($data,30),css:self.days()==30?'active btn btn-default':'btn btn-default'">Last 30 Days</button>
+                </div>
+            </div><span class="title">Quick Overview</span>
+        </div>
+        <div class="widget-chart-container" style="padding:20px;padding-left:0;min-height:200px">
+
+            <div class="chart-container" style="position: relative;" data-bind="visible:!self.isAjax()">
+                <canvas id="line-chart"></canvas>
+            </div>
+
+        </div>
+        <div class="be-spinner" data-bind="style:{display:self.isAjax()?'block':'none'}">
+            <svg width="40px" height="40px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                <circle fill="none" stroke-width="4" stroke-linecap="round" cx="33" cy="33" r="30" class="circle"></circle>
+            </svg>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+
+    window.onload = function () {
+
+
+        var myChart;
+        function bindko() {
+            var self = this;
+            self.isAjax = ko.observable(false);
+            self.days = ko.observable(7);
+
+            self.initChart = function () {
+                var ctx = document.getElementById("line-chart").getContext('2d');
+                myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [""],
+                        datasets: [{
+                            label: 'Company setup',
+                            data: [0],
+                            backgroundColor:     'rgba(25, 64, 177, 0.44)',
+                            borderColor: '#1940b1',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Trust setup',
+                            data: [0],
+                            backgroundColor: 'rgba(234, 67, 53,.44)',
+                            borderColor: 'rgb(234, 67, 53)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'User registration',
+                            data: [0],
+                            backgroundColor: 'rgba(251, 188, 5,.44)',
+                            borderColor: 'rgb(251, 188, 5)',
+                            borderWidth: 1
+                        }
+                        ]
+                    },
+                    options: {
+                        tooltips: {
+                            callbacks: {
+                                labelColor: function(tooltipItem, chart) {
+                                    return {
+                                        borderColor: 'rgb(255, 0, 0)',
+                                        backgroundColor: 'rgb(255, 0, 0)'
+                                    }
+                                }
+                            }
+                        },
+                        responsive:true,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            };
+
+
+            self.reloadChart = function (d) {
+                self.days(d);
+                self.updateChart();
+            }
+
+            self.updateChart = function () {
+
+                $.ajax({
+                    type: "GET",
+                    url: "/api/AdminApi/getreport/?days=" + self.days(),
+                    contentType: "application/json",
+                    beforeSend: function () {
+                        self.isAjax(true);
+                    },
+                    complete: function () { self.isAjax(false); },
+                    success: function (r) {
+                        myChart.data.labels = r.labels;
+                        myChart.data.datasets[0].data = r.data.companyReport;
+                        myChart.data.datasets[1].data = r.data.trustReport;
+                        myChart.data.datasets[2].data = r.data.userReport;
+                        myChart.update();
+                    },
+                    error: function () {
+                        toastr.error("Error! Server error");
+                    }
+                });
+
+            }
+
+            self.updateChart();
+            self.initChart();
+        };
+
+        ko.applyBindings(bindko(), document.getElementById("bindview"));
+
+    };
+
+
+</script>

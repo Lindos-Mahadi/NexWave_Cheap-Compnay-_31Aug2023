@@ -1,0 +1,114 @@
+﻿@model TblUser
+<div class="main-content container-fluid" id="bindview">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading-divider">
+                    Profile setting                    
+                </div>
+                <div class="panel-body">
+                    @if (Session["Subadmin"] != null && Session["Subadmin"].ToString().ToUpper() == "ADMIN")
+                    {
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="register-form-inner">
+                                    @Html.Raw(ViewBag.msg)
+
+                                    @using (Html.BeginForm())
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <div class="form-horizontal">
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            @Html.HiddenFor(model => model.Id)
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-md-10">
+                                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-md-10">
+                                                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-md-10">
+                                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                <div class="col-md-10">
+                                                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-md-offset-2 col-md-10">
+                                                    <input type="submit" value="Save changes" class="btn btn-primary" />
+                                                    <a href="/admin/changepassword" class="pull-right">Change password</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="register-form-inner">
+                                    <div class="form-horizontal">
+
+                                        <div class="form-group">
+                                            @Html.LabelForModel("Company Name", new { @class = "control-label col-md-3" })
+                                            <div class="col-md-9">
+                                                @Html.TextBox("CompanyName", (String)ViewBag.companyname, new { @style = " width:500px; ", @class = "form-control" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelForModel("Email", new { @class = "control-label col-md-3" })
+                                            <div class="col-md-9">
+                                                @Html.TextBox("Email", (String)ViewBag.email, new { @style = " width:500px; ", @class = "form-control" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelForModel("Phone", new { @class = "control-label col-md-3" })
+                                            <div class="col-md-9">
+                                                @Html.TextBox("Phone", (String)ViewBag.phone, new { @style = " width:500px; ", @class = "form-control" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelForModel("Company Address", new { @class = "control-label col-md-3" })
+                                            <div class="col-md-9">
+                                                @Html.TextBox("CompanyAddress", (String)ViewBag.address, new { @style = " width:500px; ", @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    
+                </div>
+           </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:types="uri:types.asic.gov.au" xmlns:nni.types="uri:nni.types.asic.gov.au" xmlns:bn.types="uri:bn.types.asic.gov.au" xmlns:abn.types="uri:abn.types.asic.gov.au" elementFormDefault="qualified" targetNamespace="uri:nni.types.asic.gov.au" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="ExternalQueryNameAvailabilityPortV2.xsd7.xsd" namespace="uri:bn.types.asic.gov.au" />
+  <xs:import schemaLocation="ExternalQueryNameAvailabilityPortV2.xsd8.xsd" namespace="uri:abn.types.asic.gov.au" />
+  <xs:import schemaLocation="ExternalQueryNameAvailabilityPortV2.xsd3.xsd" namespace="uri:types.asic.gov.au" />
+  <xs:complexType name="nniTypeType">
+    <xs:sequence>
+      <xs:element name="code" type="nni.types:nniTypeCodeType" />
+      <xs:element minOccurs="0" name="description" type="types:descriptionType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="stateNumberType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="10" />
+      <xs:pattern value="[A-Z0-9 ]*" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="identifierType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="numberHeading" type="nni.types:numberHeadingType">
+        <xs:annotation>
+          <xs:documentation>ACN Australian Company Number
+ARBN Australian Registered Body Number
+Number
+ARSN Australian Registered Scheme Number</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="number" type="types:nniNumberType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="numberHeadingType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="10" />
+      <xs:enumeration value="ACN" />
+      <xs:enumeration value="ARBN" />
+      <xs:enumeration value="ARSN" />
+      <xs:enumeration value="Number" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="searchStatusType">
+    <xs:annotation>
+      <xs:documentation>DRGD Deregistered
+PEND Pending Payment
+REGD Registered
+			</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="4" />
+      <xs:enumeration value="DRGD" />
+      <xs:enumeration value="PEND" />
+      <xs:enumeration value="REGD" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="restrictedNniTypeCodeType">
+    <xs:annotation>
+      <xs:documentation>ASSN Association
+BUSN Business Name
+COOP Cooperative
+LTDP Limited Partnership
+SOLS Solicitor Corporation
+REBD Religious Bodies</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="4" />
+      <xs:enumeration value="ASSN" />
+      <xs:enumeration value="BUSN" />
+      <xs:enumeration value="COOP" />
+      <xs:enumeration value="LTDP" />
+      <xs:enumeration value="SOLS" />
+      <xs:enumeration value="REBD" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nniTypeCodeType">
+    <xs:annotation>
+      <xs:documentation>APTY Australian Proprietary Company 
+APUB Australian Public Company
+ASSN Association 
+BUSN Business Name
+CHAR Charity
+COMP Community Purpose
+COOP Co-Operative Society
+FNOS Foreign Company (Overseas)
+LTDP Limited Partnership
+MISM Managed Investment Scheme
+NONC Non Company
+NRET Non Registered Entity (Nret)
+RACN Registered Australian Body
+REBD Religious Body
+RSVN Name Reservation
+SOLS Solicitor Corporation
+TRST Trust</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="4" />
+      <xs:enumeration value="APTY" />
+      <xs:enumeration value="APUB" />
+      <xs:enumeration value="ASSN" />
+      <xs:enumeration value="BUSN" />
+      <xs:enumeration value="CHAR" />
+      <xs:enumeration value="COMP" />
+      <xs:enumeration value="COOP" />
+      <xs:enumeration value="FNOS" />
+      <xs:enumeration value="LTDP" />
+      <xs:enumeration value="MISM" />
+      <xs:enumeration value="NONC" />
+      <xs:enumeration value="NRET" />
+      <xs:enumeration value="RACN" />
+      <xs:enumeration value="REBD" />
+      <xs:enumeration value="RSVN" />
+      <xs:enumeration value="SOLS" />
+      <xs:enumeration value="TRST" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="nameIndexAcncEntityType">
+    <xs:annotation>
+      <xs:documentation>Updated version of nniEntityType for acnc flag</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="nni.types:nameIndexEntityType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="acncFlag" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="nameIndexEntityType">
+    <xs:annotation>
+      <xs:documentation>Updated version of nniEntityType</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="nni.types:baseNniEntityType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="abrEntity" type="abn.types:abrEntityType" />
+          <xs:element minOccurs="0" name="agentAppointed" type="types:trueType">
+            <xs:annotation>
+              <xs:documentation>~Internal~</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="baseNniEntityType">
+    <xs:sequence>
+      <xs:element name="identifier" type="nni.types:identifierType" />
+      <xs:element minOccurs="0" name="bnReferenceNumber" type="types:bnReferenceNumberType" />
+      <xs:element name="name" type="types:distinguishedNameType" />
+      <xs:element name="type" type="nni.types:nniTypeType" />
+      <xs:element minOccurs="0" name="class" type="nni.types:classType">
+        <xs:annotation>
+          <xs:documentation>Companies</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="subClass" type="nni.types:classType">
+        <xs:annotation>
+          <xs:documentation>Companies</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="status" type="types:statusType" />
+      <xs:element minOccurs="0" name="incorporationState" type="types:stateTerritoryCodeType">
+        <xs:annotation>
+          <xs:documentation>Companies</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="placeOfIncorporation">
+        <xs:annotation>
+          <xs:documentation>Foreign Companies</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="30" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="previousStateTerritory" type="bn.types:previousStateTerritoryType" />
+      <xs:element minOccurs="0" name="dateRegistered" type="xs:date" />
+      <xs:element minOccurs="0" name="dateRenewal" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>Business Names</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="dateDeregistered" type="xs:date" />
+      <xs:element minOccurs="0" name="dateReview" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>Companies</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="jurisdiction">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="80" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="address" type="types:addressType" />
+      <xs:element minOccurs="0" maxOccurs="50" name="formerName">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="organisationName" type="types:nniNameType" />
+            <xs:element minOccurs="0" name="startDate" type="xs:date" />
+            <xs:element minOccurs="0" name="endDate" type="xs:date" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="50" name="recentDocument" type="bn.types:documentType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="nniEntityType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="businessEntity" type="abn.types:abrEntityType" />
+      <xs:element name="identifier" type="nni.types:identifierType" />
+      <xs:element name="name" type="types:nniNameType" />
+      <xs:element name="type" type="nni.types:nniTypeType" />
+      <xs:element name="status" type="types:statusType" />
+      <xs:element minOccurs="0" name="previousStateTerritory" type="bn.types:previousStateTerritoryType" />
+      <xs:element minOccurs="0" name="dateRegistered" type="xs:date" />
+      <xs:element minOccurs="0" name="dateDeregistered" type="xs:date" />
+      <xs:element minOccurs="0" name="dateRenewal" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>for Business Names</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="dateReview" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>for ASIC incorporated Bodies</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="jurisdiction">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="80" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element minOccurs="0" name="registeredAddress" type="types:addressType" />
+      <xs:element minOccurs="0" maxOccurs="50" name="recentDocuments" type="bn.types:documentType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="nniEntityWithAgentType">
+    <xs:annotation>
+      <xs:documentation>Base Organisation extended to indicate if the lodger can act for it</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="nni.types:nameIndexEntityType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="agent">
+            <xs:annotation>
+              <xs:documentation>~Internal~</xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="agentNo" type="types:asicNumericIdType" />
+                <xs:element name="agentName" type="types:nniNameType" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" maxOccurs="99" name="businessNames" type="bn.types:outboundBusinessNameType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="officeholderRole">
+    <xs:annotation>
+      <xs:documentation>DR Director
+LD Alternate Director
+SR Secretary</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="2" />
+      <xs:enumeration value="DR" />
+      <xs:enumeration value="LD" />
+      <xs:enumeration value="SR" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="businessType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="abrEntity" type="abn.types:abrEntityType" />
+      <xs:choice>
+        <xs:element name="organisation" type="nni.types:baseNniEntityType">
+          <xs:annotation>
+            <xs:documentation>Company
+Partnership
+UnincorporateStructure</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="individual" type="bn.types:individualType">
+          <xs:annotation>
+            <xs:documentation>Sole Trader
+Individual</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element minOccurs="0" maxOccurs="99" name="businessName" type="bn.types:outboundBusinessNameType" />
+      <xs:element minOccurs="0" name="agent" type="types:agentType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="companyType">
+    <xs:complexContent mixed="false">
+      <xs:extension base="nni.types:nameIndexEntityType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="officeholders">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" name="officeholder" type="nni.types:officeholderType" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" name="shareholders">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" name="shareholder" type="nni.types:shareholderType" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" maxOccurs="99" name="businessNames" type="bn.types:outboundBusinessNameType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="officeholderType">
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="organisation" type="bn.types:organisationType" />
+        <xs:element name="individual" type="bn.types:individualType" />
+      </xs:choice>
+      <xs:element name="role" type="nni.types:officeholderRole" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="shareholderType">
+    <xs:choice>
+      <xs:element name="organisation" type="bn.types:organisationType" />
+      <xs:element name="individual" type="bn.types:individualType" />
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="outboundAgentType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="agentAbn" type="types:abnType" />
+      <xs:element name="agentNo" type="types:asicNumericIdType" />
+      <xs:element minOccurs="0" name="agentName" type="types:agentNameType" />
+      <xs:choice>
+        <xs:element name="organisation" type="nni.types:nameIndexEntityType">
+          <xs:annotation>
+            <xs:documentation>Company
+Partnership
+UnincorporateStructure</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="person" type="bn.types:individualType">
+          <xs:annotation>
+            <xs:documentation>Sole Trader
+Individual</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="business">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="organisation" type="nni.types:nameIndexEntityType">
+              <xs:annotation>
+                <xs:documentation>Company
+Partnership
+UnincorporateStructure</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="person" type="bn.types:individualType">
+              <xs:annotation>
+                <xs:documentation>Sole Trader
+Individual</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="searchNniRequestType">
+    <xs:sequence>
+      <xs:element name="searchType">
+        <xs:annotation>
+          <xs:documentation>E Exact
+S Standard</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:length value="1" />
+            <xs:enumeration value="E" />
+            <xs:enumeration value="S" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="searchScope">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:length value="1" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="organisation">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="name" type="types:nniNameType" />
+            <xs:element minOccurs="0" name="type" type="nni.types:nniTypeCodeType" />
+            <xs:element minOccurs="0" name="status" type="nni.types:searchStatusType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="maxResult" type="xs:positiveInteger" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="queryNniNameType">
+    <xs:sequence>
+      <xs:element name="proposedName" type="types:nniNameType" />
+      <xs:choice>
+        <xs:element name="companyNameAvailabilityCheck" type="types:trueType" />
+        <xs:element name="bnNameAvailabilityCheck" type="types:trueType" />
+      </xs:choice>
+      <xs:element minOccurs="0" name="proprietor">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="proprietorAcn" type="types:nniNumberType" />
+            <xs:element name="proprietorAbn" type="types:abnType" />
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="classType">
+    <xs:sequence>
+      <xs:element name="code">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="4" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="description">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:maxLength value="80" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="companyExtractRequestType">
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="abn" type="types:abnType">
+          <xs:annotation>
+            <xs:documentation>ABN as 99999999999</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="acn" type="types:nniNumberType">
+          <xs:annotation>
+            <xs:documentation>ACN Company
+ARBN Australian Registered Body
+ARSN Australian Registered Scheme</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element minOccurs="0" name="company">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="registeredOffice" type="types:trueType">
+              <xs:annotation>
+                <xs:documentation>if set returns Registered Office of the company</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="principalPlaceOfBusiness" type="types:trueType">
+              <xs:annotation>
+                <xs:documentation>if set returns the Principal Place Of Business of the company</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="officeholders" type="types:trueType">
+              <xs:annotation>
+                <xs:documentation>if set returns the Directors, Secretaries and Alternate Drictors of the company</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="shareHolders" type="types:trueType">
+              <xs:annotation>
+                <xs:documentation>if set returns Share Holders of the company</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="formerNames" type="types:trueType">
+        <xs:annotation>
+          <xs:documentation>if set returns Former Names of organisastion</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="businessNames" type="types:trueType">
+        <xs:annotation>
+          <xs:documentation>if set returns Business Names owned by organisastion</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="document">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="dateListStart" type="xs:date" />
+            <xs:element minOccurs="0" name="dateListEnd" type="xs:date" />
+            <xs:element minOccurs="0" name="maxDocuments" type="xs:positiveInteger" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

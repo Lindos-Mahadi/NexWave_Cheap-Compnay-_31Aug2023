@@ -1,0 +1,53 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>knockoutAdd</title>
+    <script type="text/javascript" src="/Content/scripts/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="/Content/scripts/knockout-3.4.2.js"></script>
+  
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcAvPQGW-UrlxgZIn69qLnfOMPh-WnsJM&libraries=places"></script>
+    <script>
+        window.onload = function () {
+            ko.bindingHandlers.addressAutocomplete = {
+                init: function (element, valueAccessor, allBindingsAccessor) {
+                    var value = valueAccessor(), allBindings = allBindingsAccessor();
+                    alert("ddf");
+                    var options = { types: ['geocode'] };
+                    ko.utils.extend(options, allBindings.autocompleteOptions)
+
+                    var autocomplete = new google.maps.places.Autocomplete(element, options);
+
+                    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                        result = autocomplete.getPlace();
+
+                        value(result.formatted_address);
+
+                        // The following section poplutes any bindings that match an address component with a first type that is the same name
+                        // administrative_area_level_1, posatl_code etc. these can be found in the Google Places API documentation
+                        var components = _(result.address_components).groupBy(function (c) { return c.types[0]; });
+                        _.each(_.keys(components), function (key) {
+                            if (allBindings.hasOwnProperty(key))
+                                allBindings[key](components[key][0].short_name);
+                        });
+                    });
+                },
+                update: function (element, valueAccessor, allBindingsAccessor) {
+                    ko.bindingHandlers.value.update(element, valueAccessor);
+                }
+            };
+        }
+    </script>
+</head>
+<body>
+    <div> 
+        <input type="text" data-bind="addressAutocomplete: FullAddress, route: Street, locality: Suburb, administrative_area_level_1: State" />
+    </div>
+</body>
+</html>

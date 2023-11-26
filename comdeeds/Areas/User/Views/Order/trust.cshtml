@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "trust";
+}
+
+
+
+<div class="container margin-bottom-45 margin-top-45" id="bindview">
+
+    <div class="row">
+        <div class="col-md-3">
+            @{Html.RenderPartial("sidebar");}
+        </div>
+        <div class="col-md-9">
+            <h4 class="headline">Trusts</h4>
+
+
+            <table class="table" id="grid"></table>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    window.onload = function () {
+
+        function bindko() {
+            var self = this;
+            self.visiblebtn = ko.observable(false);
+
+            self.bindgrid = function () {
+                var grid = $('#grid').grid({
+                    dataSource: '/api/UserApi/gettrusts',
+                    selectionType: 'multiple',
+                    selectionMethod: 'checkbox',
+                    //rowReorder: true,
+                    primaryKey: "Id",
+                    columns: [
+                        { field: 'TrustName', title: "Trust Name", sortable: true },
+                        { field: 'TrustType', title: 'Type', sortable: false },
+                        { field: 'AddedDate', title: 'Creation date', sortable: true },
+                        { field: 'Paid', title: 'Paid', sortable: false },
+                        { field: 'edit', width: 150, title: '', sortable: false }
+                    ],
+                    style: {
+                        pager: {
+                            stateDisabled: 'icon-disabled'
+                        }
+                    },
+                    pager: ElePager
+
+                });
+
+
+                grid.on('rowSelect', function (e, $row, id, record) {
+                    var selections = grid.getSelections();
+                    if (selections.length > 0) {
+                        self.visiblebtn(true);
+                    } else {
+                        self.visiblebtn(false);
+                    }
+                });
+
+                grid.on('rowUnselect', function (e, $row, id, record) {
+                    var selections = grid.getSelections();
+                    if (selections.length > 0) {
+                        self.visiblebtn(true);
+                    } else {
+                        self.visiblebtn(false);
+                    }
+                });
+
+                grid.on('cellDataBound', function (e, $displayEl, id, column, record) {
+                    if ('regstatus' === column.field) {
+                        $displayEl.text(record.Paid ? "Success" : "");
+                    }
+                    if ('Paid' === column.field) {
+                        $displayEl.text(record.Paid ? "Yes" : "No");
+                    }
+                    if ('edit' === column.field) {
+                        if (record.Paid) {
+                            $displayEl.html("<a href='/user/order/downloadsmsf/?id=" + record.Id + "'  class='btn-title tooltip' title='Download Trust Deed' ><i class='sl sl-icon-docs'></i></a> "
+                                + "<a href='/user/order/downloadtrustminuteNew/?id=" + record.Id + "' class='btn-title tooltip' title='Download Trust Minute' ><i class='sl sl-icon-clock'></i></a>"
+                                + "<a href='/user/order/downloadtrustinvoice/?id=" + record.Id + "' class='btn-title tooltip' title='Download Invoice' ><i class='sl sl-icon-grid'></i></a>");
+                        }
+                        else {
+                            $displayEl.html("<a href='/trustsetup?continue=" + record.Id + "&type=trust'>Continue</a>");
+                        }
+                        $(".tooltip").tipTip({
+                            defaultPosition: "left"
+                        });
+                    }
+
+                });
+
+            };
+
+
+
+            self.bindgrid();
+        };
+
+
+        ko.applyBindings(bindko(), document.getElementById("bindview"));
+    };
+
+</script>

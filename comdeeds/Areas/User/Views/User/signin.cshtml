@@ -1,0 +1,133 @@
+﻿@model comdeeds.Models.BaseModel.ClassUserLoginForm
+@{
+    ViewBag.Title = "signin";
+    var _checked= Model.rememberme ? "checked" : "";
+}
+<link rel="stylesheet" type="text/css" href="~/Areas/Admin/assets/lib/perfect-scrollbar/css/perfect-scrollbar.min.css" />
+<link rel="stylesheet" type="text/css" href="~/Areas/Admin/assets/lib/material-design-icons/css/material-design-iconic-font.min.css" />
+<link rel="stylesheet" href="~/Areas/Admin/assets/css/style.css" type="text/css" />
+
+<div id="titlebar">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Login</h2>
+                <nav id="breadcrumbs">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li>Login</li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 margin-bottom-40">
+            @Html.Raw(ViewBag.msg)
+            
+            <div class="clearfix"></div>
+            <form enctype="multipart/form-data" method="post" action="@Url.Action("signin", "User", new { area = "User" })">
+                @Html.AntiForgeryToken()
+                <div class="agent-widget">
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" id="txtemail" name="loginemail" value="@Model.loginemail">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="txtpassword" name="loginpassword" >
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6 login-remember">
+                            <div class="checkboxes">
+                                <input type="checkbox" id="chkremember" name="rememberme" value="true" @_checked>
+                                <label for="chkremember">Remember me</label>
+                            </div></div>
+                            <div class="col-xs-6 login-forgot-password"><a href="#" data-target="#pwdModal" data-toggle="modal">Forgot Password?</a></div>
+
+                        </div>
+                    <div class="clearfix"></div>
+                    <button class="button fullwidth margin-top-5" type="submit">Log in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- model -->
+
+<div id="pwdModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="col-md-12">
+                <div class="pull-left" style="width:100%;padding-top: 4px; text-align: left;" id="fgtModal"></div>
+            </div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h1 class="text-center"><img src="~/Content/images/image__2_logo.png" alt="logo" width="200" height="100" style=" width: 168px; height: 34px;" class="logo-img"></h1>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="text-center">
+
+                                <p>If you have forgotten your password you can reset it here.</p>
+                                <div class="panel-body">
+                                    <fieldset>
+                                        <form action="@Url.Action("forgetpwd", "Admin", new { area = "Admin" })" method="post">
+                                            <div class="form-group">
+                                                <input class="form-control input-lg" placeholder="E-mail Address" name="email" type="email" value="@Model.loginemail">
+                                            </div>
+                                            <input class="btn btn-lg btn-primary btn-block" value="Send My Password" onclick="return DoAjaxPostAndMore(this)" type="button">
+                                        </form>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<div class="col-md-12">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Areas/Admin/assets/lib/jquery/jquery.min.js" type="text/javascript"></script>
+   <script src="~/Areas/Admin/assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
+    <script src="~/Areas/Admin/assets/js/main.js" type="text/javascript"></script>
+<script src="~/Areas/Admin/assets/lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+   
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+
+        $.ajax({
+            type: "POST",
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                //do something about the error
+            },
+            success: function (response) {
+                //do something with response
+                // $('#pwdModal').modal('hide');
+                $("#fgtModal").html(response);
+            }
+        });
+
+        return false;// if it's a link to prevent post
+
+    }
+
+    $(document).ready(function () {
+        //initialize the javascript
+        App.init();        
+    });
+</script>

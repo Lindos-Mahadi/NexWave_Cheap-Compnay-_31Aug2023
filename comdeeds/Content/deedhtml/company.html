@@ -1,0 +1,409 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <style type="text/css">
+        body {
+            margin-top: 0px;
+            margin-left: 0px;
+        }
+
+        .page {
+            margin: 45px 0 15px 15px;
+            margin: auto;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+            font-size: 16px;
+            line-height: 25px;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #111;
+            display: block;
+            max-width: 800px;
+        }
+
+        .tablerow {
+            width: 400px;
+            border-collapse: separate;
+            border-spacing: 0px;
+        }
+
+            .tablerow td.bordertop {
+                border-top: 3px solid #0f243e;
+                height: 40px;
+            }
+
+            .tablerow td.borderbottom {
+                border-bottom: 3px solid #0f243e;
+                height: 40px;
+            }
+
+        .tblborder {
+            font-family: sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+            line-height: 15px;
+            border-spacing: 0;
+        }
+
+            .tblborder td,
+            .tblborder th {
+                border: .2px solid #111;
+                text-align: left;
+                padding: 8px;
+                font-weight: 400;
+            }
+
+        .headfill th {
+            font-weight: bold;
+            background-color: #bbb;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+        <div style="padding-top:70px">
+            <h1 style="font-size: 96px;font-family: 'Calibri';
+color: #0f243e;line-height: 96px;text-align: center;margin-top: 0px;margin-bottom: 0px;font-weight:300">
+                Share Certificate
+            </h1>
+            <p style="text-align:center;font-size:24px;color:#0f243e">
+                <strong style="font-family:'Times New Roman'"> {companyname}</strong><br />
+                <strong style="font-family:'Times New Roman'"> A.C.N {acn} </strong><br />
+                <span style="font-family:Arial;font-size:12px"> (Registered under the Corporations Act 2001)</span>
+            </p>
+
+            <p style="text-align:center;color:#0f243e">
+                <span style="font-family:'Times New Roman';font-size:24px;font-weight:bold;">Registered Office:</span><br />
+                <span style="font-family:'Times New Roman';font-size:16px;display:block;">
+                    {regofficeadd}
+                </span><br />
+            </p>
+            <p style="text-align:center;color:#0f243e">
+                <span style="font-family:Cambria;font-size:15px;margin-top:30px;display:block">
+                    This is to certify that
+                </span>
+            </p>
+
+            <p style="text-align:center;font-weight:bold">{director1}</p>
+            <table class="tablerow" align="center">
+                <tr>
+                    <td align="center" width="50%" style="height:0px;" class="bordertop"></td>
+                </tr>
+            </table>
+
+            <p style="text-align:center;font-weight:bold">{director1add}</p>
+            <table class="tablerow" align="center" style="width:500px">
+                <tr>
+                    <td align="center" width="50%" class="bordertop"></td>
+                </tr>
+            </table>
+            <p style="text-align:center;color:#0f243e;font-family:sans-serif;font-size:15px;margin-top:30px;display:block">
+                is the registered holder of
+            </p>
+            <p style="text-align:center;color:#0f243e;">
+                <span style="font-family:sans-serif;font-size:16px;display:block;font-weight:bold;">
+                    {dir1noofshare}<br />
+                    {dir1sharecost} {shareTtype} SHARES
+                </span><br />
+            </p>
+            <p style="text-align:center;color:#0f243e;font-family:sans-serif;font-size:15px;display:block;">
+                in the above-mentioned company    <br /><br />
+                <span style="font-size:16px">Dated: {companyexecdate}</span><br />
+                <span style="font-size:16px">Executed on behalf of the company            </span>
+            </p>
+            <table class="tablerow" align="center" style="width:500px">
+                <tr>
+                    <td align="center" width="50%" class="borderbottom"></td>
+                </tr>
+            </table>
+            <p style="text-align:center;color:#0f243e;font-family:sans-serif;font-size:15px;display:block;margin-top:0;">
+                (Director(s)/ Secretary(s) to sign above as appropriate
+            </p>
+            <p style="padding:20px 50px 0;text-align:left;color:#0f243e;font-family:Calibri;line-height:1.1em;display:block;letter-spacing:initial">
+                <small>
+                    If the company has only one director, then this share certificate may be signed merely by that sole director –
+                    see sections 124(1), 127(1), 127(4),198E(1) and 204A(1) of the Corporations Act 2001.
+                    If the company has two directors or a director and a secretary, then any two of them may sign this share
+                    certificate - sections 127(1)(a) of the Corporations Act 2001.
+                </small>
+            </p>
+        </div>
+    </div>
+
+    {directorshare}
+
+    <span style="display:block;page-break-after:always"></span>
+
+    <div class="page">
+        <div style="padding-top:100px;">
+            <h2 style="font-family:sans-serif;text-align:center;">COMPANY REGISTER</h2>
+            <br /><br />
+        </div>
+        <div style="padding:0 20px;">
+            <table class="tblborder">
+                <tbody>
+                    <tr>
+                        <th width="100">Last Name or Company Name</th>
+                        <th width="100">First Name </th>
+                        <th width="100">Middle Name</th>
+                        <th width="100">Residential or Registered Address</th>
+                        <th>No. &amp; Class of Shares</th>
+                        <th>Beneficially Held (Y/N)</th>
+                        <th>Paid Per Share</th>
+                        <th>Unpaid Per Share</th>
+                    </tr>
+
+                    {companyregistryrows}
+
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total </strong> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td></td>
+                        <td>{totaldirectors}</td>
+                        <td></td>
+                        <td>${totalpaidshare} </td>
+                        <td>${totalunpaidshare}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <span style="display:block;page-break-after:always"></span>
+    <div class="page">
+        <div style="padding:100px 50px 0">
+            <h2 style="font-family:sans-serif;text-align:center;">CONSENT OF OCCUPIER FOR <br />REGISTERED OFFICE</h2>
+            <br /><br />
+
+            <p>
+                Occupier:<br />
+                Being the occupier(s) of the following premises:
+            </p>
+            <p style="font-size:13px;">{director1} <br /> {regofficeadd}</p>
+            <br />
+
+            <p>
+                Consent to the use of this address by the<br />
+                Fore mentioned company for the purposes of a "Registered Office".
+            </p>
+            <br /><br /><br />
+            ................................
+            <p>Signed:</p>
+            <p>Date: {companyexecdate}</p>
+        </div>
+    </div>
+
+    <span style="display:block;page-break-after:always"></span>
+    <div class="page">
+        <div style="padding:100px 50px 0">
+            <p style="text-align:center;font-size:20px;">
+                <strong style="font-family:sans-serif"> {companyname} </strong><br />
+                <strong style="font-family:sans-serif"> A.C.N {acn} </strong><br />
+            </p>
+            <br />
+            <p style="text-align:center;font-size:20px;line-height:16px;">
+                <strong style="font-family:sans-serif;display:block"> DIRECTOR'S CONSENT TO ACT</strong><br />
+                <span style="font-family:Arial;font-size:12px"> Pursuant to sections 201D and 204C of the Corporations act 2001</span>
+            </p>
+            <br />
+            <p style="font-family:sans-serif;font-size:15px">
+                I hereby consent to act as Director of the Company and provide the following information:
+            </p>
+            <div style="padding:50px 0">
+                <table align="center" cellspacing="20">
+                    <tr>
+                        <td width="200">Full Name : </td>
+                        <td><strong>{director1}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Registered Address:</td>
+                        <td>{director1add}</td>
+                    </tr>
+                    <tr>
+                        <td>Date of Birth:</td>
+                        <td>{director1dob}</td>
+                    </tr>
+                    <tr>
+                        <td>Place of Birth:</td>
+                        <td>{director1pob}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <br /><br />
+            <img src="http://localhost:54689/Content/deedhtml/dashed.png" width="300" />
+            <br />
+            <p style="display:inline-block;margin-top:0;font-family:sans-serif">
+                {director1}
+            </p>
+            <br /><br /><br /><br /><br /><br />
+            <p style="font-family:sans-serif">
+                {companyexecdate}
+            </p>
+        </div>
+    </div>
+
+    {directorconsent}
+
+    {applicationshare}
+
+    <span style="display:block;page-break-after:always"></span>
+    <div class="page">
+
+        <div style="padding-top:70px">
+            <h1 style="font-size: 56px;font-family: serif;line-height: 56px;text-align: center;margin-top: 0px;margin-bottom: 0px;font-weight:bold">
+                MEETING MINUTE
+            </h1>
+
+            <p style="text-align:center;font-family:sans-serif">
+                Minutes of the first meeting of directors of to establish the company
+            </p>
+            <p style="text-align:center;font-size:20px;">
+                <strong style="font-family:sans-serif"> {companyname}</strong><br />
+                <strong style="font-family:sans-serif"> A.C.N {acn} </strong><br />
+            </p>
+            <div style="padding:50px">
+                <table cellspacing="20" width="660" style="font-size:14px;line-height:20px;vertical-align:top">
+                    <tr>
+                        <td width="200"><strong> HELD AT: </strong></td>
+                        <td>{regofficeadd}</td>
+                    </tr>
+                    <tr>
+                        <td width="200"><strong> PRESENT: </strong></td>
+                        <td>{director1}</td>
+                    </tr>
+                    <tr>
+                        <td><strong> REGISTRATION OF COMPANY: </strong></td>
+                        <td>
+                            The meeting was advised that all matters relating to the
+                            registration of the Company had been attended to and that the
+                            Company had been registered on this day. The certificate of
+                            Registration was tabled.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>DIRECTORS:</strong></td>
+                        <td>
+                            There was produced to the meeting a memorandum, signed
+                            By the persons specified in the application for the Company's
+                            Registration who consented to become members of the
+                            Company appointing:<br />
+                            {alldiretorsname}
+                            <br />
+                            as the first director(s) of the Company, signed consent(s) of
+                            director(s) were tabled.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>REGISTERED OFFICE: </strong></td>
+                        <td>
+                            Resolved that the registered office of the company be located at: <br />
+                            {regofficeadd}<br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>PRINCIPAL PLACE OF BUSINESS: </strong></td>
+                        <td>
+                            Resolved that the principal place of business be located at:<br />
+                            {principaloffadd}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>REGISTER OF </strong></td>
+                        <td>
+                            Resolved that the names of the persons specified in the
+                            application for the Company's registration, who consented to
+                            become Members of the Company, be entered in the register
+                            of members in respect of the following shares, as described
+                            in the share certificates, deemed to have been allotted to them
+                            on incorporation. Share certificates were tabled.<br />
+                            {sharenowithdir}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>MEMBERS: <br/>NON-APPOINTMENT <br/>OF AUDITOR:</strong></td>
+                        <td>
+                            Resolved in accordance with the Corporations Act that the
+                            company need not appoint an auditor
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>CLOSURE:</strong></td>
+                        <td>
+                            There being no further business the meeting was terminated
+                            Signed as a true and correct record
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong><br />DATE: {companyexecdate}</strong></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <br /><br /><br />
+                            <strong>
+                                SIGNED: ___________________________________ (Director / Secretary )
+                            </strong>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

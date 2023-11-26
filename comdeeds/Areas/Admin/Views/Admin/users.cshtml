@@ -1,0 +1,121 @@
+﻿<div class="main-content container-fluid" id="bindview">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default panel-table">
+                <div class="panel-heading">
+                    Users
+                    <button class="btn btn-default"
+                            data-bind="visible: visiblebtn(), click: deleterow">
+                        <i class="mdi mdi-delete"></i>  Delete
+                    </button>&nbsp;&nbsp;
+                    @*<button class="btn btn-default"
+                            data-bind="visible: visiblebtn(), click: resetuserpassword">
+                        <i class="mdi mdi-ci"></i>  Reset Password
+                    </button>*@
+                </div>
+                <div class="panel-body">
+                    <table class="table" id="grid"></table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+        window.onload = function () {
+
+            function bindko() {
+                var self = this;
+                self.visiblebtn = ko.observable(false);
+
+                self.bindgrid = function () {
+                    var grid = $('#grid').grid({
+                        dataSource: '/api/AdminApi/getusers',
+                        selectionType: 'multiple',
+                        selectionMethod: 'checkbox',
+                        //rowReorder: true,
+                        primaryKey:"Id",
+                        columns: [
+                                { title: "Name", sortable: false, tmpl: "{Firstname} {Lastname}" },
+                                { field: 'AddedDate', title: 'Reg date', sortable: true },
+                                { field: 'Email', title: 'Email', sortable: false },
+                                { field: 'EmailVerified', title: 'Status', sortable: false },
+                                { field: 'Phone', title: 'Phone', sortable: false },
+                                { field: '_Role', title: 'Role', sortable: false }
+                        ],
+                        style: {
+                            pager: {
+                                stateDisabled: 'icon-disabled'
+                            }
+                        },
+                        pager: ElePager
+
+                    });
+
+
+                    grid.on('rowSelect', function (e, $row, id, record) {
+                        var selections = grid.getSelections();
+                        if(selections.length>0)
+                        {
+                          self.visiblebtn(true);
+                        }else
+                        {
+                           self.visiblebtn(false);
+                        }
+                    });
+
+                    grid.on('rowUnselect', function (e, $row, id, record) {
+                        var selections = grid.getSelections();
+                        if (selections.length > 0) {
+                            self.visiblebtn(true);
+                        } else {
+                            self.visiblebtn(false);
+                        }
+                    });
+
+                    grid.on('cellDataBound', function (e, $displayEl, id, column, record) {
+                        if ('EmailVerified' === column.field) {
+                            $displayEl.html(record.EmailVerified ? "<span class='label label-success'> Verified</span>" : "<span class='label label-warning'>Pending</span>");
+                        }
+                        if ('AddedDate' === column.field) {
+                            $displayEl.text("").append(moment(record.AddedDate).format('Do MMM YYYY, HH:mm'));
+                        }
+                    });
+
+                };
+
+
+                self.deleterow = function () {
+                    if (confirm("Are you sure ?")) {
+                        var selections = $('#grid').grid().getSelections();
+                        if (selections.length > 0) {
+                            var dt = JSON.stringify(selections);
+                            $.ajax({
+                                type: "POST",
+                                data: dt,
+                                url: "/api/AdminApi/delusers/",
+                                contentType: "application/json",
+                                success: function (d) {
+                                    if (d.msg == "success") {
+                                        alert("data deleted successfully.");
+                                        $("#grid").grid().reload();
+                                    } else {
+                                        alert("Error, please try again.");
+                                    }
+                                },
+                                error: function () {
+                                    alert("Error,  please try again.");
+                                }
+                            });
+                        }
+                    }
+                }                
+                self.bindgrid();
+            };
+
+            ko.applyBindings(bindko(), document.getElementById("bindview"));
+	 	 };
+
+</script>
