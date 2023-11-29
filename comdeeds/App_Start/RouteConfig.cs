@@ -58,18 +58,19 @@ namespace comdeeds
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 
+            routes.MapRoute(
+            name: "UserMaintenance",
+            url: "user/Maintenance/{action}/{id}",
+            defaults: new { controller = "Maintenance", action = "MaintenanceIndex", id = UrlParameter.Optional },
+            namespaces: new[] { "comdeeds.Areas.User.Controllers" } // Add the namespace for the area controllers
+        );
+
             //comment by praveen
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}", // * URL with parameters but id is optional here *
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
-
-            //  routes.MapRoute(
-            //    name: "DefaultSite",
-            //    url: "{id}",
-            //    defaults: new { controller = "Home", action = "php", id = UrlParameter.Optional }
-            //);
         }
     }
 }

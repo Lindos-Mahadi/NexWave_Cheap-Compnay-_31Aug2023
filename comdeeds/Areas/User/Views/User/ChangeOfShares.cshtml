@@ -1,0 +1,173 @@
+﻿
+@{
+    ViewBag.Title = "Change Of Shares";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-8 mx-auto">
+            <div class="tab-content active" data-bind="css:tabbing()==5?'tab-content active':'tab-content'">
+
+                <form id="shareallocationform" class="submit-page p-0" data-bind="submit:sharesubmit">
+                    <h3>Share allocation</h3>
+                    <div class="submit-section">
+
+                        <div data-bind="foreach:shares">
+
+                            <div class="row with-forms">
+                                <div class="col-md-6">
+                                    <h5>
+                                        <input type="text" readonly="readonly" disabled="disabled" data-bind="value:Id" style="color:red;display:none;">
+                                        <input type="text" readonly="readonly" disabled="disabled" data-bind="value:did" style="display:none;">
+                                        Who owns these shares?
+                                    </h5>
+                                    <input type="text" readonly="readonly" disabled="disabled" data-bind="value:dirName">
+                                </div>
+                                <div class="col-md-6">
+                                    <span data-bind="value:noOfshare"></span><span class="validationMessage" style="display: none;"></span>
+                                </div>
+                            </div>
+                            <div class="row with-forms">
+                                <div class="col-md-3">
+                                    <div class="col-md-12">
+                                        <h5>Share class/type</h5>
+                                        <select name="sharetype" data-bind="value:shareType">
+                                            <option value="">Select share</option>
+                                            <option value="ordinary">ORDINARY SHARE</option>
+                                            <option value="REDP">Redeemable Preference[REDP]</option>
+                                            <option value="FOU"> Founders</option>
+                                            <option value="SPE">Special</option>
+                                            <option value="CUMP ">Cumulative Preference</option>
+                                            <option value="PRF ">Preference</option>
+                                            <option value="EMP ">Employees</option>
+                                            <option value="A">Class A</option>
+                                            <option value="B">Class B </option>
+                                            <option value="C">Class C </option>
+                                            <option value="D">Class D </option>
+                                        </select><span class="validationMessage" style="display: none;"></span>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <h5>Shares (Paid/Unpaid)</h5>
+                                        <select name="shareoption" data-bind="value:shareoption">
+                                            <option value="Paid">Paid</option>
+                                            <option value="Unpaid">Unpaid</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="col-md-12">
+                                        <h5>Numbers of Shares</h5>
+                                        <input type="text" name="noofshare" id="noofshare" data-bind="value:noOfshare"><span class="validationMessage" style="display: none;"></span>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="col-md-12">
+                                        <h5>Price of shares</h5>
+
+                                        <select name="amountopaidshare" id="amountopaidshare" data-bind="value:shareAmount">
+                                            <option value="">Select</option>
+                                            <option value="1.00">$1.00</option>
+                                            <option value="2.00">$2.00</option>
+                                            <option value="5.00">$5.00</option>
+                                            <option value="10.00">$10.00</option>
+                                            <option value="20.00">$20.00</option>
+                                            <option value="100.00">$100.00</option>
+                                            <option value="0.01">$0.01</option>
+                                            <option value="0.05">$0.05</option>
+                                            <option value="0.10">$0.10</option>
+                                            <option value="0.20">$0.20</option>
+                                            <option value="0.25">$0.25</option>
+                                        </select><span class="validationMessage" style="display: none;"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="row with-forms">
+                                        <div class="col-md-12">
+                                            <h6>Will these Shares be owned by the shareholder for their own benefit ?</h6>
+                                            <div class="checkboxes margin-top-15 margin-right-15">
+                                                <input type="radio" data-bind="checked:rdocheck,attr:{name:'rdoShareBehalf_'+$index(),id:'rdoShareBehalf1_'+$index()}" value="true" name="rdoShareBehalf_0" id="rdoShareBehalf1_0">
+                                                <label data-bind="attr:{for:'rdoShareBehalf2_'+$index()}" for="rdoShareBehalf2_0">Yes</label>
+                                            </div>
+                                            <div class="checkboxes margin-top-15">
+                                                <input type="radio" data-bind="checked:rdocheck,attr:{name:'rdoShareBehalf_'+$index(),id:'rdoShareBehalf2_'+$index()}" value="false" name="rdoShareBehalf_0" id="rdoShareBehalf2_0">
+                                                <label data-bind="attr:{for:'rdoShareBehalf2_'+$index()}" for="rdoShareBehalf2_0">No</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12" style="" data-bind="visible:$data.rdocheck() == 'true'">
+                                            <h5>Owner Name</h5>
+                                            <input type="text" name="shareownername" id="shareownername" data-bind="value:shareOwnerName">
+                                        </div>
+                                        <div class="col-md-12" style="display:none" data-bind="visible:$data.rdocheck() == 'false'">
+                                            <h5>A company or trust holds shares</h5>
+                                            <input type="text" name="sharedetailsnotheldanotherorg" id="sharedetailsnotheldanotherorg" data-bind="value:sharedetailsnotheldanotherorg">
+                                            <p style="font-size: 11px;line-height: 1.8;">For Example: If the beneifical owner is a family trust enter the name of the trust.<br>IE: T Thomas Pty Ltd ATF Thomas Family Trust </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <hr>
+                        </div>
+
+                        <div class="row with-forms" data-bind="visible:ndaddpnl" style="">
+                            <div class="col-md-12">
+                                <h4>Are there any other persons or entities you wish to give shares to, who are not Directors ? </h4>
+                                <div class="checkboxes margin-top-15 margin-right-15">
+                                    <input type="radio" value="yes" name="rdoNewShare" id="rdoNewShare1" data-bind="checked:rdonewshare,event:{change:satoggle.bind($data,'yes')}">
+                                    <label for="rdoNewShare1">Yes</label>
+                                </div>
+                                <div class="checkboxes margin-top-15">
+                                    <input type="radio" value="no" name="rdoNewShare" id="rdoNewShare2" data-bind="checked:rdonewshare,event:{change:satoggle.bind($data,'no')}">
+                                    <label for="rdoNewShare2">No</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row with-forms" style="border: 1px solid rgb(196, 229, 255); padding: 10px; display: none;" data-bind="visible:saddpnl">
+
+                            <div class="row with-forms">
+                                <div class="col-md-6">
+                                    <h5>Number of Non Directors</h5>
+                                    <select id="ddshareNodirectorno" name="ddshareNodirectorno" data-bind="value:sharedirectorsCounter">
+                                        <option value="0">Select</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div data-bind="foreach:share_another"></div>
+                        </div>
+
+                        <div class="row with-forms" style="border: 1px solid #c4e5ff;padding:10px;">
+                            <div class="col-md-6">
+                                <h5>
+                                    Governance of company
+                                </h5>
+                                <div class="checkboxes margin-top-15 margin-right-15">
+                                    <input type="radio" value="no" name="rdoNewCon" id="rdoNewCon1" data-bind="checked:rdogovcheck">
+                                    <label for="rdoNewCon1">replaceable rules $0</label>
+                                </div>
+                                <div class="checkboxes margin-top-15">
+                                    <input type="radio" value="yes" name="rdoNewCon" id="rdoNewCon2" data-bind="checked:rdogovcheck">
+                                    <label for="rdoNewCon2">constitution $10</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <button type="submit" class="button preview pull-right margin-bottom-15">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

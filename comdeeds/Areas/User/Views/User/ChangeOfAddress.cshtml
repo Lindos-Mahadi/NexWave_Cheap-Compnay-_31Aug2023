@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "Address";
+    //Layout = "~/Areas/User/Views/Shared/sidebar.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-8 mx-auto">
+            <div class="tab-content active" data-bind="css:tabbing()==3?'tab-content active':'tab-content'">
+
+                <form id="companyaddressform" class="submit-page p-0" data-bind="submit:companyaddsubmit">
+
+                    <h3>Company address</h3>
+                    <em>If the company is acting as a trustee you can use your Home Address</em>
+
+                    <div class="submit-section" data-bind="with:companyAddress()">
+                        <input type="text" id="txtAutocomplete1" style="width: 300px;color:red;display:none;" placeholder="Enter your address"><br><br>
+                        <div class="row with-forms">
+                            <div class="col-md-6">
+                                <h5>Unit / Level(Optional)</h5>
+                                <input type="text" name="compaddunit" id="compaddunit" data-bind="value:companyAddress().unit">
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Street address</h5>
+                                <input type="text" name="compaddstreet" id="compaddstreet" data-bind="value:companyAddress().street"><span class="validationMessage" style="display: none;"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>State</h5>
+                                <select name="ddcompaddstate" id="ddcompaddstate" data-bind="value:companyAddress().state">
+                                    <option value="">Select state</option>
+                                    <option value="ACT">Australian Capital Territory</option>
+                                    <option value="NSW">New South Wales</option>
+                                    <option value="NT">Northern Territory</option>
+                                    <option value="QLD">Queensland</option>
+                                    <option value="SA">South Australia</option>
+                                    <option value="TAS">Tasmania</option>
+                                    <option value="VIC">Victoria</option>
+                                    <option value="WA">Western Australia</option>
+                                </select><span class="validationMessage" style="display: none;"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Suburb</h5>
+                                <input type="text" name="compaddsuburb" id="compaddsuburb" data-bind="value:companyAddress().suburb"><span class="validationMessage" style="display: none;"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Postcode</h5>
+                                <input type="text" name="compaddpostcode" id="compaddpostcode" data-bind="value:companyAddress().postcode"><span class="validationMessage" style="display: none;"></span>
+                            </div>
+                        </div>
+
+                        <div class="row with-forms">
+
+                            <div class="col-md-12">
+                                <h5>Is the Principal place of business the same as the registered office? and will the company operate from this address?and the home address of director of company?</h5>
+
+                                <div class="checkboxes margin-top-15 margin-right-15">
+                                    <input type="radio" value="yes" name="rdosamecompadd" id="rdosamecompadd1" data-bind="checked:companyAddress().sameadd,event:{change:patoggle.bind($data,'yes')}">
+                                    <label for="rdosamecompadd1">Yes</label>
+                                </div>
+                                <div class="checkboxes margin-top-15">
+                                    <input type="radio" value="no" name="rdosamecompadd" id="rdosamecompadd2" data-bind="checked:companyAddress().sameadd,event:{change:patoggle.bind($data,'no')}">
+                                    <label for="rdosamecompadd2">No</label>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div style="display:none;background-color:#fff4b6;padding:20px;" data-bind="visible:paddpnl,with:companyPrincipalAddress()">
+                                <h4>Principle place of business</h4>
+                                <div class="row with-forms">
+                                    <div class="col-md-6">
+                                        <h5>Unit / Level(Optional)</h5>
+                                        <input type="text" name="compaddunit_p" id="compaddunit_p" data-bind="value:companyPrincipalAddress().unit">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Street address</h5>
+                                        <input type="text" name="compaddstreet_p" id="compaddstreet_p" data-bind="value:companyPrincipalAddress().street" placeholder="PO Boxes and Locked bag addresses are not allowed."><span class="validationMessage" style="display: none;"></span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h5>State</h5>
+                                        <select name="ddcompaddstate_p" id="ddcompaddstate_p" data-bind="value:companyPrincipalAddress().state">
+                                            <option value="">Select state</option>
+                                            <option value="ACT">Australian Capital Territory</option>
+                                            <option value="NSW">New South Wales</option>
+                                            <option value="NT">Northern Territory</option>
+                                            <option value="QLD">Queensland</option>
+                                            <option value="SA">South Australia</option>
+                                            <option value="TAS">Tasmania</option>
+                                            <option value="VIC">Victoria</option>
+                                            <option value="WA">Western Australia</option>
+                                        </select><span class="validationMessage" style="display: none;"></span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h5>Suburb</h5>
+                                        <input type="text" name="compaddsuburb_p" id="compaddsuburb_p" data-bind="value:companyPrincipalAddress().suburb"><span class="validationMessage" style="display: none;"></span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h5>Postcode</h5>
+                                        <input type="text" name="compaddpostcode_p" id="compaddpostcode_p" data-bind="value:companyPrincipalAddress().postcode"><span class="validationMessage" style="display: none;"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+                    <button type="submit" class="button preview pull-right margin-bottom-15">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

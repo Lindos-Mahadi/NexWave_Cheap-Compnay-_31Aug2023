@@ -1,0 +1,58 @@
+﻿@*@model IEnumerable<comdeeds.Models.BaseModel.TblCompanyAddressModel>*@
+@{
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+    //Area = "User";
+}
+
+
+<h1>Hello Maintenance</h1>
+@*@model List<comdeeds.Models.BaseModel.ClassCompanyAddressModel>
+
+    @{
+        ViewBag.Title = "Company Addresses";
+    }
+
+    <h2>Company Addresses</h2>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Company Addresses</title>
+    </head>
+    <body>
+
+        <h2>Company Addresses</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>UnitLevel</th>
+                    <th>Street</th>
+                    <th>State</th>
+                    <th>Suburb</th>
+                    <th>PostCode</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var address in Model)
+                {
+                    <tr>
+                        <td>@address.id</td>
+                        <td>@address.unit</td>
+                        <td>@address.street</td>
+                        <td>@address.state</td>
+                        <td>@address.suburb</td>
+                        <td>@address.postcode</td>
+                        <td>@address.type</td>
+                        <td>@address.sameadd</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </body>
+    </html>
+    <script src="~/Content/plugin/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Content/scripts/moment.min.js"></script>*@

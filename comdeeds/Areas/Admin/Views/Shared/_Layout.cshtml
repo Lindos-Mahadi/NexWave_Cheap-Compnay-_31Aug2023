@@ -119,55 +119,74 @@
                                 <li>
                                     <a href="/admin/dashboard"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
                                 </li>
-@if (Session["Subadmin"] != null && Session["Subadmin"].ToString() == "admin")
-{
-                                <li class="parent">
-                                    <a href="#"><i class="icon mdi mdi-face"></i><span>Users</span></a>
-                                    <ul class="sub-menu">
+                                @if (Session["Subadmin"] != null && Session["Subadmin"].ToString() == "admin")
+                                {
+                                    <li class="parent">
+                                        <a href="#"><i class="icon mdi mdi-face"></i><span>Users</span></a>
+                                        <ul class="sub-menu">
 
-                                        <li><a href="/admin/adduser"><span>Add User</span></a></li>
-
-
-                                        <li><a href="/admin/users"><span>Users list</span></a></li>
+                                            <li><a href="/admin/adduser"><span>Add User</span></a></li>
 
 
-                                        <li>
-                                            <a href="/admin/adminusers"><span>Admin users</span></a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/resetuserpassword"><span>Reset user password</span></a>
-                                        </li>
+                                            <li><a href="/admin/users"><span>Users list</span></a></li>
 
-                                    </ul>
-                                </li>
-}  
+
+                                            <li>
+                                                <a href="/admin/adminusers"><span>Admin users</span></a>
+                                            </li>
+                                            <li>
+                                                <a href="/admin/resetuserpassword"><span>Reset user password</span></a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                }
                                 <li>
                                     <a href="/admin/trusts"><i class="icon mdi mdi-account"></i><span>Trust deeds</span></a>
                                 </li>
                                 <li>
                                     <a href="../AdminC/UserSearchList.aspx"><i class="icon mdi mdi-account"></i><span>Company setup</span></a>
                                 </li>
-                             
 
-@*@if ((string)TempData["subadmin"] != "subadmin" && ((string)TempData["subadmin"] != null) || (string)TempData["specialUser"] == "specialuser" && ((string)TempData["specialUser"] != null) || (string)TempData["subadmin"] == "admin")
-{*@
+
+                                @*@if ((string)TempData["subadmin"] != "subadmin" && ((string)TempData["subadmin"] != null) || (string)TempData["specialUser"] == "specialuser" && ((string)TempData["specialUser"] != null) || (string)TempData["subadmin"] == "admin")
+        {*@
                                 <li>
                                     <a href='/admin/payments'><i class="icon mdi mdi-money-box"></i><span>Payments</span></a>
                                 </li>
-@*}*@
-@if((string)TempData["laywer"] == "Laywer" || (string)TempData["subadmin"] == "admin")
-{
-                                <li>
-                                    <a href="/admin/queries"><i class="icon mdi mdi-comment-text"></i><span>Queries</span></a>
+                                @*}*@
+                                <li class="parent">
+                                    <a href="#"><i class="icon mdi mdi-face"></i><span>Maintenance</span></a>
+                                    <ul class="sub-menu">
+
+                                        <li><a href="/admin/adduser"><span>Part Two</span></a></li>
+
+
+                                        @*<li><a href="/admin/users"><span>Part list</span></a></li>
+
+
+                                        <li>
+                                            <a href="/admin/adminusers"><span>Part users</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/resetuserpassword"><span>Reset user password</span></a>
+                                        </li>*@
+
+                                    </ul>
                                 </li>
-} 
-@if (Session["Subadmin"] != null && Session["Subadmin"].ToString() == "admin")
-{
-                                <li class="divider">Other</li>
-                                <li>
-                                    <a href="/admin/settings"><i class="icon mdi mdi-wrench"></i><span>Website settings</span></a>
-                                </li>
-}
+                                @if ((string)TempData["laywer"] == "Laywer" || (string)TempData["subadmin"] == "admin")
+                                {
+                                    <li>
+                                        <a href="/admin/queries"><i class="icon mdi mdi-comment-text"></i><span>Queries</span></a>
+                                    </li>
+                                }
+                                @if (Session["Subadmin"] != null && Session["Subadmin"].ToString() == "admin")
+                                {
+                                    <li class="divider">Other</li>
+                                    <li>
+                                        <a href="/admin/settings"><i class="icon mdi mdi-wrench"></i><span>Website settings</span></a>
+                                    </li>
+                                }
                                 <li>
                                     <a href="/admin/profile"><i class="icon mdi mdi-settings"></i><span>Profile settings</span></a>
                                 </li>

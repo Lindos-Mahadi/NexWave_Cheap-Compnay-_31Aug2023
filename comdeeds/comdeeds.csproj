@@ -467,6 +467,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Areas\User\Views\User\ChangeOfAddress.cshtml" />
+    <Content Include="Areas\User\Views\Maintenance\MaintenanceIndex.cshtml" />
+    <Content Include="Areas\User\Views\User\ChangeOfDirectors.cshtml" />
+    <Content Include="Areas\User\Views\User\ChangeOfShares.cshtml" />
+    <Content Include="Areas\User\Views\User\ChangeOfStructure.cshtml" />
+    <Content Include="Areas\User\Views\User\User_Summary.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -735,6 +741,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminApiController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\DownloadsController.cs" />
+    <Compile Include="Areas\User\Controllers\MaintenanceController.cs" />
     <Compile Include="Areas\User\Controllers\OrderController.cs" />
     <Compile Include="Areas\User\Controllers\UserApiController.cs" />
     <Compile Include="Areas\User\Controllers\UserController.cs" />

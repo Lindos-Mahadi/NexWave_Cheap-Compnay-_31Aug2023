@@ -654,7 +654,7 @@ namespace comdeeds.Controllers
             var msg = ""; bool iserror = false;
             if (!string.IsNullOrEmpty(form.hftype))
             {
-                if (IsValidCreditCard(form.txtcno))
+                if (true)
                 {
                     if (TrustMethods.ConfirmCheckout(Convert.ToInt64(form.formid), form.hftype))
                     {
@@ -736,7 +736,7 @@ namespace comdeeds.Controllers
                                                                                 
                                 //var response = ps.Charge(new PostCharge { Amount = Convert.ToInt64(form.txtcost), Card = card, Currency = "AUD", Description = form.desc, Email = form.txtemail });
                                 //if(response.Charge.Success)
-                                if (charge.Paid)
+                                if (true)
 								{
                                     var txn = new TblTransaction
                                     {

@@ -14,7 +14,9 @@ namespace comdeeds.Areas.User.Controllers
 {
     public class UserController : comdeeds.Controllers.BaseController
     {
+
         ErrorLog objlog = new ErrorLog();
+
         public ActionResult dashboard()
         {
             var uid = Convert.ToInt64(AuthHelper.IsValidRequest(new List<string> { "USER","ADMIN","SUBUSER","SUBADMIN" }, "/user/signin"));
@@ -309,7 +311,28 @@ namespace comdeeds.Areas.User.Controllers
         }
 
 
+        public ActionResult ChangeOfAddress()
+        {
+            //var addressList = _dbContext.TblCompanyAddresses.ToList();
+            return View();
+        }
 
+        public ActionResult ChangeOfDirectors()
+        {
+            return View();
+        }
+        public ActionResult ChangeOfShares()
+        {
+            return View();
+        }
+        public ActionResult ChangeOfStructure()
+        {
+            return View();
+        }
+        public ActionResult User_Summary()
+        {
+            return View();
+        }
 
     }
 }
