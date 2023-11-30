@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -14,6 +15,17 @@ namespace comdeeds.Areas.User.Controllers
 {
     public class UserController : comdeeds.Controllers.BaseController
     {
+        private readonly MyDbContext _dbContext;
+        public UserController(MyDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public UserController()
+        {
+        }
+
+
 
         ErrorLog objlog = new ErrorLog();
 
@@ -311,12 +323,127 @@ namespace comdeeds.Areas.User.Controllers
         }
 
 
-        public ActionResult ChangeOfAddress()
+        public ActionResult Address()
         {
-            //var addressList = _dbContext.TblCompanyAddresses.ToList();
+            if (TempData["c_error"] != null)
+            {
+                ViewBag.msg = TempData["c_error"];
+                TempData["c_error"] = null;
+            }
             return View();
         }
+        //[ActionName("company-address")]
+        public ActionResult ChangeOfAddress(string cname)
+        {
+            if (Request.QueryString.Get("cname") != null)
+            {
+                cname = Server.UrlDecode(Request.QueryString.Get("cname").ToString());
+            }
 
+            string CompanyCookieId = "company-session-id";
+
+            if (cname != null)
+            { Session["cname"] = cname.ToString(); }
+            else
+            {
+                if (Request.Cookies["company-session-id"] != null)
+                {
+                    Response.Cookies["company-session-id"].Expires = DateTime.Now.AddDays(-1);
+                }
+                //CompanyCookieId = "";
+            }
+
+            try
+            {
+                int n;
+                bool isNumeric = int.TryParse(cname, out n);
+                if (isNumeric == true)
+                {
+                    Response.Cookies[CompanyCookieId].Expires = DateTime.Now.AddDays(-1);
+                    var c = new HttpCookie(CompanyCookieId, cname);
+                    c.Expires = DateTime.Now.AddMonths(1);
+                    Response.Cookies.Add(c);
+                    string cookie = "There is no cookie!";
+                    if (Request.Cookies.AllKeys.Contains(CompanyCookieId))
+                    {
+                        cookie = "Yeah - Cookie: " + this.Request.Cookies[CompanyCookieId].Value;
+                        //Response.Redirect("../company-setup", false);
+                    }
+                }
+            }
+            catch (Exception ex) { }
+
+            // for admin to continue form
+            if (Request.QueryString["type"] == "admin")
+            {
+                if (AuthHelper.IsValidRequestByRole(new List<string> { "ADMIN", "USER", "SUBUSER" }))
+                {
+                    var companyid = Request.QueryString["continue"];
+                    long i = 0;
+                    if (long.TryParse(companyid, out i))
+                    {
+                        var c = new HttpCookie(CompanyCookieId, companyid);
+                        c.Expires = DateTime.Now.AddDays(1);
+                        Response.Cookies.Add(c);
+                    }
+                    ViewBag.adminEdit = true;
+                }
+            }
+            else if (Request.QueryString["type"] == "company")
+            {
+                if (AuthHelper.IsValidRequestByRole(new List<string> { "USER", "SUBUSER" }))
+                {
+                    var companyid = Request.QueryString["continue"];
+                    long i = 0;
+                    if (long.TryParse(companyid, out i))
+                    {
+                        var c = new HttpCookie(CompanyCookieId, companyid);
+                        c.Expires = DateTime.Now.AddDays(1);
+                        Response.Cookies.Add(c);
+                    }
+                    ViewBag.adminEdit = true;
+                }
+            }
+            // for admin to continue form
+
+            comdeeds.Models.BaseModel.ClassUserDetails user = new comdeeds.Models.BaseModel.ClassUserDetails();
+            var isauth = App_Code.AuthHelper.IsValidRequestByRole(new List<string> { "USER", "ADMIN", "SUBUSER", "SUBADMIN" });
+            ViewBag.openpnl = 1;
+            if (isauth)
+            {
+                var uid = Convert.ToInt64(AuthHelper.IsValidRequest(new List<string> { "USER", "ADMIN", "SUBUSER", "SUBADMIN" }, "/user/signin"));
+                user = UserMethods.GetUserById(uid);
+                ViewBag.openpnl = 2;
+            }
+            ViewBag.isauth = isauth;
+            ViewBag.cn = cname;
+            if (TempData["registermsg"] != null)
+            {
+                ViewBag.msg = TempData["registermsg"];
+                TempData["registermsg"] = null;
+            }
+            return View(user);
+        }
+
+        [HttpPost]
+        [ActionName("ChangeOfAddress")]
+        public ActionResult ChangeOfAddress(comdeeds.Models.BaseModel.ClassUserDetails form, string hdncname)
+        {
+            string msg = ""; string cname1 = "";
+            msg = UserMethods.RegisterUserThruForm(form);
+            TempData["registermsg"] = msg;
+            ViewBag.cn = hdncname;
+
+            if (Session["cname"] != null)
+                cname1 = Session["cname"].ToString();
+
+            if (hdncname != "" && hdncname != null)
+                return RedirectToAction("company-setup", new { cname = hdncname });
+            else if (cname1 != "")
+                return RedirectToAction("company-setup", new { cname = cname1 });
+            else
+                return RedirectToAction("company-setup");
+        }
         public ActionResult ChangeOfDirectors()
         {
             return View();

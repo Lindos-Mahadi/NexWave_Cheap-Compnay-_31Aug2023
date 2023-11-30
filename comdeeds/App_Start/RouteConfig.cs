@@ -51,19 +51,26 @@ namespace comdeeds
 
             // Ignore the alternate path to the home page
             routes.IgnoreRoute("");
+
             //comment by praveen
+            //routes.MapRoute(
+            //    name: "MaintenanceIndex",
+            //    url: "{Maintenance}/{MaintenanceIndex}",
+            //    defaults: new { controller = "Maintenance", action = "MaintenanceIndex"}
+            // );
+
+            routes.MapRoute(
+                name: "CompanySetup",
+                url: "{ComMain}/{company-setup}",
+                defaults: new { controller = "ComMain", action = "CompanySetup" } // Adjust controller and action names as needed
+            );
+
             routes.MapRoute(
                 name: "DefaultSite",
                 url: "{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 
-            routes.MapRoute(
-            name: "UserMaintenance",
-            url: "user/Maintenance/{action}/{id}",
-            defaults: new { controller = "Maintenance", action = "MaintenanceIndex", id = UrlParameter.Optional },
-            namespaces: new[] { "comdeeds.Areas.User.Controllers" } // Add the namespace for the area controllers
-        );
 
             //comment by praveen
             routes.MapRoute(

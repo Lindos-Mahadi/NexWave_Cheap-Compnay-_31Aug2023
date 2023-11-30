@@ -1,111 +1,737 @@
-﻿
+﻿@model comdeeds.Models.BaseModel.ClassFullCompany
 @{
-    ViewBag.Title = "Address";
-    //Layout = "~/Areas/User/Views/Shared/sidebar.cshtml";
+    var company = Model.Company;
+    var address = Model.Address;
+    var companysearch = Model.companysearch;
+    //var trust = Model.CompanyTrust;
+    var dir = Model.Directors;
+    var share = Model.Shares;
+    var indshares = Model.indShares;
+    var user = Model.user;
+    var cost = Model.Cost;
+    var i = 1;
+    var j = 1;
+    var totaldir = dir.Count;
+    var totalind = indshares.Count;
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-8 mx-auto">
-            <div class="tab-content active" data-bind="css:tabbing()==3?'tab-content active':'tab-content'">
+<div id="titlebar">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Company summary</h2>
+                <nav id="breadcrumbs">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/company-setup">Company setup</a></li>
+                        <li>Summary</li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <form id="companyaddressform" class="submit-page p-0" data-bind="submit:companyaddsubmit">
-
-                    <h3>Company address</h3>
-                    <em>If the company is acting as a trustee you can use your Home Address</em>
-
-                    <div class="submit-section" data-bind="with:companyAddress()">
-                        <input type="text" id="txtAutocomplete1" style="width: 300px;color:red;display:none;" placeholder="Enter your address"><br><br>
-                        <div class="row with-forms">
+<div class="container margin-bottom-45" id="printable">
+    <a href="/company-setup?type=admin&continue=@ViewBag.companyidd" class="pull-right" style="display:block;"><i class="fa fa-arrow-left"></i> Back to edit</a>
+    <form method="post" action="@Url.Action("companysummary", "Home")" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Raw(ViewBag.msg)
+                <div class="clearfix"></div>
+                <div class="summary">
+                    <div class="summary-box">
+                        <div class="row">
                             <div class="col-md-6">
-                                <h5>Unit / Level(Optional)</h5>
-                                <input type="text" name="compaddunit" id="compaddunit" data-bind="value:companyAddress().unit">
-                            </div>
-                            <div class="col-md-6">
-                                <h5>Street address</h5>
-                                <input type="text" name="compaddstreet" id="compaddstreet" data-bind="value:companyAddress().street"><span class="validationMessage" style="display: none;"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <h5>State</h5>
-                                <select name="ddcompaddstate" id="ddcompaddstate" data-bind="value:companyAddress().state">
-                                    <option value="">Select state</option>
-                                    <option value="ACT">Australian Capital Territory</option>
-                                    <option value="NSW">New South Wales</option>
-                                    <option value="NT">Northern Territory</option>
-                                    <option value="QLD">Queensland</option>
-                                    <option value="SA">South Australia</option>
-                                    <option value="TAS">Tasmania</option>
-                                    <option value="VIC">Victoria</option>
-                                    <option value="WA">Western Australia</option>
-                                </select><span class="validationMessage" style="display: none;"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <h5>Suburb</h5>
-                                <input type="text" name="compaddsuburb" id="compaddsuburb" data-bind="value:companyAddress().suburb"><span class="validationMessage" style="display: none;"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <h5>Postcode</h5>
-                                <input type="text" name="compaddpostcode" id="compaddpostcode" data-bind="value:companyAddress().postcode"><span class="validationMessage" style="display: none;"></span>
-                            </div>
-                        </div>
+                                <h4 class="headline">Summary of fees</h4>
+                                <div class="fess-summary well">
+                                    <table class="basic-table">
+                                        <tr>
+                                            <td>ASIC fees</td>
+                                            <td>$@cost.AsicFee</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Our fee (EX GST)</td>
+                                            <td>$@cost.SetupCost</td>
+                                        </tr>
+                                        <tr>
+                                            <td>ADD GST</td>
+                                            <td>$@cost.SetupGST</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Credit card fees </td>
+                                            <td>$@(Math.Round((((cost.AsicFee + cost.SetupCost + cost.SetupGST) * cost.CreditCardFee) / 100), 2))   (@cost.CreditCardFee %)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Processing fees</td>
+                                            <td>$@cost.ProcessingFee</td>
+                                        </tr>
+                                        @if (@companysearch.govofcomapany == "yes")
+                                        {
+                                            <tr>
+                                                <td>company constitution document - Fees </td>
+                                                <td>$10 + $1</td>
+                                            </tr>
+                                        }
 
-                        <div class="row with-forms">
-
-                            <div class="col-md-12">
-                                <h5>Is the Principal place of business the same as the registered office? and will the company operate from this address?and the home address of director of company?</h5>
-
-                                <div class="checkboxes margin-top-15 margin-right-15">
-                                    <input type="radio" value="yes" name="rdosamecompadd" id="rdosamecompadd1" data-bind="checked:companyAddress().sameadd,event:{change:patoggle.bind($data,'yes')}">
-                                    <label for="rdosamecompadd1">Yes</label>
-                                </div>
-                                <div class="checkboxes margin-top-15">
-                                    <input type="radio" value="no" name="rdosamecompadd" id="rdosamecompadd2" data-bind="checked:companyAddress().sameadd,event:{change:patoggle.bind($data,'no')}">
-                                    <label for="rdosamecompadd2">No</label>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div style="display:none;background-color:#fff4b6;padding:20px;" data-bind="visible:paddpnl,with:companyPrincipalAddress()">
-                                <h4>Principle place of business</h4>
-                                <div class="row with-forms">
-                                    <div class="col-md-6">
-                                        <h5>Unit / Level(Optional)</h5>
-                                        <input type="text" name="compaddunit_p" id="compaddunit_p" data-bind="value:companyPrincipalAddress().unit">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h5>Street address</h5>
-                                        <input type="text" name="compaddstreet_p" id="compaddstreet_p" data-bind="value:companyPrincipalAddress().street" placeholder="PO Boxes and Locked bag addresses are not allowed."><span class="validationMessage" style="display: none;"></span>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h5>State</h5>
-                                        <select name="ddcompaddstate_p" id="ddcompaddstate_p" data-bind="value:companyPrincipalAddress().state">
-                                            <option value="">Select state</option>
-                                            <option value="ACT">Australian Capital Territory</option>
-                                            <option value="NSW">New South Wales</option>
-                                            <option value="NT">Northern Territory</option>
-                                            <option value="QLD">Queensland</option>
-                                            <option value="SA">South Australia</option>
-                                            <option value="TAS">Tasmania</option>
-                                            <option value="VIC">Victoria</option>
-                                            <option value="WA">Western Australia</option>
-                                        </select><span class="validationMessage" style="display: none;"></span>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h5>Suburb</h5>
-                                        <input type="text" name="compaddsuburb_p" id="compaddsuburb_p" data-bind="value:companyPrincipalAddress().suburb"><span class="validationMessage" style="display: none;"></span>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h5>Postcode</h5>
-                                        <input type="text" name="compaddpostcode_p" id="compaddpostcode_p" data-bind="value:companyPrincipalAddress().postcode"><span class="validationMessage" style="display: none;"></span>
-                                    </div>
+                                        <tr>
+                                            <th>Total paid</th>
+                                            <th>$@cost.TotalCost</th>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="divider"></div>
-                    <button type="submit" class="button preview pull-right margin-bottom-15">Submit</button>
-                </form>
+                    <div class="summary-box">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4 class="headline">Company Information</h4>
+                                <div class="fess-summary well">
+                                    @Html.Raw(ViewBag.step1)
+                                    <table class="basic-table plain" style="display:none;">
+                                        <tr>
+                                            <td>Company name </td>
+                                            <td>@company.CompanyName</td>
+                                        </tr>
+                                        @{
+                                            if (company.NameReserved == true)
+                                            {
+                                                <tr>
+                                                    <td>Company ABN</td>
+                                                    <td>@company.Abn</td>
+                                                </tr>
+                                            }
+                                        }
+                                        <tr>
+                                            <td>Company type </td>
+                                            <td>PTY.LTD.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>State of Registration</td>
+                                            <td>@company.RegistrationState</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Special Purpose</td>
+                                            <td>@company.CompanyUseFor</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Purpose of Company</td>
+                                            <td>@company.CompanyPurpose</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="summary-box">
+                        <div class="row">
+
+                            @{
+                                foreach (var a in address)
+                                {
+                                    var addtype = (bool)a.IsRegisteredAddress ? "Registered office address" : "";
+                                    addtype = (bool)a.IsPrincipleAddress ? "Principle place of business" : addtype;
+
+                                    <div class="col-md-6">
+                                        <h4 class="headline">@addtype</h4>
+
+                                        <table class="basic-table bordered">
+                                            <tr>
+                                                <td>Unit</td>
+                                                <td>@a.UnitLevel </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Street</td>
+                                                <td>@a.Street</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Suburb</td>
+                                                <td>@a.Suburb</td>
+                                            </tr>
+                                            <tr>
+                                                <td>State</td>
+                                                <td>@a.State</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Postcost</td>
+                                                <td>@a.PostCode</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <div class="summary-box">
+                        <h4 class="headline">Directors / Shareholders</h4>
+                        <div class="row">
+                            @{
+                                foreach (var d in dir)
+                                {
+                                    <div class="col-md-12">
+                                        <h5 class="headline">Director @i of @totaldir</h5>
+                                        <table class="basic-table">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Date of Birth</th>
+                                                <th>Address</th>
+                                                <th>City of Birth</th>
+                                                <th>State of Birth</th>
+                                                <th>Country of Birth</th>
+                                            </tr>
+                                            <tr>
+                                                <td>@d.FirstName @d.LastName</td>
+                                                <td>@d.DoBday/@d.DoBmonth/@d.DoByear</td>
+                                                <td>@d.DoBaddress</td>
+                                                <td>@d.DoBcity</td>
+                                                <td>@d.DoBstate</td>
+                                                <td>@d.DoBcountry</td>
+                                            </tr>
+                                        </table>
+
+                                        <h5 class="headline margin-top-20">Share allocation</h5>
+
+                                        <table class="basic-table">
+                                            <tr>
+                                                <td>Share Class</td>
+                                                <td>Number of Shares</td>
+                                                <td>Amount paid per share</td>
+                                                <td>Held for own benefit</td>
+                                                <td>Owner name</td>
+                                                <td>Shares status</td>
+                                            </tr>
+                                            @{
+                                                foreach (var s in share.Where(x => x.DirectorId == d.Id).ToList())
+                                                {
+                                                    var b = s.ShareBehalf ? "yes" : "no";
+                                                    var o = s.ShareBehalf ? s.OwnerName : s.sharedetailsnotheldanotherorg;
+                                                    <tr>
+                                                        <td>@s.ShareClass</td>
+                                                        <td>@s.NoOfShare</td>
+                                                        <td>$@s.ShareAmount</td>
+                                                        <td>@b</td>
+                                                        <td>@o</td>
+                                                        <td>@s.shareoption</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </table>
+
+                                        <hr />
+                                    </div>
+                                    i += 1;
+                                }
+                            }
+                        </div>
+                    </div>
+                    @{
+
+                        var count = 0;
+                        foreach (var s in indshares)
+                        {
+                            if (s.individual_or_company == "Individual1" || s.individual_or_company == "company")
+                            {
+                                count++;
+                            }
+                        }
+
+                    }
+                    @{
+                        if (count > 0)
+                        {
+
+                            foreach (var nd in indshares)
+                            {
+                                if (nd.individual_or_company == "Individual1")
+                                {
+                                    <div class="summary-box">
+                                        <h4 class="heading">Individual / Shareholders </h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h5 class="headline">Individual @j of @totalind</h5>
+                                                <table class="basic-table">
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Date of Birth</th>
+                                                        <th>Address</th>
+                                                        <th>Place of Birth</th>
+                                                        @*
+                                                            <th>State of Birth</th>*@
+                                                        @*
+                                                            <th>Country of Birth</th>*@
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@nd.shareholderdetails</td>
+                                                        <td>@nd.individual_or_company_dob</td>
+                                                        <td>@nd.individual_or_company_address</td>
+                                                        <td>@nd.placeofbirth</td>
+                                                        @*
+                                                            <td>@nd.DoBstate</td>*@
+                                                        @*
+                                                            <td>@nd.DoBcountry</td>*@
+                                                    </tr>
+                                                </table>
+
+                                                <h5 class="headline margin-top-20">Share allocation</h5>
+
+                                                <table class="basic-table">
+                                                    <tr>
+                                                        <td>Share Class</td>
+                                                        <td>Number of Shares</td>
+                                                        <td>Amount paid per share</td>
+                                                        <td>Held for own benefit</td>
+                                                        <td>Owner name</td>
+                                                    </tr>
+                                                    @{
+
+                                                        var b = nd.ShareBehalf ? "yes" : "no";
+                                                        var o = nd.ShareBehalf ? nd.OwnerName : nd.sharedetailsnotheldanotherorg;
+                                                        <tr>
+                                                            <td>@nd.ShareClass</td>
+                                                            <td>@nd.NoOfShare</td>
+                                                            <td>$@nd.ShareAmount</td>
+                                                            <td>@b</td>
+                                                            <td>@o</td>
+                                                        </tr>
+                                                        j += 1;
+                                                    }
+                                                </table>
+
+                                                <hr />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+                                else if (nd.individual_or_company == "company")
+                                {
+                                    <div class="summary-box">
+                                        <h4 class="heading">Company / Shareholders </h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h5 class="headline">Company @j of @totalind</h5>
+                                                <table class="basic-table">
+                                                    <tr>
+                                                        <th>Company Name</th>
+                                                        <th>ABN</th>
+                                                        <th>Address</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@nd.shareholderdetails</td>
+                                                        <td>@nd.individual_or_company_acn</td>   @*show abn here*@
+                                                        <td>@nd.individual_or_company_address</td>
+                                                    </tr>
+                                                </table>
+
+                                                <h5 class="headline margin-top-20">Share allocation</h5>
+
+                                                <table class="basic-table">
+                                                    <tr>
+                                                        <td>Share Class</td>
+                                                        <td>Number of Shares</td>
+                                                        <td>Amount paid per share</td>
+                                                        <td>Held for own benefit</td>
+                                                        <td>Owner name</td>
+                                                    </tr>
+                                                    @{
+
+                                                        var b = nd.ShareBehalf ? "yes" : "no";
+                                                        var o = nd.ShareBehalf ? nd.OwnerName : "";
+                                                        <tr>
+                                                            <td>@nd.ShareClass</td>
+                                                            <td>@nd.NoOfShare</td>
+                                                            <td>$@nd.ShareAmount</td>
+                                                            <td>@b</td>
+                                                            <td>@o</td>
+                                                        </tr>
+                                                        j += 1;
+                                                    }
+                                                </table>
+
+                                                <hr />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+
+                            }
+                        }
+
+                    }
+                    @*added by praveen*@
+                    <div class="summary-box">
+                        <div class="row with-forms" style="background-color: rgba(43, 123, 186, 0.52); padding: 6px 12px;font-size: 13px;color: #fff;font-weight: 500;border-radius: 3px;margin: 0px 3px;">
+                            <div class="col-md-12">
+                                Who will be appointed as the company Secretary.
+                            </div>
+                        </div><br />
+                        <div class="col-md-3">
+                            <div class="row with-forms">
+                                <div class="col-md-12">
+                                    <select name="CompanySecretary" id="CompanySecretary" value="@company.CompanySecretary">
+                                        <option value="">Select</option>
+                                        @{
+                                            foreach (var d in dir)
+                                            {
+                                                //if (d.designation.ToLower() == "secretary".ToLower())
+                                                //{
+                                                <option value="@d.FirstName @d.LastName">@d.FirstName @d.LastName</option>
+                                                //}
+                                            }
+                                        }
+                                    </select>
+                                    @*<div class="checkboxes margin-top-15 margin-right-15">
+                                            <input type="radio" checked="@company.CompanySecretary" name="CompanySecretary" id="CompanySecretary1" style="width:16px;" value="Rob Joseph" />
+                                            <label for="CompanySecretary" style="font-size: 16px;">Rob Joseph</label>
+                                        </div>
+                                        <div class="checkboxes margin-top-15">
+                                            <input type="radio" checked="@company.CompanySecretary" name="CompanySecretary" id="CompanySecretary2" style="width:16px;" value="John Joseph" />
+                                            <label for="CompanySecretary2" style="font-size: 16px;">John Joseph</label>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="summary-box">
+                        <div class="row with-forms" style="background-color: rgba(43, 123, 186, 0.52); padding: 6px 12px;font-size: 13px;color: #fff;font-weight: 500;border-radius: 3px;margin: 0px 3px;">
+                            <div class="col-md-12">
+                                Who will be appointed as the public officer of the company.
+                            </div>
+                        </div><br />
+                        <div class="col-md-3">
+                            <div class="row with-forms">
+                                <div class="col-md-12">
+                                    <select name="PublicOfficerOfCompany" id="PublicOfficerOfCompany" data-bind="value:" @company.PublicOfficerOfCompany ">
+                                        <option value="">Select</option>
+                                        @{
+                                            foreach (var d in dir)
+                                            {
+                                                //if (d.designation.ToLower() == "director".ToLower())
+                                                //{
+                                                <option value="@d.FirstName @d.LastName">@d.FirstName @d.LastName</option>
+                                                //}
+                                            }
+                                        }
+                                    </select>
+                                    @*<div class="checkboxes margin-top-15 margin-right-15">
+                                            <input type="radio" checked="@company.PublicOfficerOfCompany" name="PublicOfficerOfCompany" id="PublicOfficerOfCompany1" style="width:16px;" value="Rob Joseph" />
+                                            <label for="PublicOfficerOfCompany1" style="font-size: 16px;">Rob Joseph</label>
+                                        </div>
+                                        <div class="checkboxes margin-top-15">
+                                            <input type="radio" checked="@company.PublicOfficerOfCompany" name="PublicOfficerOfCompany" id="PublicOfficerOfCompany2" style="width:16px;" value="John Joseph" />
+                                            <label for="PublicOfficerOfCompany2" style="font-size: 16px;">John Joseph</label>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="summary-box">
+                        <div class="row with-forms" style="background-color: rgba(43, 123, 186, 0.52); padding: 6px 12px;font-size: 13px;color: #fff;font-weight: 500;border-radius: 3px;margin: 0px 3px;">
+                            <div class="col-md-12">
+                                How will the first meeting of directors be held ?
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row with-forms">
+                                <div class="col-md-12">
+                                    <div class="checkboxes margin-top-15 margin-right-15">
+                                        <input type="radio" @((company.HowfstmeetingOfDirheld == "By meeting") ? "checked" : "") name="HowfstmeetingOfDirheld" onchange="showDOI()" id="HowfstmeetingOfDirheld1" style="width:16px;" value="By meeting" />
+                                        <label for="HowfstmeetingOfDirheld" style="font-size: 16px;">By meeting</label>
+                                    </div>
+                                    <div class="checkboxes margin-top-15">
+                                        <input type="radio" @((company.HowfstmeetingOfDirheld == "By circulated resolution") ? "checked" : "") name="HowfstmeetingOfDirheld" onchange="showDOI()" id="HowfstmeetingOfDirheld2" style="width:16px;" value="By circulated resolution" />
+                                        <label for="HowfstmeetingOfDirheld2" style="font-size: 16px;">By circulated resolution</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-8" style="display:none" id="DOI" name="DOI">
+                                    <h5>Circulation date</h5>
+                                    <div class="input-group date datetimepicker" style="width:100%;padding-top:0;margin-top:0;">
+                                        <span class="data-unit" style="top: 40%;"><i class="sl sl-icon-calender"></i></span>
+                                        <input data-min-view="2" type="text"
+                                               data-date-format="dd/mm/yyyy" class="datepicker form-control"
+                                               name="dateofincorporation" id="dateofincorporation" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    @*end by praveen*@
+
+                    <div class="summary-box alt">
+                        <h4 class="headline">Free Consultations</h4>
+
+                        @*<div class="checkboxes">
+                                <input type="checkbox" checked="@company.QuoteForTax" name="chkquotefortax" id="chk1" value="true" />
+                                <label for="chk1">I would like a FREE quote for the cost of tax services</label>
+                            </div>*@
+                        <div class="clearfix"></div>
+                        <div class="checkboxes">
+                            <input type="checkbox" checked="@company.LegalAssessment" name="chklegalassesment" id="chk2" value="true" />
+                            <label for="chk2">I would like a 1 hour FREE Legal Assessment</label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="checkboxes">
+                            <input type="checkbox" checked="@company.BorrowingReview" name="chkborrowingreview" id="chk3" value="true" />
+                            <label for="chk3">I would like a FREE Borrowing review or assessments</label>
+                        </div>
+                    </div>
+
+                    <div class="summary-box alt">
+                        <h4 class="headline">Agreement for @company.CompanyName</h4>
+
+                        <div class="checkboxes" style="display:none;">
+                            <input type="checkbox" name="chkagreement_3" id="chk4" value="true" />
+                            <label for="chk4">I have read the above and accept responsibility for any liability incurred due to my use of the deed. I understand that this deed does not constitute legal advice and may be unsuitable for the purposes I wish to employ it for" "I intend to seek legal advice after obtaining the Deed or intend to waive my right to seek Independent Legal Advice</label>
+                        </div>
+                        <div class="checkboxes">
+                            <input type="checkbox" checked="@company.Agreement" name="chkagreement" id="chk4_3" value="true" />
+                            <label for="chk4_3">I apply for the registration of a company on the basis of the information in this form and any attachments. I have the necessary written consents and agreements referred to in this application concerning the members and officeholders and I shall give the consents and agreements to the company after the company becomes registered. The information provided in this application and in any annexures is true and correct at the time of signing.</label>
+                        </div>
+                        <div class="checkboxes" style="display:none;">
+                            <input type="checkbox" name="chkagreement_1" id="chk4_1" value="true" />
+                            <label for="chk4_1">I DECLARE that this company is a special purpose company as defined under Regulation 3 of the Corporations (Fees) Regulations 2003."</label>
+                        </div>
+                        <div class="checkboxes" style="display:none;">
+                            <input type="checkbox" name="chkagreement_2" id="chk4_2" value="true" />
+                            <label for="chk4_2">I declare that I own, or am registering the company for the owner(s) of the identical business name(s), the registration details of which are listed."</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="text-center">
+                            @if (ViewBag.visisubmit == true)
+                            {
+                                <button type="submit" value="submit" name="submit" class="button preview" style="vertical-align:top">Proceed to pay ($@cost.TotalCost)</button>
+                                <a href="/" class="button border" style="vertical-align:top">Cancel</a>
+                            }
+                            else
+                            {
+                                if (ViewBag.edit == true)
+                                {
+                                    <a href="/AdminC/UserSearchList.aspx" class="button border" style="vertical-align:top">Done</a>
+                                }
+                                else
+                                {
+                                    <button type="submit" value="lodge" name="submit" class="button preview" style="vertical-align:top">Proceed to Lodge</button>
+                                    <a href="/" class="button border" style="vertical-align:top">Cancel</a>
+                                }
+
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#dateofincorporation').datetimepicker();
+        showDOI();
+        selectDir();
+    });
+    function showDOI() {
+        if ($("input[name='HowfstmeetingOfDirheld']:checked").val() == 'By meeting') {
+            $("#DOI").hide();
+        }
+        else if ($("input[name='HowfstmeetingOfDirheld']:checked").val() == 'By circulated resolution') {
+            $("#DOI").show();
+            $("#dateofincorporation").val("@company.DateOfIncorporation");
+            $("#dateofincorporation").datetimepicker({
+                showClear: true,
+                format: 'dd/MM/yyyy',
+            });
+        }
+        else {
+            $("#DOI").hide();
+        }
+    }
+    function selectDir() {
+
+        $("#CompanySecretary").val("@company.CompanySecretary");
+        $("#PublicOfficerOfCompany").val("@company.PublicOfficerOfCompany");
+    }
+</script>
+<script src="~/Content/plugin/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Content/scripts/moment.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*@{
+        ViewBag.Title = "Change of Address";
+        //Layout = "~/Areas/User/Views/Shared/sidebar.cshtml";
+    }
+
+    <div class="container">
+        <div class="row">
+            <div class="col-8 mx-auto">
+                <div class="tab-content active" data-bind="css:tabbing()==3?'tab-content active':'tab-content'">
+
+                    <form id="companyaddressform" class="submit-page p-0" data-bind="submit:companyaddsubmit">
+
+                        <h3>Company address</h3>
+                        <em>If the company is acting as a trustee you can use your Home Address</em>
+
+                        <div class="submit-section" data-bind="with:companyAddress()">
+                            <input type="text" id="txtAutocomplete1" style="width: 300px;color:red;display:none;" placeholder="Enter your address"><br><br>
+                            <div class="row with-forms">
+                                <div class="col-md-6">
+                                    <h5>Unit / Level(Optional)</h5>
+                                    <input type="text" name="compaddunit" id="compaddunit" data-bind="value:companyAddress().unit">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Street address</h5>
+                                    <input type="text" name="compaddstreet" id="compaddstreet" data-bind="value:companyAddress().street"><span class="validationMessage" style="display: none;"></span>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>State</h5>
+                                    <select name="ddcompaddstate" id="ddcompaddstate" data-bind="value:companyAddress().state">
+                                        <option value="">Select state</option>
+                                        <option value="ACT">Australian Capital Territory</option>
+                                        <option value="NSW">New South Wales</option>
+                                        <option value="NT">Northern Territory</option>
+                                        <option value="QLD">Queensland</option>
+                                        <option value="SA">South Australia</option>
+                                        <option value="TAS">Tasmania</option>
+                                        <option value="VIC">Victoria</option>
+                                        <option value="WA">Western Australia</option>
+                                    </select><span class="validationMessage" style="display: none;"></span>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>Suburb</h5>
+                                    <input type="text" name="compaddsuburb" id="compaddsuburb" data-bind="value:companyAddress().suburb"><span class="validationMessage" style="display: none;"></span>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>Postcode</h5>
+                                    <input type="text" name="compaddpostcode" id="compaddpostcode" data-bind="value:companyAddress().postcode"><span class="validationMessage" style="display: none;"></span>
+                                </div>
+                            </div>
+
+                            <div class="row with-forms">
+
+                                <div class="col-md-12">
+                                    <h5>Is the Principal place of business the same as the registered office? and will the company operate from this address?and the home address of director of company?</h5>
+
+                                    <div class="checkboxes margin-top-15 margin-right-15">
+                                        <input type="radio" value="yes" name="rdosamecompadd" id="rdosamecompadd1" data-bind="checked:companyAddress().sameadd,event:{change:patoggle.bind($data,'yes')}">
+                                        <label for="rdosamecompadd1">Yes</label>
+                                    </div>
+                                    <div class="checkboxes margin-top-15">
+                                        <input type="radio" value="no" name="rdosamecompadd" id="rdosamecompadd2" data-bind="checked:companyAddress().sameadd,event:{change:patoggle.bind($data,'no')}">
+                                        <label for="rdosamecompadd2">No</label>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div style="display:none;background-color:#fff4b6;padding:20px;" data-bind="visible:paddpnl,with:companyPrincipalAddress()">
+                                    <h4>Principle place of business</h4>
+                                    <div class="row with-forms">
+                                        <div class="col-md-6">
+                                            <h5>Unit / Level(Optional)</h5>
+                                            <input type="text" name="compaddunit_p" id="compaddunit_p" data-bind="value:companyPrincipalAddress().unit">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Street address</h5>
+                                            <input type="text" name="compaddstreet_p" id="compaddstreet_p" data-bind="value:companyPrincipalAddress().street" placeholder="PO Boxes and Locked bag addresses are not allowed."><span class="validationMessage" style="display: none;"></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5>State</h5>
+                                            <select name="ddcompaddstate_p" id="ddcompaddstate_p" data-bind="value:companyPrincipalAddress().state">
+                                                <option value="">Select state</option>
+                                                <option value="ACT">Australian Capital Territory</option>
+                                                <option value="NSW">New South Wales</option>
+                                                <option value="NT">Northern Territory</option>
+                                                <option value="QLD">Queensland</option>
+                                                <option value="SA">South Australia</option>
+                                                <option value="TAS">Tasmania</option>
+                                                <option value="VIC">Victoria</option>
+                                                <option value="WA">Western Australia</option>
+                                            </select><span class="validationMessage" style="display: none;"></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5>Suburb</h5>
+                                            <input type="text" name="compaddsuburb_p" id="compaddsuburb_p" data-bind="value:companyPrincipalAddress().suburb"><span class="validationMessage" style="display: none;"></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5>Postcode</h5>
+                                            <input type="text" name="compaddpostcode_p" id="compaddpostcode_p" data-bind="value:companyPrincipalAddress().postcode"><span class="validationMessage" style="display: none;"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+                        <button type="submit" class="button preview pull-right margin-bottom-15">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>*@

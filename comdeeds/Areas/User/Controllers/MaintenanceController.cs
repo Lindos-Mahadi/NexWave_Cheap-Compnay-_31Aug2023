@@ -10,8 +10,8 @@ namespace comdeeds.Areas.User.Controllers
 {
     public class MaintenanceController : BaseController
     {
-        // GET: User/Maintenance
-        //private readonly MyDbContext _db;
+        //GET: User/Maintenance
+        private readonly MyDbContext _db;
         //public MaintenanceController(MyDbContext db)
         //{
         //    _db = db;
